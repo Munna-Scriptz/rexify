@@ -1,11 +1,13 @@
 
 import React from 'react';
 import Slider from 'react-slick';
-import { Truck, RotateCcw, Gift, Headset, ShieldCheck, ChevronRight, ChevronLeft } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 
 // Import slick carousel styles
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import SingleCategoryCard from '../components/common/SingleCategoryCard';
+import Benefits from '../components/category/Benefits';
 
 const Category = () => {
 
@@ -14,7 +16,13 @@ const Category = () => {
         { name: "Windows Laptops", img: "https://images.unsplash.com/photo-1629131726692-1accd0c53ce0?q=80&w=300&auto=format&fit=crop" },
         { name: "Apple Macbooks", img: "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?q=80&w=300&auto=format&fit=crop" },
         { name: "Gaming laptop", img: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?q=80&w=300&auto=format&fit=crop" },
-        { name: "Chromebooks", img: "https://images.unsplash.com/photo-1544099858-75feeb57f01e?q=80&w=300&auto=format&fit=crop" },
+        { name: "Chromebooks", img: "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/airpods-pro-3-hero-select-202509?wid=532&hei=582&fmt=png-alpha&.v=cmp4MmZ6OWxOeHNNTXh4SzlBNUpEb1RucE9zZTI5eEREaWZpY29lSld3eG5ybFVoUG5ONDlkK2JkbHErdVFSNVM0TjRWdzF2UjRGVEY0c3dBQVZ6VFk1ZmVZeDNxQ3ljaDhwR2JKTTZHaDg" },
+        { name: "Laptop deals", img: "https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?q=80&w=300&auto=format&fit=crop" },
+        { name: "All laptops", img: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?q=80&w=300&auto=format&fit=crop" },
+        { name: "Windows Laptops", img: "https://images.unsplash.com/photo-1629131726692-1accd0c53ce0?q=80&w=300&auto=format&fit=crop" },
+        { name: "Apple Macbooks", img: "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?q=80&w=300&auto=format&fit=crop" },
+        { name: "Gaming laptop", img: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?q=80&w=300&auto=format&fit=crop" },
+        { name: "Chromebooks", img: "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/airpods-pro-3-hero-select-202509?wid=532&hei=582&fmt=png-alpha&.v=cmp4MmZ6OWxOeHNNTXh4SzlBNUpEb1RucE9zZTI5eEREaWZpY29lSld3eG5ybFVoUG5ONDlkK2JkbHErdVFSNVM0TjRWdzF2UjRGVEY0c3dBQVZ6VFk1ZmVZeDNxQ3ljaDhwR2JKTTZHaDg" },
         { name: "Laptop deals", img: "https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?q=80&w=300&auto=format&fit=crop" },
         { name: "All laptops", img: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?q=80&w=300&auto=format&fit=crop" },
     ];
@@ -25,15 +33,6 @@ const Category = () => {
         { name: "Microsoft", color: "text-gray-600" },
         { name: "LG", color: "text-red-600" },
         { name: "SONY", color: "text-black" },
-    ];
-
-    // --- Data: Benefits ---
-    const benefits = [
-        { icon: Truck, title: "Free shipping", desc: "On orders over £50" },
-        { icon: RotateCcw, title: "Easy returns", desc: "Free within 30 days" },
-        { icon: Gift, title: "Special gifts", desc: "Free with select orders" },
-        { icon: Headset, title: "Support 24/7", desc: "Help when you need it" },
-        { icon: ShieldCheck, title: "Secured payment", desc: "100% safe" },
     ];
 
     // --- Data: Best Deals ---
@@ -128,38 +127,31 @@ const Category = () => {
     return (
         <section className="min-h-screen pb-20">
             <div className="container">
-                {/* Hero & Categories */}
+                {/* ----------------- Categories */}
                 <div className="py-12">
                     <div>
                         <div className="mb-8">
-                            <h1 className="text-3xl font-bold text-gray-900 mb-2">Find Your Laptop</h1>
-                            <p className="text-gray-600 text-sm">Find the perfect laptop for work, play and everything in between.</p>
+                            <h1 className="text-4xl font-semibold text-coil mb-2">Find Your Category</h1>
+                            <p className="text-text-muted text-sm">Find the perfect category for you. We ensure the best</p>
                         </div>
 
-                        <div className="category-slider">
-                            {/* We can use CSS to override slick arrows if needed, or just let them be standard */}
-                            <Slider {...sliderSettings}>
-                                {categories.map((cat, idx) => (
-                                    <div key={idx} className="px-2">
-                                        <div className="bg-white rounded-lg p-4 flex flex-col items-center justify-between h-40 shadow-sm hover:shadow-md transition-shadow cursor-pointer">
-                                            <div className="h-24 flex items-center justify-center w-full">
-                                                <img src={cat.img} alt={cat.name} className="max-h-full max-w-full object-contain mix-blend-multiply" />
-                                            </div>
-                                            <span className="text-xs font-medium text-center text-gray-800">{cat.name}</span>
-                                        </div>
-                                    </div>
-                                ))}
-                            </Slider>
+                        <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4'>
+                            {
+                                categories.map((item, i) => (
+                                    <SingleCategoryCard key={i} item={item} />
+                                ))
+                            }
                         </div>
                     </div>
                 </div>
 
-                <div className="mt-12 space-y-16">
+
+                <div className="mt-102 space-y-16">
 
                     {/* Brands Section */}
                     <section>
                         <div className="flex justify-between items-center mb-6">
-                            <h2 className="text-xl font-bold text-gray-900">Laptop brands</h2>
+                            <h2 className="text-xl font-bold text-coil">Laptop brands</h2>
                             <a href="#" className="text-blue-600 text-sm font-medium hover:underline flex items-center gap-1">
                                 View all <ChevronRight size={14} />
                             </a>
@@ -175,19 +167,7 @@ const Category = () => {
                     </section>
 
                     {/* Benefits Banner */}
-                    <section className="bg-white border border-gray-200 rounded-xl p-6 md:p-10 shadow-sm">
-                        <div className="grid grid-cols-2 md:grid-cols-5 gap-6 text-center">
-                            {benefits.map((item, idx) => (
-                                <div key={idx} className="flex flex-col items-center gap-3">
-                                    <item.icon size={24} className="text-gray-600" />
-                                    <div className="text-center">
-                                        <h4 className="text-sm font-bold text-gray-900">{item.title}</h4>
-                                        <p className="text-xs text-gray-500 mt-1">{item.desc}</p>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </section>
+                    <Benefits />
 
                     {/* Best Deals */}
                     <section>

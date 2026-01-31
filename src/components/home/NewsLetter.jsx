@@ -8,11 +8,11 @@ const NewsLetter = () => {
         <>
             <section id='content' className='mt-35 py-24'>
                 <div className="container">
-                    <div class="px-6 relative">
+                    <div className="px-6 relative">
 
-                        <div class="absolute left-10 top-5 text-orange-500">
-                                <MoveEyes />
-                            </div>
+                        <div className="absolute left-10 top-5 text-orange-500">
+                            <MoveEyes />
+                        </div>
 
                         <div className="absolute right-25 top-5 -rotate-10 text-accent">
                             <span className="text-xl font-semibold">Monthly-ish</span>

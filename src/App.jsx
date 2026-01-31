@@ -6,14 +6,17 @@ import Home from './pages/Home'
 import LayoutTwo from './layout/LayoutTwo'
 import SignUp from './pages/SignUp'
 import SignIn from './pages/SignIn'
+import Category from './pages/Category'
 
 const App = () => {
   const MyRouter = createBrowserRouter(createRoutesFromElements(
     <Route>
       <Route path='/' element={<LayoutOne />}>
         <Route index element={<Home />} />
+        <Route path='category' element={<Category />} />
       </Route>
 
+      {/* --------------- Auth Router ---------------- */}
       <Route path='/auth' element={<LayoutTwo />}>
         <Route index element={<Navigate to="signUp" replace />} />
         <Route path="signUp" element={<SignUp />} />

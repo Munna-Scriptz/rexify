@@ -60,7 +60,7 @@ const Navbar = () => {
                             <NavLink className={`navLinkHover duration-300`} to={'/'}>Home</NavLink>
                             <NavLink className={`navLinkHover duration-300`} to={'/'}>Products</NavLink>
                             <NavLink className={`navLinkHover duration-300`} to={'/category'}>Categories</NavLink>
-                            <NavLink className={`navLinkHover duration-300`} to={'/'}>About</NavLink>
+                            <NavLink className={`navLinkHover duration-300`} to={'/about'}>About</NavLink>
                             <NavLink className={`navLinkHover duration-300`} to={'/'}>Contact</NavLink>
                             <NavLink className={`navLinkHover duration-300`} to={'/'}>Support</NavLink>
                         </div>

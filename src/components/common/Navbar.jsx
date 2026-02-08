@@ -58,11 +58,11 @@ const Navbar = () => {
                         {/* ------------ NavLinks  */}
                         <div className={`flex items-center gap-6 group-hover:text-text-primary ${isNavbarWhite && 'text-text-primary'}`}>
                             <NavLink className={`navLinkHover duration-300`} to={'/'}>Home</NavLink>
+                            <NavLink className={`navLinkHover duration-300`} to={'/'}>Featured</NavLink>
                             <NavLink className={`navLinkHover duration-300`} to={'/'}>Products</NavLink>
                             <NavLink className={`navLinkHover duration-300`} to={'/category'}>Categories</NavLink>
                             <NavLink className={`navLinkHover duration-300`} to={'/about'}>About</NavLink>
-                            <NavLink className={`navLinkHover duration-300`} to={'/'}>Contact</NavLink>
-                            <NavLink className={`navLinkHover duration-300`} to={'/'}>Support</NavLink>
+                            <NavLink className={`navLinkHover duration-300`} to={'/contact'}>Contact</NavLink>
                         </div>
 
                         {/* ------------ NavButtons  */}

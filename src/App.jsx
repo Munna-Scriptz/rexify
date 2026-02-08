@@ -8,6 +8,7 @@ import SignUp from './pages/SignUp'
 import SignIn from './pages/SignIn'
 import Category from './pages/Category'
 import About from './pages/About'
+import Contact from './pages/Contact'
 
 const App = () => {
   const MyRouter = createBrowserRouter(createRoutesFromElements(
@@ -16,6 +17,7 @@ const App = () => {
         <Route index element={<Home />} />
         <Route path='category' element={<Category />} />
         <Route path='about' element={<About />} />
+        <Route path='contact' element={<Contact />} />
       </Route>
 
       {/* --------------- Auth Router ---------------- */}

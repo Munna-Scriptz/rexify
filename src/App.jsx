@@ -9,6 +9,7 @@ import SignIn from './pages/SignIn'
 import Category from './pages/Category'
 import About from './pages/About'
 import Contact from './pages/Contact'
+import Cart from './pages/Cart'
 
 const App = () => {
   const MyRouter = createBrowserRouter(createRoutesFromElements(
@@ -18,6 +19,7 @@ const App = () => {
         <Route path='category' element={<Category />} />
         <Route path='about' element={<About />} />
         <Route path='contact' element={<Contact />} />
+        <Route path='cart' element={<Cart />} />
       </Route>
 
       {/* --------------- Auth Router ---------------- */}

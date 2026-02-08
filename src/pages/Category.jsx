@@ -1,104 +1,141 @@
-
 import React from 'react';
-import Slider from 'react-slick';
-import { ChevronRight } from 'lucide-react';
-
-// Import slick carousel styles
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import SingleCategoryCard from '../components/common/SingleCategoryCard';
-import Benefits from '../components/category/Benefits';
+import { ArrowRight, Smartphone, Laptop, Tablet, Headphones, Watch, Gamepad2 } from 'lucide-react';
 
 const Category = () => {
-
-    // --- Data: Categories ---
     const categories = [
-        { name: "Windows Laptops", img: "https://images.unsplash.com/photo-1629131726692-1accd0c53ce0?q=80&w=300&auto=format&fit=crop" },
-        { name: "Apple Macbooks", img: "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?q=80&w=300&auto=format&fit=crop" },
-        { name: "Gaming laptop", img: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?q=80&w=300&auto=format&fit=crop" },
-        { name: "Chromebooks", img: "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/airpods-pro-3-hero-select-202509?wid=532&hei=582&fmt=png-alpha&.v=cmp4MmZ6OWxOeHNNTXh4SzlBNUpEb1RucE9zZTI5eEREaWZpY29lSld3eG5ybFVoUG5ONDlkK2JkbHErdVFSNVM0TjRWdzF2UjRGVEY0c3dBQVZ6VFk1ZmVZeDNxQ3ljaDhwR2JKTTZHaDg" },
-        { name: "Laptop deals", img: "https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?q=80&w=300&auto=format&fit=crop" },
-        { name: "All laptops", img: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?q=80&w=300&auto=format&fit=crop" },
-        { name: "Windows Laptops", img: "https://images.unsplash.com/photo-1629131726692-1accd0c53ce0?q=80&w=300&auto=format&fit=crop" },
-        { name: "Apple Macbooks", img: "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?q=80&w=300&auto=format&fit=crop" },
-        { name: "Gaming laptop", img: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?q=80&w=300&auto=format&fit=crop" },
-        { name: "Chromebooks", img: "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/airpods-pro-3-hero-select-202509?wid=532&hei=582&fmt=png-alpha&.v=cmp4MmZ6OWxOeHNNTXh4SzlBNUpEb1RucE9zZTI5eEREaWZpY29lSld3eG5ybFVoUG5ONDlkK2JkbHErdVFSNVM0TjRWdzF2UjRGVEY0c3dBQVZ6VFk1ZmVZeDNxQ3ljaDhwR2JKTTZHaDg" },
-        { name: "Laptop deals", img: "https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?q=80&w=300&auto=format&fit=crop" },
-        { name: "All laptops", img: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?q=80&w=300&auto=format&fit=crop" },
-    ];
-
-    const brands = [
-        { name: "SAMSUNG", color: "text-blue-700" },
-        { name: "Apple", color: "text-black" }, // Using logo in real life
-        { name: "Microsoft", color: "text-gray-600" },
-        { name: "LG", color: "text-red-600" },
-        { name: "SONY", color: "text-black" },
-    ];
-
-    // --- Data: Best Deals ---
-    const bestDeals = [
         {
-            name: "Asus Chromebook C14 1400 Flip",
-            price: "509,-",
-            oldPrice: "659,-",
-            discount: "10%",
-            rating: "4.7(123)",
-            image: "https://images.unsplash.com/photo-1588702547923-7093a6c36d89?q=80&w=400&auto=format&fit=crop"
+            id: 1,
+            title: "Smartphones",
+            count: "240+ Products",
+            image: "https://images.unsplash.com/photo-1598327105666-5b89351aff70?q=80&w=800&auto=format&fit=crop",
+            icon: <Smartphone size={24} />
         },
         {
-            name: "Lenovo IdeaPad 1 15IJL7 15.6\"",
-            price: "479,-",
-            oldPrice: "589,-",
-            discount: "20%",
-            rating: "4.8 (95)",
-            image: "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?q=80&w=400&auto=format&fit=crop"
+            id: 2,
+            title: "Laptops",
+            count: "120+ Products",
+            image: "https://images.unsplash.com/photo-1531297461136-82lwDe83b91d?q=80&w=800&auto=format&fit=crop",
+            icon: <Laptop size={24} />
         },
         {
-            name: "Apple MacBook Air 2023",
-            price: "1,879",
-            oldPrice: "2,099",
-            discount: "10%",
-            rating: "4.9 (210)",
-            image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca4?q=80&w=400&auto=format&fit=crop"
+            id: 3,
+            title: "Tablets",
+            count: "85+ Products",
+            image: "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?q=80&w=800&auto=format&fit=crop",
+            icon: <Tablet size={24} />
         },
         {
-            name: "Samsung Galaxy Book4",
-            price: "1,679,-",
-            oldPrice: "2,099,-",
-            discount: "20%",
-            rating: "4.5 (115)",
-            image: "https://images.unsplash.com/photo-1531297461136-82lwDe83b91d?q=80&w=400&auto=format&fit=crop"
+            id: 4,
+            title: "Audio",
+            count: "180+ Products",
+            image: "https://images.unsplash.com/photo-1546435770-a3e426bf472b?q=80&w=800&auto=format&fit=crop",
+            icon: <Headphones size={24} />
+        },
+        {
+            id: 5,
+            title: "Wearables",
+            count: "60+ Products",
+            image: "https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?q=80&w=800&auto=format&fit=crop",
+            icon: <Watch size={24} />
+        },
+        {
+            id: 6,
+            title: "Gaming",
+            count: "90+ Products",
+            image: "https://images.unsplash.com/photo-1592840496011-a5030a246d9f?q=80&w=800&auto=format&fit=crop",
+            icon: <Gamepad2 size={24} />
         }
     ];
 
     return (
-        <section className="min-h-screen pb-20">
-            <div className="container">
-                {/* ----------------- Categories */}
-                <div className="py-12">
-                    <div>
-                        <div className="mb-8">
-                            <h1 className="text-4xl font-semibold text-coil mb-2">Find Your Category</h1>
-                            <p className="text-text-muted text-sm">Find the perfect category for you. We ensure the best</p>
-                        </div>
+        <div className="min-h-screen bg-bg text-text-primary font-primary">
 
-                        <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4'>
-                            {
-                                categories.map((item, i) => (
-                                    <SingleCategoryCard key={i} item={item} />
-                                ))
-                            }
-                        </div>
+            {/* Header */}
+            <section className="py-20 bg-surface border-b border-border">
+                <div className="container text-center">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 text-accent text-sm font-medium mb-6 animate-fade-in">
+                        <span className="relative flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
+                        </span>
+                        Explore the Future
+                    </div>
+                    <h1 className="text-4xl md:text-5xl font-bold font-space mb-4">
+                        Browse by Category
+                    </h1>
+                    <p className="text-text-secondary max-w-xl mx-auto text-lg">
+                        Dive into our extensive collection of premium electronics.
+                        Find exactly what you need, organized for your convenience.
+                    </p>
+                </div>
+            </section>
+
+            {/* Category Grid */}
+            <section className="py-20">
+                <div className="container">
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {categories.map((category) => (
+                            <div
+                                key={category.id}
+                                className="group relative h-[400px] rounded-3xl overflow-hidden cursor-pointer shadow-sm hover:shadow-2xl transition-all duration-500"
+                            >
+                                {/* Background Image */}
+                                <div className="absolute inset-0">
+                                    <img
+                                        src={category.image}
+                                        alt={category.title}
+                                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                    />
+                                    {/* Overlay */}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity"></div>
+                                </div>
+
+                                {/* Content */}
+                                <div className="absolute inset-0 p-8 flex flex-col justify-end">
+                                    <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                                        <div className="flex items-center gap-3 mb-2 text-white/80">
+                                            <div className="p-2 bg-white/10 backdrop-blur-md rounded-lg">
+                                                {category.icon}
+                                            </div>
+                                            <span className="text-sm font-medium uppercase tracking-wider">{category.count}</span>
+                                        </div>
+
+                                        <h3 className="text-3xl font-bold text-white mb-4 font-space">{category.title}</h3>
+
+                                        <div className="flex items-center gap-2 text-white font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
+                                            Shop Now <ArrowRight size={20} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
+            </section>
 
+            {/* Trending / Featured Mini-Section */}
+            <section className="py-20 bg-surface">
+                <div className="container">
+                    <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+                        <div>
+                            <h2 className="text-3xl font-bold font-space mb-4">Trending Now</h2>
+                            <p className="text-text-secondary">Most popular categories this week.</p>
+                        </div>
+                        <button className="text-accent font-medium hover:text-blue-700 transition-colors flex items-center gap-2">
+                            View All Trends <ArrowRight size={18} />
+                        </button>
+                    </div>
 
-                <div className="mt-28 space-y-16">
-                    {/* Benefits Banner */}
-                    <Benefits />
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        {['VR Headsets', 'Smart Home', 'Cameras', 'Accessories'].map((item, i) => (
+                            <div key={i} className="bg-bg p-6 rounded-2xl border border-border hover:border-accent hover:shadow-lg transition-all text-center cursor-pointer group">
+                                <h4 className="font-bold text-lg group-hover:text-accent transition-colors">{item}</h4>
+                            </div>
+                        ))}
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        </div>
     );
 };
 

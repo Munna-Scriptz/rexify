@@ -4,7 +4,7 @@ import { ShoppingBag, ArrowRight } from 'lucide-react'
 const OrderSummary = ({ cartItems }) => {
     const subtotal = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
     const tax = subtotal * 0.08; // Assuming 8% tax
-    const shipping = subtotal > 1000 ? 0 : 25; // Free shipping over $1000
+    const shipping = subtotal > 1000 ? 0 : 25; // Free shipping over $1000  
     const total = subtotal + tax + shipping;
 
     return (

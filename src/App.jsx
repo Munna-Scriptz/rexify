@@ -10,6 +10,7 @@ import Category from './pages/Category'
 import About from './pages/About'
 import Contact from './pages/Contact'
 import Cart from './pages/Cart'
+import Product from './pages/Product'
 
 const App = () => {
   const MyRouter = createBrowserRouter(createRoutesFromElements(
@@ -17,6 +18,7 @@ const App = () => {
       <Route path='/' element={<LayoutOne />}>
         <Route index element={<Home />} />
         <Route path='category' element={<Category />} />
+        <Route path='product' element={<Product />} />
         <Route path='about' element={<About />} />
         <Route path='contact' element={<Contact />} />
         <Route path='cart' element={<Cart />} />

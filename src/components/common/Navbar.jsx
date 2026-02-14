@@ -65,13 +65,9 @@ const Navbar = () => {
                             {/* Products Mega Menu */}
                             <div
                                 className="h-full flex items-center justify-center relative py-4"
-                                onMouseEnter={() => setProductMenuOpen(true)}
-                                onMouseLeave={() => setProductMenuOpen(false)}
+                                onMouseEnter={() => setProductMenuOpen(true)} 
                             >
                                 <NavLink className={`navLinkHover duration-300`} to={'/category'}>Products</NavLink>
-                                <div className={`absolute top-full w-[900px] left-0 transition-all duration-300 ${productMenuOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
-                                    <ProductMenu />
-                                </div>
                             </div>
 
                             <NavLink className={`navLinkHover duration-300`} to={'/category'}>Categories</NavLink>
@@ -119,6 +115,12 @@ const Navbar = () => {
 
             {/* -------------- Search Field ------------ */}
             {search && <SearchField close={setSearch} />}
+
+            {/* -------------- Products Field ------------ */}
+            <div onMouseLeave={() => setProductMenuOpen(false)} className={`absolute left-0 w-screen transition-all duration-300 ${productMenuOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
+                <ProductMenu />
+            </div>
+
         </>
     )
 }

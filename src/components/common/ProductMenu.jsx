@@ -47,8 +47,8 @@ const ProductMenu = () => {
     }
 
     return (
-        <div className="absolute top-full left-0 w-full bg-white/95 backdrop-blur-md shadow-2xl border-t border-gray-100 animate-in fade-in slide-in-from-top-2 duration-200 z-50">
-            <div className="container mx-auto">
+        <div className="w-full bg-white/95 backdrop-blur-md shadow border-t border-gray-100 animate-in fade-in slide-in-from-top-2 duration-200 z-50">
+            <div className="container">
                 <div className="flex">
 
                     {/* Sidebar Categories */}

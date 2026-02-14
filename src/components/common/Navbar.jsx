@@ -4,10 +4,12 @@ import { Link, NavLink, useLocation } from 'react-router'
 import { FiHeart } from 'react-icons/fi'
 import { PiUser } from 'react-icons/pi'
 import SearchField from './SearchField'
+import ProductMenu from './ProductMenu'
 
 const Navbar = () => {
     const [isNavbarWhite, setIsNavbarWhite] = useState(false);
     const [search, setSearch] = useState(false);
+    const [productMenuOpen, setProductMenuOpen] = useState(false);
     const location = useLocation();
 
     const isHomePage = location.pathname === "/" || location.pathname === "/home";
@@ -59,7 +61,19 @@ const Navbar = () => {
                         <div className={`flex items-center gap-6 group-hover:text-text-primary ${isNavbarWhite && 'text-text-primary'}`}>
                             <NavLink className={`navLinkHover duration-300`} to={'/'}>Home</NavLink>
                             <NavLink className={`navLinkHover duration-300`} to={'/'}>Featured</NavLink>
-                            <NavLink className={`navLinkHover duration-300`} to={'/'}>Products</NavLink>
+
+                            {/* Products Mega Menu */}
+                            <div
+                                className="h-full flex items-center justify-center relative py-4"
+                                onMouseEnter={() => setProductMenuOpen(true)}
+                                onMouseLeave={() => setProductMenuOpen(false)}
+                            >
+                                <NavLink className={`navLinkHover duration-300`} to={'/category'}>Products</NavLink>
+                                <div className={`absolute top-full w-[900px] left-0 transition-all duration-300 ${productMenuOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
+                                    <ProductMenu />
+                                </div>
+                            </div>
+
                             <NavLink className={`navLinkHover duration-300`} to={'/category'}>Categories</NavLink>
                             <NavLink className={`navLinkHover duration-300`} to={'/about'}>About</NavLink>
                             <NavLink className={`navLinkHover duration-300`} to={'/contact'}>Contact</NavLink>

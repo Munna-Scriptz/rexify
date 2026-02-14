@@ -47,7 +47,7 @@ const ProductMenu = () => {
     }
 
     return (
-        <div className="w-full bg-white/95 backdrop-blur-md shadow border-b bordergray-100 animate-in fade-in slide-in-from-top-2 duration-200 z-50">
+        <div className="w-full bg-white backdrop-blur-md shadow animate-in fade-in slide-in-from-top-2 duration-200">
             <div className="container">
                 <div className="flex">
 

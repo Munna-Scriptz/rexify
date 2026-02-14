@@ -29,7 +29,7 @@ const Navbar = () => {
             else if (currentScrollY > 100) {
                 navbar.style.top = "-100px";
             }
-            if (search || !isHomePage) {
+            if (search || !isHomePage || productMenuOpen) {
                 setIsNavbarWhite(true);
             } else {
                 if (currentScrollY > 0) {
@@ -42,11 +42,10 @@ const Navbar = () => {
         };
 
         window.addEventListener("scroll", handleScroll);
-        // Initial check
         handleScroll();
 
         return () => window.removeEventListener("scroll", handleScroll);
-    }, [isHomePage, search]);
+    }, [isHomePage, search, productMenuOpen]);
 
 
     return (
@@ -117,7 +116,7 @@ const Navbar = () => {
             {search && <SearchField close={setSearch} />}
 
             {/* -------------- Products Field ------------ */}
-            <div onMouseLeave={() => setProductMenuOpen(false)} className={`absolute left-0 w-full transition-all duration-300 ${productMenuOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
+            <div onMouseLeave={() => setProductMenuOpen(false)} className={`absolute left-0 z-40 w-full transition-all duration-300 ${productMenuOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
                 <div className='absolute top-0 left-0 bg-black/70 w-full h-screen backdrop-blur' onMouseEnter={() => setProductMenuOpen(false)}></div>
                 <ProductMenu />
             </div>

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import logo from '../../assets/Logo.png'
 import { Link, NavLink, useLocation } from 'react-router'
-import { FiHeart } from 'react-icons/fi'
+import { FiHeart, FiShoppingCart } from 'react-icons/fi'
 import { PiUser } from 'react-icons/pi'
 import SearchField from './SearchField'
 import ProductMenu from './ProductMenu'
+import { ShoppingCart } from 'lucide-react'
 
 const Navbar = () => {
     const [isNavbarWhite, setIsNavbarWhite] = useState(false);
@@ -85,22 +86,18 @@ const Navbar = () => {
                                 </label>
                                 <input className={`w-30 read pl-10 h-8 outline-none rounded-full hover:bg-text-muted/20 group-hover:placeholder:text-text-primary ${isNavbarWhite && 'placeholder:text-text-primary'} appearance-none duration-300 [&::-webkit-search-cancel-button]:appearance-none cursor-pointer`} readOnly type="search" id='search' name='search' aria-label='search' placeholder='Search' />
                             </div>
-                            {/* --------- Cart  */}
-                            <div className={`w-8 h-8 flex items-center justify-center hover:bg-text-muted/30 group-hover:text-text-primary ${isNavbarWhite && 'text-text-primary'} rounded-full cursor-pointer relative`}>
+                            {/* --------- icons  */}
+                            <Link to={"/cart"} className={`w-8 h-8 flex items-center justify-center hover:bg-text-muted/30 group-hover:text-text-primary duration-300 ${isNavbarWhite && 'text-text-primary'} rounded-full relative`}>
                                 <div className='w-4 h-4 bg-accent rounded-full text-xs text-white flex items-center justify-center absolute -top-1 -right-1'>
                                     <span>3</span>
                                 </div>
-                                <svg className='w-6 duration-300' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                    <path fill="currentColor" fillRule="evenodd" d="M1.289 2.763a.75.75 0 0 1 .948-.475l.265.089l.04.013c.626.209 1.155.385 1.572.579c.442.206.826.46 1.117.865c.291.403.412.848.467 1.333c.052.456.052 1.014.052 1.674V9.5c0 1.435.002 2.437.103 3.192c.099.734.28 1.122.556 1.399c.277.277.666.457 1.4.556c.755.101 1.756.103 3.191.103h7a.75.75 0 0 1 0 1.5h-7.055c-1.367 0-2.47 0-3.337-.116c-.9-.122-1.658-.38-2.26-.982s-.86-1.36-.981-2.26c-.117-.867-.117-1.97-.117-3.337V6.883c0-.713 0-1.185-.042-1.546c-.04-.342-.107-.506-.194-.626c-.086-.12-.221-.237-.533-.382c-.33-.153-.777-.304-1.453-.53l-.265-.087a.75.75 0 0 1-.474-.95" clipRule="evenodd"></path>
-                                    <path fill="currentColor" d="M5.745 6q.006.39.005.841V9.5c0 1.435.002 2.437.103 3.192q.023.165.05.308h10.12c.959 0 1.438 0 1.814-.248s.565-.688.942-1.57l.43-1c.809-1.89 1.213-2.834.769-3.508S18.506 6 16.45 6z" opacity={0.5}></path>
-                                    <path fill="currentColor" d="M7.25 9A.75.75 0 0 1 8 8.25h3a.75.75 0 0 1 0 1.5H8A.75.75 0 0 1 7.25 9m.25 9a1.5 1.5 0 1 1 0 3a1.5 1.5 0 0 1 0-3M18 19.5a1.5 1.5 0 1 0-3 0a1.5 1.5 0 0 0 3 0"></path>
-                                </svg>
-                            </div>
+                                <ShoppingCart strokeWidth={1} />
+                            </Link>
 
                             {/* --------- Favorites  */}
-                            <div className={`w-8 h-8 flex items-center justify-center hover:bg-text-muted/20 duration-300 group-hover:text-text-primary ${isNavbarWhite && 'text-text-primary'} text-xl rounded-full cursor-pointer relative`}>
-                                <FiHeart />
-                            </div>
+                            <Link to={"/favourite"} className={`w-8 h-8 flex items-center justify-center hover:bg-text-muted/20 duration-300 group-hover:text-text-primary ${isNavbarWhite && 'text-text-primary'} text-xl rounded-full cursor-pointer relative`}>
+                                <FiHeart strokeWidth={1.5} />
+                            </Link>
 
                             {/* --------- User  */}
                             <Link to={'/auth'} className={`w-8 h-8 flex items-center justify-center hover:bg-text-muted/20 duration-300 group-hover:text-text-primary ${isNavbarWhite && 'text-text-primary'} text-xl rounded-full cursor-pointer relative`}>

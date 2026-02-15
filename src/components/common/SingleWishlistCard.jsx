@@ -21,20 +21,11 @@ const SingleWishlistCard = ({ img, badge, name, variant, price, rating, reviews 
 
                 {/* Remove  */}
                 <button
-                    className="absolute top-3 right-3 h-8 w-8 rounded-full cursor-pointer bg-white/80 hover:bg-white text-text-muted hover:text-red-500 flex items-center justify-center transition-all shadow-sm hover:shadow-md opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0"
+                    className="absolute top-3 right-3 h-8 w-8 rounded-full cursor-pointer bg-coil/40 hover:bg-red-500 text-white hover:text- flex items-center justify-center duration-300 shadow-sm hover:shadow-md translate-y-2"
                     aria-label="Remove"
                 >
-                    <HeartOff size={16} />
+                    <HeartOff size={18} />
                 </button>
-
-                {/* Hover Actions */}
-                <div className="absolute bottom-4 left-0 w-full px-4 flex justify-center opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
-                    <button
-                        className="w-full py-2.5 rounded-xl cursor-pointer bg-neutral-900 text-white font-medium text-sm flex items-center justify-center gap-2 shadow-lg hover:bg-black transition-colors"
-                        aria-label="Add to cart">
-                        <FiShoppingBag size={16} /> Add to Cart
-                    </button>
-                </div>
             </div>
 
             {/* Content */}
@@ -57,6 +48,14 @@ const SingleWishlistCard = ({ img, badge, name, variant, price, rating, reviews 
                         <span className="text-neutral-400">({reviews})</span>
                     </div>
                 </div>
+
+
+                {/* Hover Actions */}
+                    <button
+                    className='w-full py-2.5 mt-3 bg-accent cursor-pointer text-white font-medium rounded-xl hover:bg-blue-700 transition-all flex items-center justify-center gap-2 shadow-lg shadow-accent/20'
+                        aria-label="Add to cart">
+                        <FiShoppingBag size={16} /> Add to Cart
+                    </button>
             </div>
 
             {/* Bottom Accent Line */}

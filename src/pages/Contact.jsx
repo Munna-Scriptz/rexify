@@ -1,6 +1,6 @@
 import React from 'react'
 import { Mail, Phone, MapPin, Send, HelpCircle } from 'lucide-react'
-import PageHeader from '../components/common/PageHeader'
+import { PageHeader } from '../components/common/PageHeader'
 
 const Contact = () => {
     return (

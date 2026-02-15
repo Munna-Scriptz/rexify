@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowRight, Smartphone, Laptop, Tablet, Headphones, Watch, Gamepad2 } from 'lucide-react';
-import PageHeader from '../components/common/PageHeader';
+import { PageHeader } from '../components/common/PageHeader';
 
 const Category = () => {
     const categories = [
@@ -55,7 +55,7 @@ const Category = () => {
                     <div id="content-Row" className="text-text-primary">
 
                         {/* Header */}
-                        <PageHeader topText={"Explore The Future"} headerText={"Browse by"} colorText={"Category"} bottomText={"Dive into our extensive collection of premium electronics. Find exactly what you need, organized for your convenience."}/>
+                        <PageHeader topText={"Explore The Future"} headerText={"Browse by"} colorText={"Category"} bottomText={"Dive into our extensive collection of premium electronics. Find exactly what you need, organized for your convenience."} />
 
                         {/* Category Grid */}
                         <section className="py-20">

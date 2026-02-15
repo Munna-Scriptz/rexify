@@ -1,33 +1,13 @@
 import React from 'react'
 import { Rocket, Shield, Zap, Globe, Users, ArrowRight } from 'lucide-react'
+import { AboutHeader } from '../components/common/PageHeader'
 
 const About = () => {
     return (
         <div className="font-primary text-text-primary bg-bg min-h-screen">
 
-            {/* Hero Section */}
-            <section className="relative py-24 lg:py-32 overflow-hidden">
-                <div className="absolute inset-0 bg-accent/5 -z-10"></div>
-                <div className="container flex flex-col items-center text-center">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 text-accent text-sm font-medium mb-6 animate-fade-in">
-                        <span className="relative flex h-2 w-2">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
-                        </span>
-                        We are Rexify
-                    </div>
-                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6">
-                        Redefining the <br className="hidden md:block" />
-                        <span className="text-transparent bg-clip-text bg-linear-to-r from-accent to-blue-600">
-                            Digital Experience
-                        </span>
-                    </h1>
-                    <p className="max-w-2xl text-lg text-text-secondary md:text-xl leading-relaxed">
-                        We build tools that empower creators, developers, and businesses to scale
-                        without boundaries. Simple, powerful, and built for the future.
-                    </p>
-                </div>
-            </section>
+            {/* Hero Section/about */}
+            <AboutHeader />
 
             {/* Mission Section */}
             <section className="py-20 bg-surface">

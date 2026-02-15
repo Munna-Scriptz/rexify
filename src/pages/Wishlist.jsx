@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router'
 import { Heart, ArrowRight } from 'lucide-react'
 import SingleWishlistCard from '../components/common/SingleWishlistCard'
+import { WishlistHeader } from '../components/common/PageHeader'
 
 const Wishlist = () => {
     const [wishlistItems, setWishlistItems] = useState([
@@ -45,16 +46,6 @@ const Wishlist = () => {
             inStock: true,
             rating: 4.6,
             reviews: 210
-        },
-        {
-            id: 5,
-            name: "Gucci GG Supreme",
-            brand: "Gucci",
-            price: 2100,
-            image: "https://images.unsplash.com/photo-1559563458-52c69522108a?q=80&w=300&auto=format&fit=crop",
-            inStock: false,
-            rating: 4.9,
-            reviews: 340
         }
     ]);
 
@@ -81,19 +72,8 @@ const Wishlist = () => {
             <div className="container mx-auto px-4 md:px-8">
 
                 {/* Header */}
-                <div className="flex flex-col items-center mb-16">
-                    <Heart className="w-10 h-10 mb-4 text-text-primary" strokeWidth={1} />
-                    <h1 className="text-4xl md:text-5xl font-bold font-space mb-6 text-text-primary">
-                        My <span className="text-accent">wishlist</span>
-                    </h1>
-
-                    {/* Tabs / Sub-nav */}
-                    <div className="flex items-center gap-8 text-sm font-medium text-text-muted border-b border-border pb-4 w-full md:w-auto justify-center">
-                        <button className="hover:text-text-primary transition-colors">Create a wishlist</button>
-                        <button className="text-text-primary border-b-2 border-text-primary pb-4 -mb-4.5">Your wishlists</button>
-                        <button className="hover:text-text-primary transition-colors">Search wishlist</button>
-                    </div>
-                </div>
+                <WishlistHeader />
+                
 
                 {/* Grid Content */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">

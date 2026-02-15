@@ -21,7 +21,7 @@ const SingleWishlistCard = ({ img, badge, name, variant, price, rating, reviews 
 
                 {/* Remove  */}
                 <button
-                    className="absolute top-3 right-3 h-8 w-8 rounded-full cursor-pointer bg-coil/40 hover:bg-red-500 text-white hover:text- flex items-center justify-center duration-300 shadow-sm hover:shadow-md translate-y-2"
+                    className="absolute top-2 right-3 h-8 w-8 rounded-full cursor-pointer bg-coil/40 hover:bg-red-500 text-white hover:text- flex items-center justify-center duration-300 shadow-sm hover:shadow-md translate-y-2"
                     aria-label="Remove"
                 >
                     <HeartOff size={18} />

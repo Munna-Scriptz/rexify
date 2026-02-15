@@ -83,7 +83,9 @@ const Wishlist = () => {
                 {/* Header */}
                 <div className="flex flex-col items-center mb-16">
                     <Heart className="w-10 h-10 mb-4 text-text-primary" strokeWidth={1} />
-                    <h1 className="text-5xl font-bold font-space text-center text-text-primary mb-8">My wishlist</h1>
+                    <h1 className="text-4xl md:text-5xl font-bold font-space mb-6 text-text-primary">
+                        My <span className="text-accent">wishlist</span>
+                    </h1>
 
                     {/* Tabs / Sub-nav */}
                     <div className="flex items-center gap-8 text-sm font-medium text-text-muted border-b border-border pb-4 w-full md:w-auto justify-center">

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import logo from '../../assets/Logo.png'
 import { Link, NavLink, useLocation } from 'react-router'
-import { FiHeart, FiShoppingCart } from 'react-icons/fi'
+import { FiHeart } from 'react-icons/fi'
 import { PiUser } from 'react-icons/pi'
 import SearchField from './SearchField'
 import ProductMenu from './ProductMenu'
@@ -60,7 +60,7 @@ const Navbar = () => {
                         {/* ------------ NavLinks  */}
                         <div className={`flex items-center gap-6 group-hover:text-text-primary ${isNavbarWhite && 'text-text-primary'}`}>
                             <NavLink className={`navLinkHover duration-300`} to={'/'}>Home</NavLink>
-                            <NavLink className={`navLinkHover duration-300`} to={'/'}>Featured</NavLink>
+                            <NavLink className={`navLinkHover duration-300`} to={'/'}>Shop</NavLink>
 
                             {/* Products Mega Menu */}
                             <div
@@ -95,7 +95,7 @@ const Navbar = () => {
                             </Link>
 
                             {/* --------- Favorites  */}
-                            <Link to={"/favourite"} className={`w-8 h-8 flex items-center justify-center hover:bg-text-muted/20 duration-300 group-hover:text-text-primary ${isNavbarWhite && 'text-text-primary'} text-xl rounded-full cursor-pointer relative`}>
+                            <Link to={"/wishlist"} className={`w-8 h-8 flex items-center justify-center hover:bg-text-muted/20 duration-300 group-hover:text-text-primary ${isNavbarWhite && 'text-text-primary'} text-xl rounded-full cursor-pointer relative`}>
                                 <FiHeart strokeWidth={1.5} />
                             </Link>
 

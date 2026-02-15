@@ -11,6 +11,7 @@ import About from './pages/About'
 import Contact from './pages/Contact'
 import Cart from './pages/Cart'
 import Product from './pages/Product'
+import Wishlist from './pages/Wishlist'
 
 const App = () => {
   const MyRouter = createBrowserRouter(createRoutesFromElements(
@@ -22,6 +23,7 @@ const App = () => {
         <Route path='about' element={<About />} />
         <Route path='contact' element={<Contact />} />
         <Route path='cart' element={<Cart />} />
+        <Route path='wishlist' element={<Wishlist />} />
       </Route>
 
       {/* --------------- Auth Router ---------------- */}

@@ -51,7 +51,7 @@ const Navbar = () => {
 
     return (
         <>
-            <nav id='navbar' className={`py-3 sticky top-0 duration-300 z-50 group hover:bg-surface ${isNavbarWhite && 'shadow bg-white'}`}>
+            <nav onMouseEnter={() => setProductMenuOpen(false)} id='navbar' className={`py-3 sticky top-0 duration-300 z-50 group hover:bg-surface ${isNavbarWhite && 'shadow bg-white'}`}>
                 <div className="container">
                     <div id='Navbar-Row' className='flex items-center justify-between text-white'>
                         {/* ------------ Image  */}

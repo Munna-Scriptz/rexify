@@ -26,7 +26,7 @@ const ImageGallery = (product) => {
                         onClick={() => setSelectedImage(index)}
                         className={`aspect-square bg-surface rounded-xl overflow-hidden cursor-pointer border-2 transition-all ${selectedImage === index ? 'border-accent' : 'border-transparent hover:border-gray-300'}`}
                     >
-                        <img src={img} alt="" className="w-full h-full object-cover" />
+                        <img src={img} alt="img" className="w-full h-full object-cover" />
                     </div>
                 ))}
             </div>

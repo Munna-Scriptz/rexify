@@ -48,10 +48,16 @@ const Navbar = () => {
         return () => window.removeEventListener("scroll", handleScroll);
     }, [isHomePage, search, productMenuOpen]);
 
+    // Lock body scroll when product menu is open
+    useEffect(() => {
+        document.body.style.overflow = productMenuOpen ? 'hidden' : '';
+        return () => { document.body.style.overflow = ''; };
+    }, [productMenuOpen]);
+
 
     return (
         <>
-            <nav onMouseEnter={() => setProductMenuOpen(false)} id='navbar' className={`py-3 sticky top-0 duration-300 z-50 group hover:bg-surface ${isNavbarWhite && 'shadow bg-white'}`}>
+            <nav id='navbar' className={`py-3 sticky top-0 duration-300 z-50 group hover:bg-surface ${isNavbarWhite && 'shadow bg-white'}`}>
                 <div className="container">
                     <div id='Navbar-Row' className='flex items-center justify-between text-white'>
                         {/* ------------ Image  */}
@@ -78,7 +84,7 @@ const Navbar = () => {
                         {/* ------------ NavButtons  */}
                         <div className={`border-l group-hover:border-text-primary/40 ${isNavbarWhite && 'border-text-primary/40'} border-gray-300 pl-3 flex items-center gap-2 `}>
                             {/* ------- Search  */}
-                            <div onClick={() => { setSearch(!search) }} className='flex items-center rounded-2xl relative cursor-pointer'>
+                            <div onClick={() => { setSearch(!search); setProductMenuOpen(false); }} className='flex items-center rounded-2xl relative cursor-pointer'>
                                 <label htmlFor='search' className={`w-8 h-8 pointer-events-none bg-transparent cursor-pointer group-hover:bg-text-muted/20 flex duration-300 items-center justify-center rounded-full absolute left-0`}>
                                     <svg className={`w-6 group-hover:text-text-primary ${isNavbarWhite && 'text-text-primary'}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                         <path fill="currentColor" d="M9.864 3.081A1.56 1.56 0 0 0 9 4.471c0 .275.079.553.215.799a6 6 0 1 0 7.66 6.948a.5.5 0 0 1 .105.183c.235.743.49 1.61 1.418 1.647a8 8 0 0 1-1.126 1.919l4.426 4.317a1 1 0 0 1-1.396 1.432l-4.46-4.348A8 8 0 1 1 9.864 3.081M18.484 8a.3.3 0 0 1 .285.201l.25.766a1.58 1.58 0 0 0 .999.998l.765.248l.015.004a.304.304 0 0 1 .146.46a.3.3 0 0 1-.146.11l-.765.248a1.58 1.58 0 0 0-.999.998l-.249.766a.303.303 0 0 1-.57 0l-.25-.766a1.58 1.58 0 0 0-.998-1.002l-.765-.248a.304.304 0 0 1-.146-.46a.3.3 0 0 1 .146-.11l.765-.248a1.58 1.58 0 0 0 .984-.998L18.2 8.2a.3.3 0 0 1 .284-.2m-4.011-8a.545.545 0 0 1 .512.363l.449 1.376a2.84 2.84 0 0 0 1.797 1.797l1.378.447l.028.007a.55.55 0 0 1 .363.514a.54.54 0 0 1-.363.513l-1.378.447A2.84 2.84 0 0 0 15.46 7.26l-.447 1.376L15 8.67a.545.545 0 0 1-1.014-.034L13.54 7.26a2.84 2.84 0 0 0-1.798-1.804l-1.378-.447A.55.55 0 0 1 10 4.496a.54.54 0 0 1 .363-.513l1.378-.447A2.84 2.84 0 0 0 13.5 1.773l.012-.034l.447-1.376A.55.55 0 0 1 14.473 0"></path>
@@ -112,9 +118,13 @@ const Navbar = () => {
             {/* -------------- Search Field ------------ */}
             {search && <SearchField close={setSearch} />}
 
-            {/* -------------- Products Field ------------ */}
-            <div onMouseLeave={() => setProductMenuOpen(false)} className={`absolute left-0 z-40 w-full transition-all duration-300 ${productMenuOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
-                <div className='absolute top-0 left-0 bg-black/70 w-full h-screen backdrop-blur' onMouseEnter={() => setProductMenuOpen(false)}></div>
+            {/* -------------- Products Mega Menu ------------ */}
+            <div
+                onMouseLeave={() => setProductMenuOpen(false)}
+                className={`fixed left-0 right-0 z-40 transition-all duration-300 ${productMenuOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2 pointer-events-none'}`}
+                style={{ top: document.getElementById('navbar')?.offsetHeight ?? 56 }}
+            >
+                <div className='absolute top-0 left-0 bg-black/70 w-full h-screen backdrop-blur' onMouseEnter={() => setProductMenuOpen(false)} onClick={() => setProductMenuOpen(false)}></div>
                 <ProductMenu />
             </div>
 

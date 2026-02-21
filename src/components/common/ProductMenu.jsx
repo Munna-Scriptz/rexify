@@ -45,7 +45,6 @@ const ProductMenu = () => {
             { name: "UGREEN Nexode", price: "$89", image: "https://images.unsplash.com/photo-1586953208448-b95a79798f07?q=80&w=200&auto=format&fit=crop" },
         ]
     }
-
     return (
         <div className="w-full bg-white backdrop-blur-md shadow animate-in fade-in slide-in-from-top-2 duration-200">
             <div className="container">

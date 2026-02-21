@@ -60,7 +60,7 @@ const Navbar = () => {
                         {/* ------------ NavLinks  */}
                         <div className={`flex items-center gap-6 group-hover:text-text-primary ${isNavbarWhite && 'text-text-primary'}`}>
                             <NavLink className={`navLinkHover duration-300`} to={'/'}>Home</NavLink>
-                            <NavLink className={`navLinkHover duration-300`} to={'/'}>Shop</NavLink>
+                            <NavLink className={`navLinkHover duration-300`} to={'/shop'}>Shop</NavLink>
 
                             {/* Products Mega Menu */}
                             <div

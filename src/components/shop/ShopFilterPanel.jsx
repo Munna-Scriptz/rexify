@@ -1,21 +1,7 @@
-import React, { useState } from 'react';
-import { ChevronDown, ChevronUp, X, SlidersHorizontal } from 'lucide-react';
-
-const FilterSection = ({ title, children, defaultOpen = true }) => {
-    const [open, setOpen] = useState(defaultOpen);
-    return (
-        <div className="border-b border-border py-5">
-            <button
-                onClick={() => setOpen(!open)}
-                className="w-full flex items-center justify-between font-semibold text-text-primary text-sm mb-1"
-            >
-                {title}
-                {open ? <ChevronUp size={16} className="text-text-secondary" /> : <ChevronDown size={16} className="text-text-secondary" />}
-            </button>
-            {open && <div className="mt-3">{children}</div>}
-        </div>
-    );
-};
+import React from 'react';
+import { X, SlidersHorizontal } from 'lucide-react';
+import FilterSection from './FilterSection';
+import RatingStars from './RatingStars';
 
 const ShopFilterPanel = ({ filters, setFilters, onReset }) => {
 
@@ -70,8 +56,8 @@ const ShopFilterPanel = ({ filters, setFilters, onReset }) => {
                             key={cat}
                             onClick={() => handleCategoryChange(cat)}
                             className={`text-left text-sm px-3 py-2 rounded-lg transition-all font-medium ${filters.category === cat
-                                    ? 'bg-accent text-white'
-                                    : 'text-text-secondary hover:bg-muted hover:text-text-primary'
+                                ? 'bg-accent text-white'
+                                : 'text-text-secondary hover:bg-muted hover:text-text-primary'
                                 }`}
                         >
                             {cat}
@@ -142,8 +128,8 @@ const ShopFilterPanel = ({ filters, setFilters, onReset }) => {
                             <div
                                 onClick={() => handleBrandToggle(brand)}
                                 className={`w-4.5 h-4.5 rounded flex items-center justify-center border-2 transition-all cursor-pointer shrink-0 ${filters.brands.includes(brand)
-                                        ? 'bg-accent border-accent'
-                                        : 'border-border group-hover:border-accent/60'
+                                    ? 'bg-accent border-accent'
+                                    : 'border-border group-hover:border-accent/60'
                                     }`}
                             >
                                 {filters.brands.includes(brand) && (
@@ -171,15 +157,11 @@ const ShopFilterPanel = ({ filters, setFilters, onReset }) => {
                             key={r}
                             onClick={() => handleRatingChange(r)}
                             className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${filters.rating === r
-                                    ? 'bg-accent/10 text-accent font-semibold'
-                                    : 'text-text-secondary hover:bg-muted hover:text-text-primary'
+                                ? 'bg-accent/10 text-accent font-semibold'
+                                : 'text-text-secondary hover:bg-muted hover:text-text-primary'
                                 }`}
                         >
-                            <span className="flex">
-                                {Array.from({ length: 5 }).map((_, i) => (
-                                    <span key={i} className={i < r ? 'text-yellow-400' : 'text-border'}>★</span>
-                                ))}
-                            </span>
+                            <RatingStars count={r}/>
                             <span>& Up</span>
                         </button>
                     ))}
@@ -194,8 +176,8 @@ const ShopFilterPanel = ({ filters, setFilters, onReset }) => {
                             key={opt.label}
                             onClick={() => handleAvailability(opt.val)}
                             className={`text-left text-sm px-3 py-2 rounded-lg transition-all font-medium ${filters.inStockOnly === opt.val
-                                    ? 'bg-accent text-white'
-                                    : 'text-text-secondary hover:bg-muted hover:text-text-primary'
+                                ? 'bg-accent text-white'
+                                : 'text-text-secondary hover:bg-muted hover:text-text-primary'
                                 }`}
                         >
                             {opt.label}

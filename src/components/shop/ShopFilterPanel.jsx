@@ -2,6 +2,7 @@ import React from 'react';
 import { X, SlidersHorizontal } from 'lucide-react';
 import FilterSection from './FilterSection';
 import RatingStars from './RatingStars';
+import RangeSlider from './RangeSlider';
 
 const ShopFilterPanel = ({ filters, setFilters, onReset }) => {
 
@@ -20,8 +21,18 @@ const ShopFilterPanel = ({ filters, setFilters, onReset }) => {
         });
     };
 
+    const MIN_PRICE = 0;
+    const MAX_PRICE = 5000;
+
     const handlePriceChange = (e, key) => {
-        setFilters(f => ({ ...f, priceRange: { ...f.priceRange, [key]: Number(e.target.value) } }));
+        const value = Number(e.target.value);
+        setFilters(f => {
+            if (key === 'min') {
+                return { ...f, priceRange: { ...f.priceRange, min: Math.min(value, f.priceRange.max - 50) } };
+            } else {
+                return { ...f, priceRange: { ...f.priceRange, max: Math.max(value, f.priceRange.min + 50) } };
+            }
+        });
     };
 
     const handleRatingChange = (rating) => {
@@ -55,7 +66,7 @@ const ShopFilterPanel = ({ filters, setFilters, onReset }) => {
                         <button
                             key={cat}
                             onClick={() => handleCategoryChange(cat)}
-                            className={`text-left text-sm px-3 py-2 rounded-lg transition-all font-medium ${filters.category === cat
+                            className={`text-left text-sm px-3 py-2 rounded-lg transition-all cursor-pointer font-medium ${filters.category === cat
                                 ? 'bg-accent text-white'
                                 : 'text-text-secondary hover:bg-muted hover:text-text-primary'
                                 }`}
@@ -68,56 +79,7 @@ const ShopFilterPanel = ({ filters, setFilters, onReset }) => {
 
             {/* Price Range */}
             <FilterSection title="Price Range">
-                <div className="space-y-3">
-                    <div className="flex items-center justify-between text-sm font-semibold text-text-primary">
-                        <span>${filters.priceRange.min}</span>
-                        <span>${filters.priceRange.max}</span>
-                    </div>
-                    <div className="relative h-1.5 bg-muted rounded-full">
-                        <div
-                            className="absolute h-full bg-accent rounded-full"
-                            style={{
-                                left: `${(filters.priceRange.min / 5000) * 100}%`,
-                                right: `${100 - (filters.priceRange.max / 5000) * 100}%`
-                            }}
-                        />
-                    </div>
-                    <div className="relative">
-                        <input
-                            type="range" min={0} max={5000} step={50}
-                            value={filters.priceRange.min}
-                            onChange={e => handlePriceChange(e, 'min')}
-                            className="absolute w-full h-1.5 opacity-0 cursor-pointer z-10"
-                        />
-                        <input
-                            type="range" min={0} max={5000} step={50}
-                            value={filters.priceRange.max}
-                            onChange={e => handlePriceChange(e, 'max')}
-                            className="absolute w-full h-1.5 opacity-0 cursor-pointer z-20"
-                        />
-                        <div className="h-1.5 bg-transparent" />
-                    </div>
-                    <div className="flex gap-2 mt-4">
-                        <div className="flex-1">
-                            <label className="text-xs text-text-muted mb-1 block">Min</label>
-                            <input
-                                type="number" min={0} max={filters.priceRange.max} step={50}
-                                value={filters.priceRange.min}
-                                onChange={e => handlePriceChange(e, 'min')}
-                                className="w-full border border-border rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-accent bg-bg"
-                            />
-                        </div>
-                        <div className="flex-1">
-                            <label className="text-xs text-text-muted mb-1 block">Max</label>
-                            <input
-                                type="number" min={filters.priceRange.min} max={5000} step={50}
-                                value={filters.priceRange.max}
-                                onChange={e => handlePriceChange(e, 'max')}
-                                className="w-full border border-border rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-accent bg-bg"
-                            />
-                        </div>
-                    </div>
-                </div>
+                <RangeSlider filters={(filters)} MIN_PRICE={MIN_PRICE} MAX_PRICE={MAX_PRICE} handlePriceChange={handlePriceChange}/>
             </FilterSection>
 
             {/* Brands */}
@@ -161,7 +123,7 @@ const ShopFilterPanel = ({ filters, setFilters, onReset }) => {
                                 : 'text-text-secondary hover:bg-muted hover:text-text-primary'
                                 }`}
                         >
-                            <RatingStars count={r}/>
+                            <RatingStars count={r} />
                             <span>& Up</span>
                         </button>
                     ))}

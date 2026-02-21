@@ -1,9 +1,11 @@
 import React, { useState, useMemo } from 'react';
-import { FiHeart } from 'react-icons/fi';
-import { ChevronDown, X, SlidersHorizontal, LayoutGrid, List, Star } from 'lucide-react';
+import { ChevronDown, X, SlidersHorizontal, LayoutGrid, List, } from 'lucide-react';
 import ShopFilterPanel from '../components/shop/ShopFilterPanel';
 import Pagination from '../components/shop/Pagination';
 import ShopCard from '../components/shop/ShopCard';
+import ProductListView from '../components/shop/ShopListCard';
+import ShopEmptyState from '../components/emptyState/ShopEmptyState';
+import SortProduct from '../components/shop/SortProduct';
 
 /* ------------------------------------------------------------------ */
 /*  Mock product data                                                    */
@@ -67,7 +69,7 @@ const Shop = () => {
             case 'price-desc': products.sort((a, b) => b.price - a.price); break;
             case 'rating': products.sort((a, b) => b.rating - a.rating); break;
             case 'reviews': products.sort((a, b) => b.reviews - a.reviews); break;
-            default: break; // featured order
+            default: break;
         }
 
         return products;
@@ -133,37 +135,13 @@ const Shop = () => {
                                     >
                                         <SlidersHorizontal size={15} /> Filters
                                     </button>
-                                    <p className="text-sm text-text-secondary">
+                                    <p className="text-base text-text-secondary">
                                         <span className="font-bold text-text-primary">{filteredProducts.length}</span> products found
                                     </p>
                                 </div>
 
                                 {/* Right: sort + view toggles */}
-                                <div className="flex items-center gap-3">
-                                    <div className="relative">
-                                        <select
-                                            value={sortBy}
-                                            onChange={e => { setSortBy(e.target.value); setCurrentPage(1); }}
-                                            className="appearance-none pl-3 pr-8 py-2 rounded-xl border border-border text-sm text-text-primary bg-bg focus:outline-none focus:border-accent cursor-pointer font-medium transition-colors"
-                                        >
-                                            <option value="featured">Featured</option>
-                                            <option value="price-asc">Price: Low → High</option>
-                                            <option value="price-desc">Price: High → Low</option>
-                                            <option value="rating">Top Rated</option>
-                                            <option value="reviews">Most Reviewed</option>
-                                        </select>
-                                        <ChevronDown size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none" />
-                                    </div>
-                                    {/* View toggles */}
-                                    <div className="flex items-center gap-1 border border-border rounded-xl p-1">
-                                        <button onClick={() => setViewMode('grid')} className={`p-1.5 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-accent text-white' : 'text-text-secondary hover:text-text-primary'}`}>
-                                            <LayoutGrid size={15} />
-                                        </button>
-                                        <button onClick={() => setViewMode('list')} className={`p-1.5 rounded-lg transition-all ${viewMode === 'list' ? 'bg-accent text-white' : 'text-text-secondary hover:text-text-primary'}`}>
-                                            <List size={15} />
-                                        </button>
-                                    </div>
-                                </div>
+                                <SortProduct sortBy={sortBy} setSortBy={setSortBy} setCurrentPage={setCurrentPage} setViewMode={setViewMode} viewMode={viewMode}/>
                             </div>
 
                             {/* Mobile Filters Drawer */}
@@ -192,14 +170,7 @@ const Shop = () => {
 
                             {/* Product Grid / List */}
                             {paginatedProducts.length === 0 ? (
-                                <div className="flex flex-col items-center justify-center py-32 text-center">
-                                    <div className="text-6xl mb-4">🔍</div>
-                                    <h3 className="text-xl font-bold text-text-primary mb-2">No products found</h3>
-                                    <p className="text-text-secondary text-sm mb-6">Try adjusting or clearing your filters.</p>
-                                    <button onClick={handleReset} className="px-6 py-2.5 bg-accent text-white rounded-xl text-sm font-semibold hover:bg-blue-700 transition-all">
-                                        Reset Filters
-                                    </button>
-                                </div>
+                                <ShopEmptyState handleReset={handleReset} />
                             ) : viewMode === 'grid' ? (
                                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
                                     {paginatedProducts.map(p => <ShopCard key={p.id} product={p} />)}
@@ -207,39 +178,8 @@ const Shop = () => {
                             ) : (
                                 /* List view */
                                 <div className="flex flex-col gap-4">
-                                    {paginatedProducts.map(p => (
-                                        <div key={p.id} className="flex gap-5 rounded-2xl border border-border overflow-hidden group bg-bg hover:shadow-lg transition-all duration-300 p-4">
-                                            <div className="w-36 h-32 shrink-0 bg-surface rounded-xl flex items-center justify-center overflow-hidden">
-                                                <img src={p.img} alt={p.name} className="h-24 object-contain group-hover:scale-105 transition-transform duration-300" />
-                                            </div>
-                                            <div className="flex-1 flex flex-col justify-between py-1">
-                                                <div>
-                                                    <p className="text-xs text-text-muted uppercase tracking-wider mb-1">{p.brand} · {p.category}</p>
-                                                    <h3 className="font-semibold text-text-primary">{p.name}</h3>
-                                                    <div className="flex items-center gap-1.5 mt-1.5">
-                                                        <Star size={13} className="text-yellow-400 fill-yellow-400" />
-                                                        <span className="text-xs font-semibold text-text-primary">{p.rating}</span>
-                                                        <span className="text-xs text-text-muted">({p.reviews.toLocaleString()} reviews)</span>
-                                                    </div>
-                                                </div>
-                                                <div className="flex items-center gap-3 mt-3">
-                                                    {!p.inStock && <span className="text-xs text-error font-medium">Out of Stock</span>}
-                                                    {p.inStock && <span className="text-xs text-success font-medium">In Stock</span>}
-                                                    <span className="text-[11px] px-2.5 py-1 rounded-full border border-border text-text-muted">{p.badge}</span>
-                                                </div>
-                                            </div>
-                                            <div className="flex flex-col items-end justify-between shrink-0">
-                                                <span className="text-xl font-bold text-text-primary">${p.price.toLocaleString()}</span>
-                                                <div className="flex gap-2">
-                                                    <button className="h-9 w-9 rounded-xl border border-border flex items-center justify-center text-text-secondary hover:border-accent hover:text-accent transition-all" aria-label="Wishlist">
-                                                        <FiHeart size={16} />
-                                                    </button>
-                                                    <button className="h-9 px-4 rounded-xl bg-accent text-white text-sm font-semibold hover:bg-blue-700 transition-all disabled:opacity-40" disabled={!p.inStock}>
-                                                        Add to Cart
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    {paginatedProducts.map(item => (
+                                        <ProductListView key={item.id} item={item} />
                                     ))}
                                 </div>
                             )}

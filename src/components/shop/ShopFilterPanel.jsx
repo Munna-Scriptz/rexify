@@ -141,7 +141,7 @@ const ShopFilterPanel = ({ filters, setFilters, onReset }) => {
                         <label key={brand} className="flex items-center gap-3 cursor-pointer group">
                             <div
                                 onClick={() => handleBrandToggle(brand)}
-                                className={`w-4.5 h-4.5 rounded flex items-center justify-center border-2 transition-all cursor-pointer flex-shrink-0 ${filters.brands.includes(brand)
+                                className={`w-4.5 h-4.5 rounded flex items-center justify-center border-2 transition-all cursor-pointer shrink-0 ${filters.brands.includes(brand)
                                         ? 'bg-accent border-accent'
                                         : 'border-border group-hover:border-accent/60'
                                     }`}

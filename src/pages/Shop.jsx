@@ -149,7 +149,7 @@ const ShopFilterPanel = ({ filters, setFilters, onReset }) => {
                 <div className="flex flex-col gap-2.5">
                     {brands.map(brand => (
                         <label key={brand} className="flex items-center gap-3 cursor-pointer group" onClick={() => handleBrandToggle(brand)}>
-                            <div className={`w-4.5 h-4.5 rounded-md flex items-center justify-center border-2 transition-all flex-shrink-0 ${filters.brands.includes(brand) ? 'bg-accent border-accent' : 'border-border group-hover:border-accent/60'}`}>
+                            <div className={`w-4.5 h-4.5 rounded-md flex items-center justify-center border-2 transition-all shrink-0 ${filters.brands.includes(brand) ? 'bg-accent border-accent' : 'border-border group-hover:border-accent/60'}`}>
                                 {filters.brands.includes(brand) && (
                                     <svg width="10" height="8" fill="none" viewBox="0 0 10 8"><path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
                                 )}
@@ -348,20 +348,12 @@ const Shop = () => {
 
     return (
         <>
-            {/* Page Header */}
-            <PageHeader
-                topText="Browse Our Store"
-                headerText="Shop All"
-                colorText="Products"
-                bottomText="Discover the latest tech gear — from flagship phones to pro laptops, all in one place."
-            />
-
             <section className="py-10">
                 <div className="container">
                     <div className="flex gap-8">
 
                         {/* ── Sidebar Filter ── */}
-                        <div className="hidden lg:block w-64 flex-shrink-0">
+                        <div className="hidden lg:block w-64 shrink-0">
                             <div className="sticky top-4">
                                 <ShopFilterPanel filters={filters} setFilters={handleFilterChange} onReset={handleReset} />
                             </div>
@@ -456,7 +448,7 @@ const Shop = () => {
                                 <div className="flex flex-col gap-4">
                                     {paginatedProducts.map(p => (
                                         <div key={p.id} className="flex gap-5 rounded-2xl border border-border overflow-hidden group bg-bg hover:shadow-lg transition-all duration-300 p-4">
-                                            <div className="w-36 h-32 flex-shrink-0 bg-surface rounded-xl flex items-center justify-center overflow-hidden">
+                                            <div className="w-36 h-32 shrink-0 bg-surface rounded-xl flex items-center justify-center overflow-hidden">
                                                 <img src={p.img} alt={p.name} className="h-24 object-contain group-hover:scale-105 transition-transform duration-300" />
                                             </div>
                                             <div className="flex-1 flex flex-col justify-between py-1">
@@ -475,7 +467,7 @@ const Shop = () => {
                                                     <span className="text-[11px] px-2.5 py-1 rounded-full border border-border text-text-muted">{p.badge}</span>
                                                 </div>
                                             </div>
-                                            <div className="flex flex-col items-end justify-between flex-shrink-0">
+                                            <div className="flex flex-col items-end justify-between shrink-0">
                                                 <span className="text-xl font-bold text-text-primary">${p.price.toLocaleString()}</span>
                                                 <div className="flex gap-2">
                                                     <button className="h-9 w-9 rounded-xl border border-border flex items-center justify-center text-text-secondary hover:border-accent hover:text-accent transition-all" aria-label="Wishlist">

@@ -1,5 +1,13 @@
 import React from 'react';
-import { X, SlidersHorizontal } from 'lucide-react';
+import {
+    X,
+    SlidersHorizontal,
+    LayoutGrid,
+    DollarSign,
+    Tag,
+    Star,
+    PackageCheck
+} from 'lucide-react';
 import FilterSection from './FilterSection';
 import RatingStars from './RatingStars';
 import RangeSlider from './RangeSlider';
@@ -44,23 +52,25 @@ const ShopFilterPanel = ({ filters, setFilters, onReset }) => {
     };
 
     return (
-        <aside className="w-full">
+        <aside className="w-full border-r border-border pr-6">
             {/* Header */}
             <div className="flex items-center justify-between mb-1 pb-4 border-b border-border">
-                <div className="flex items-center gap-2 font-bold text-text-primary text-base">
-                    <SlidersHorizontal size={18} className="text-accent" />
+                <div className="flex items-center gap-2.5 font-bold text-text-primary text-base">
+                    <span className="flex items-center justify-center w-7 h-7 rounded-lg bg-accent/10">
+                        <SlidersHorizontal size={15} className="text-accent" />
+                    </span>
                     Filters
                 </div>
                 <button
                     onClick={onReset}
-                    className="flex items-center gap-1 text-xs text-text-secondary hover:text-accent transition-colors font-medium"
+                    className="flex items-center gap-1 text-xs text-text-secondary hover:text-red-500 cursor-pointer transition-colors font-medium px-2 py-1 rounded-md hover:bg-red-50"
                 >
-                    <X size={13} /> Reset All
+                    <X size={12} /> Reset
                 </button>
             </div>
 
             {/* Category */}
-            <FilterSection title="Category">
+            <FilterSection title="Category" icon={LayoutGrid}>
                 <div className="flex flex-col gap-2">
                     {categories.map(cat => (
                         <button
@@ -78,12 +88,12 @@ const ShopFilterPanel = ({ filters, setFilters, onReset }) => {
             </FilterSection>
 
             {/* Price Range */}
-            <FilterSection title="Price Range">
-                <RangeSlider filters={(filters)} MIN_PRICE={MIN_PRICE} MAX_PRICE={MAX_PRICE} handlePriceChange={handlePriceChange}/>
+            <FilterSection title="Price Range" icon={DollarSign}>
+                <RangeSlider filters={(filters)} MIN_PRICE={MIN_PRICE} MAX_PRICE={MAX_PRICE} handlePriceChange={handlePriceChange} />
             </FilterSection>
 
             {/* Brands */}
-            <FilterSection title="Brand" defaultOpen={true}>
+            <FilterSection title="Brand" icon={Tag} defaultOpen={true}>
                 <div className="flex flex-col gap-2">
                     {brands.map(brand => (
                         <label key={brand} className="flex items-center gap-3 cursor-pointer group">
@@ -112,7 +122,7 @@ const ShopFilterPanel = ({ filters, setFilters, onReset }) => {
             </FilterSection>
 
             {/* Rating */}
-            <FilterSection title="Min. Rating">
+            <FilterSection title="Min. Rating" icon={Star}>
                 <div className="flex flex-col gap-2">
                     {ratings.map(r => (
                         <button
@@ -131,7 +141,7 @@ const ShopFilterPanel = ({ filters, setFilters, onReset }) => {
             </FilterSection>
 
             {/* Availability */}
-            <FilterSection title="Availability" defaultOpen={true}>
+            <FilterSection title="Availability" icon={PackageCheck} defaultOpen={true}>
                 <div className="flex flex-col gap-2">
                     {[{ label: 'All Products', val: false }, { label: 'In Stock Only', val: true }].map(opt => (
                         <button

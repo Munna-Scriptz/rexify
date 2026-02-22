@@ -4,6 +4,7 @@
 
 /* ------------------------- Tailwind Css ---------------------- */
 @import "tailwindcss";
+
 @utility container {
   margin-inline: auto;
   padding-inline: 1rem;
@@ -17,21 +18,29 @@
 
   /* ================= Base ================= */
   --color-bg: #ffffff;
-  --color-surface: #f7f8fa;        /* cards / sections */
-  --color-muted: #eef0f3;          /* subtle backgrounds */
+  --color-surface: #f7f8fa;
+  /* cards / sections */
+  --color-muted: #eef0f3;
+  /* subtle backgrounds */
 
   /* ================= Text ================= */
-  --color-text-primary: rgb(29, 29, 31);   /* main text */
-  --color-text-secondary: #6e6e73; /* secondary text */
-  --color-coil: #333333; /* Coil text */
-  --color-text-muted: #9aa0a6;     /* hints */
+  --color-text-primary: rgb(29, 29, 31);
+  /* main text */
+  --color-text-secondary: #6e6e73;
+  /* secondary text */
+  --color-coil: #333333;
+  /* Coil text */
+  --color-text-muted: #9aa0a6;
+  /* hints */
 
   /* ================= Borders ================= */
-  --color-border: #e5e5e5;         /* soft, clean borders */
+  --color-border: #e5e5e5;
+  /* soft, clean borders */
 
   /* ================= Brand ================= */
-  --color-brand: #111111;          /* Rexify black */
-  --color-accent: #155dfc ;
+  --color-brand: #111111;
+  /* Rexify black */
+  --color-accent: #155dfc;
   --color-accent-soft: #E9ECFF;
 
   /* ================= Status ================= */
@@ -39,6 +48,7 @@
   --color-warning: #f59e0b;
   --color-error: #ef4444;
 }
+
 omg {
   /* ================= Fonts ================= */
   --font-primary: "Poppins", "sans-serif";
@@ -46,22 +56,32 @@ omg {
 
   /* ================= Base ================= */
   --color-bg: #ffffff;
-  --color-surface: #f7f8fa;        /* cards / sections */
-  --color-muted: #eef0f3;          /* subtle backgrounds */
+  --color-surface: #f7f8fa;
+  /* cards / sections */
+  --color-muted: #eef0f3;
+  /* subtle backgrounds */
 
   /* ================= Text ================= */
-  --color-text-primary: #212121;   /* main text */
-  --color-text-secondary: #6e6e73; /* secondary text */
-  --color-coil: #333333; /* secondary text */
-  --color-text-muted: #9aa0a6;     /* hints */
+  --color-text-primary: #212121;
+  /* main text */
+  --color-text-secondary: #6e6e73;
+  /* secondary text */
+  --color-coil: #333333;
+  /* secondary text */
+  --color-text-muted: #9aa0a6;
+  /* hints */
 
   /* ================= Borders ================= */
-  --color-border: #e5e5e5;         /* soft, clean borders */
+  --color-border: #e5e5e5;
+  /* soft, clean borders */
 
   /* ================= Brand ================= */
-  --color-brand: #111111;          /* Rexify black */
-  --color-accent: #155dfc;         /* futuristic blue glow */
-  --color-accent-soft: #e9ecff;    /* hover / bg */
+  --color-brand: #111111;
+  /* Rexify black */
+  --color-accent: #155dfc;
+  /* futuristic blue glow */
+  --color-accent-soft: #e9ecff;
+  /* hover / bg */
 
   /* ================= Status ================= */
   --color-success: #16a34a;
@@ -74,22 +94,108 @@ omg {
 /* ------------------------- Common css ---------------------- */
 .container {
   width: 100%;
-  @media (width >= 40rem /* 640px */) {
-    max-width: 40rem /* 640px */;
+  @media (width >=40rem
+
+    /* 640px */
+  ) {
+    max-width: 40rem
+      /* 640px */
+    ;
   }
-  @media (width >= 48rem /* 768px */) {
-    max-width: 48rem /* 768px */;
+
+  @media (width >=48rem
+
+    /* 768px */
+  ) {
+    max-width: 48rem
+      /* 768px */
+    ;
   }
-  @media (width >= 64rem /* 1024px */) {
-    max-width: 64rem /* 1024px */;
+
+  @media (width >=64rem
+
+    /* 1024px */
+  ) {
+    max-width: 64rem
+      /* 1024px */
+    ;
   }
-  @media (width >= 80rem /* 1280px */) {
-    max-width: 84rem /* 1280px */;
+
+  @media (width >=80rem
+
+    /* 1280px */
+  ) {
+    max-width: 84rem
+      /* 1280px */
+    ;
   }
-  @media (width >= 88rem /* 1280px */) {
-    max-width: 90rem /* 1280px */;
+
+  @media (width >=88rem
+
+    /* 1280px */
+  ) {
+    max-width: 90rem
+      /* 1280px */
+    ;
   }
-  @media (width >= 96rem /* 1536px */) {
-    max-width: 96rem /* 1536px */;
+
+  @media (width >=96rem
+
+    /* 1536px */
+  ) {
+    max-width: 96rem
+      /* 1536px */
+    ;
   }
+}
+
+
+
+
+/* -------------------- Additional animations -------------------- */
+@theme {
+
+  /* Animate In */
+  --animate-animate-in: animate-in 0.4s ease-out forwards;
+
+  @keyframes animate-in {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Fade In */
+  --animate-fade-in: fade-in 0.4s ease-out forwards;
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* Slide In From Bottom (12px ≈ spacing-3) */
+  --animate-slide-in-from-bottom-3: slide-in-from-bottom-3 0.4s ease-out forwards;
+
+  @keyframes slide-in-from-bottom-3 {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
 }

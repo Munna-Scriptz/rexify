@@ -81,7 +81,7 @@ const Profile = () => {
                     <div className="lg:col-span-9 space-y-6">
 
                         {activeTab === 'profile' && (
-                            <div className="animate-in fade-in slide-in-from-bottom-3 duration-500 space-y-6">
+                            <div className="animate-slide-in-from-bottom-3 duration-500 space-y-6">
                                 {/* Profile Card */}
                                 <div className="bg-white rounded-2xl p-10 border border-border shadow-sm relative overflow-hidden">
                                     <div className="absolute top-0 right-0 w-64 h-64 bg-accent/5 blur-3xl -translate-y-1/2 translate-x-1/2 rounded-full"></div>
@@ -208,7 +208,7 @@ const Profile = () => {
                         )}
 
                         {activeTab === 'orders' && (
-                            <div className="animate-in fade-in slide-in-from-bottom-3 duration-500 space-y-6">
+                            <div className="animate-slide-in-from-bottom-3 duration-500 space-y-6">
                                 <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
                                     <div className="p-8 border-b border-border flex items-center justify-between bg-white sticky top-0 z-10">
                                         <h2 className="text-xl font-bold font-space text-text-primary flex items-center gap-3">
@@ -269,7 +269,7 @@ const Profile = () => {
                         )}
 
                         {activeTab === 'addresses' && (
-                            <div className="animate-in fade-in slide-in-from-bottom-3 duration-500 space-y-6">
+                            <div className="animate-slide-in-from-bottom-3 duration-500 space-y-6">
                                 <div className="flex items-center justify-between">
                                     <h2 className="text-xl font-bold font-space text-text-primary flex items-center gap-3">
                                         <MapPin size={22} className="text-accent" />
@@ -319,7 +319,7 @@ const Profile = () => {
                         )}
 
                         {activeTab === 'security' && (
-                            <div className="animate-in fade-in slide-in-from-bottom-3 duration-500 space-y-6">
+                            <div className="animate-slide-in-from-bottom-3 duration-500 space-y-6">
                                 <div className="bg-white rounded-2xl p-10 border border-border shadow-sm">
                                     <h2 className="text-xl font-bold text-text-primary mb-8 font-space flex items-center gap-3">
                                         <Lock size={22} className="text-accent" />
@@ -373,7 +373,7 @@ const Profile = () => {
                         )}
 
                         {activeTab === 'notifications' && (
-                            <div className="animate-in fade-in slide-in-from-bottom-3 duration-500">
+                            <div className="animate-slide-in-from-bottom-3 duration-500">
                                 <div className="bg-white rounded-2xl p-10 border border-border shadow-sm">
                                     <h2 className="text-xl font-bold text-text-primary mb-6 font-space flex items-center gap-3">
                                         <Bell size={22} className="text-accent" />

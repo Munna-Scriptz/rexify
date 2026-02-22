@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { User, Lock, ChevronRight, ShieldCheck, Bell, LogOut, Edit3, ShoppingBag, MapPin, Plus, Trash2, Clock, CreditCard } from 'lucide-react';
 import ProfileTab from '../components/profile/ProfileTab';
 import OrderTab from '../components/profile/OrderTab';
+import AddressTab from '../components/profile/AddressTab';
+import SecurityTab from '../components/profile/SecurityTab';
+import NotificationTab from '../components/profile/NotificationTab';
 
 const Profile = () => {
     const [activeTab, setActiveTab] = useState('profile');
@@ -84,138 +87,15 @@ const Profile = () => {
                         )}
 
                         {activeTab === 'addresses' && (
-                            <div className="animate-slide-in-from-bottom-3 duration-500 space-y-6">
-                                <div className="flex items-center justify-between">
-                                    <h2 className="text-xl font-bold font-space text-text-primary flex items-center gap-3">
-                                        <MapPin size={22} className="text-accent" />
-                                        Saved Addresses
-                                    </h2>
-                                    <button className="flex items-center gap-2 px-5 py-2.5 bg-accent text-white font-bold text-sm rounded-xl hover:shadow-lg hover:shadow-accent/30 active:scale-95 transition-all cursor-pointer">
-                                        <Plus size={18} /> Add New Address
-                                    </button>
-                                </div>
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    {addresses.map((addr) => (
-                                        <div key={addr.id} className={`bg-white p-8 rounded-2xl border transition-all duration-300 relative group shadow-sm hover:shadow-md ${addr.isDefault ? 'border-accent ring-1 ring-accent/20 shadow-lg shadow-accent/5' : 'border-border'}`}>
-                                            {addr.isDefault && (
-                                                <div className="absolute top-4 right-4 bg-accent text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-tighter shadow-sm">
-                                                    Default
-                                                </div>
-                                            )}
-                                            <div className="w-12 h-12 rounded-xl bg-accent/5 flex items-center justify-center text-accent mb-6">
-                                                <MapPin size={24} strokeWidth={2.2} />
-                                            </div>
-                                            <h4 className="text-lg font-bold text-text-primary mb-3 font-space">{addr.type} Delivery</h4>
-                                            <p className="text-sm text-text-secondary mb-2 leading-relaxed">{addr.details}</p>
-                                            <p className="text-sm font-semibold text-text-primary mb-8 flex items-center gap-2">
-                                                <CreditCard size={14} className="text-text-muted" /> {addr.phone}
-                                            </p>
-
-                                            <div className="flex items-center gap-6 pt-6 border-t border-border/50">
-                                                <button className="text-sm font-bold text-text-primary hover:text-accent transition-colors flex items-center gap-1.5 cursor-pointer">
-                                                    <Edit3 size={15} /> Edit
-                                                </button>
-                                                {!addr.isDefault && (
-                                                    <button className="text-sm font-bold text-text-muted hover:text-red-500 transition-colors flex items-center gap-1.5 cursor-pointer">
-                                                        <Trash2 size={15} /> Delete
-                                                    </button>
-                                                )}
-                                                {!addr.isDefault && (
-                                                    <button className="text-xs font-bold text-accent ml-auto hover:underline cursor-pointer">
-                                                        Set as Default
-                                                    </button>
-                                                )}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
+                            <AddressTab addressData={addresses}/>
                         )}
 
                         {activeTab === 'security' && (
-                            <div className="animate-slide-in-from-bottom-3 duration-500 space-y-6">
-                                <div className="bg-white rounded-2xl p-10 border border-border shadow-sm">
-                                    <h2 className="text-xl font-bold text-text-primary mb-8 font-space flex items-center gap-3">
-                                        <Lock size={22} className="text-accent" />
-                                        Advanced Security
-                                    </h2>
-
-                                    <div className="space-y-10">
-                                        {/* Change Password */}
-                                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-8 border-b border-border/60">
-                                            <div>
-                                                <h4 className="font-bold text-lg text-text-primary mb-1">Pass-key & Password</h4>
-                                                <p className="text-sm text-text-secondary max-w-md">Update your password or set up a biometric passkey for faster logins.</p>
-                                            </div>
-                                            <button className="px-8 py-3 bg-text-primary text-white text-sm font-bold rounded-xl hover:bg-black hover:shadow-xl transition-all duration-300 cursor-pointer text-center">
-                                                Update Credentials
-                                            </button>
-                                        </div>
-
-                                        {/* 2FA */}
-                                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pb-8 border-b border-border/60">
-                                            <div className="flex items-start gap-4">
-                                                <div className="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-                                                    <ShieldCheck size={20} />
-                                                </div>
-                                                <div>
-                                                    <h4 className="font-bold text-lg text-text-primary mb-1">Two-Factor Auth</h4>
-                                                    <p className="text-sm text-text-secondary">Protect your account with an extra verification step.</p>
-                                                </div>
-                                            </div>
-                                            <div className="flex items-center gap-4">
-                                                <span className="text-xs font-black text-text-muted uppercase tracking-widest bg-muted px-2 py-1 rounded">Inactive</span>
-                                                <button className="w-14 h-7 bg-muted rounded-full relative cursor-pointer p-1 transition-colors hover:bg-muted/80">
-                                                    <div className="w-5 h-5 bg-white rounded-full shadow-md transition-transform"></div>
-                                                </button>
-                                            </div>
-                                        </div>
-
-                                        {/* Sessions */}
-                                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-                                            <div>
-                                                <h4 className="font-bold text-lg text-text-primary mb-1">Active Login Sessions</h4>
-                                                <p className="text-sm text-text-secondary">Manage and sign out of other active sessions on different devices.</p>
-                                            </div>
-                                            <button className="flex items-center gap-2 text-sm font-bold text-accent hover:text-accent/80 transition-colors cursor-pointer group">
-                                                Device History <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <SecurityTab />
                         )}
 
                         {activeTab === 'notifications' && (
-                            <div className="animate-slide-in-from-bottom-3 duration-500">
-                                <div className="bg-white rounded-2xl p-10 border border-border shadow-sm">
-                                    <h2 className="text-xl font-bold text-text-primary mb-6 font-space flex items-center gap-3">
-                                        <Bell size={22} className="text-accent" />
-                                        Communication Preferences
-                                    </h2>
-                                    <p className="text-text-secondary text-sm mb-10 pb-6 border-b border-border">Control the frequency and channel of our updates.</p>
-
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
-                                        {[
-                                            { label: 'Newsletter & Promos', desc: 'New arrivals and exclusive offers' },
-                                            { label: 'Order Notifications', desc: 'Updates on your shipping status' },
-                                            { label: 'Security Alerts', desc: 'Important account login alerts' },
-                                            { label: 'Flash Sale Entry', desc: 'Early access to limited drops' }
-                                        ].map((item, idx) => (
-                                            <div key={idx} className="flex items-center justify-between py-2">
-                                                <div>
-                                                    <h5 className="font-bold text-text-primary text-sm">{item.label}</h5>
-                                                    <p className="text-xs text-text-muted">{item.desc}</p>
-                                                </div>
-                                                <button className={`w-12 h-6 rounded-full relative cursor-pointer transition-colors p-1 ${idx < 2 ? 'bg-accent' : 'bg-muted'}`}>
-                                                    <div className={`w-4 h-4 bg-white rounded-full shadow-sm shadow-black/20 transition-transform ${idx < 2 ? 'translate-x-6' : 'translate-x-0'}`}></div>
-                                                </button>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
+                            <NotificationTab />
                         )}
                     </div>
                 </div>

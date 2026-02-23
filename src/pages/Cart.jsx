@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router' // Assuming react-router v6+ or react-router-dom
 import OrderSummary from '../components/cart/OrderSummary';
 import CartItem from '../components/cart/CartItem';
 import EmptyCart from '../components/cart/EmptyCart';

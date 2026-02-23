@@ -50,8 +50,8 @@ const Confirm = () => {
                                         key={method.id}
                                         onClick={() => setPaymentMethod(method.id)}
                                         className={`flex items-start gap-4 p-5 rounded-2xl border transition-all duration-300 relative text-left cursor-pointer ${paymentMethod === method.id
-                                                ? 'border-accent bg-accent/5 ring-1 ring-accent/20 shadow-md'
-                                                : 'border-border hover:border-gray-300 hover:bg-gray-50'
+                                            ? 'border-accent bg-accent/5 ring-1 ring-accent/20 shadow-md'
+                                            : 'border-border hover:border-gray-300 hover:bg-gray-50'
                                             }`}
                                     >
                                         <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${paymentMethod === method.id ? 'bg-accent text-white' : 'bg-surface text-text-muted'
@@ -171,25 +171,7 @@ const Confirm = () => {
                     </div>
 
                     {/* Right Column: Order Summary */}
-                    <div className="lg:col-span-1">
-                        <OrderSummary cartItems={cartItems} buttonText="Pay Now" />
-
-                        {/* Summary Extra Info */}
-                        <div className="mt-8 space-y-4">
-                            <div className="p-4 rounded-xl border border-border bg-white flex items-center justify-between group cursor-pointer hover:border-accent transition-colors">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-8 h-8 rounded-lg bg-surface flex items-center justify-center text-text-muted group-hover:text-accent group-hover:bg-accent/10 transition-colors">
-                                        <Wallet size={16} />
-                                    </div>
-                                    <span className="text-sm font-bold text-text-primary">Apply Promo Code</span>
-                                </div>
-                                <ChevronRight size={16} className="text-text-muted group-hover:translate-x-1 transition-transform" />
-                            </div>
-                            <p className="text-[11px] text-text-muted text-center px-4">
-                                By clicking "Pay Now", you agree to Rexify's <span className="underline cursor-pointer">Terms of Service</span> and <span className="underline cursor-pointer">Privacy Policy</span>.
-                            </p>
-                        </div>
-                    </div>
+                    <OrderSummary cartItems={cartItems} buttonText="Pay Now" />
                 </div>
             </div>
         </div>

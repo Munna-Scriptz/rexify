@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Check, ShoppingBag, Clock, ChevronRight, Package, Home, ArrowRight, Share2 } from 'lucide-react';
+import { Check, ShoppingBag, Package, Home, ArrowRight, Share2 } from 'lucide-react';
 import { Link } from 'react-router';
+import completeIcon from "../assets/completPayment.webm"
 
 const Complete = () => {
     const [showConfetti, setShowConfetti] = useState(false);
     const orderNumber = "REX-" + Math.floor(Math.random() * 900000 + 100000);
 
     useEffect(() => {
-        // Trigger confetti effect on mount
         setShowConfetti(true);
         const timer = setTimeout(() => setShowConfetti(false), 5000);
         return () => clearTimeout(timer);
@@ -36,18 +36,20 @@ const Complete = () => {
 
             <div className="max-w-xl w-full text-center z-10">
                 {/* Success Animation Container */}
-                <div className="mb-8 relative inline-block">
-                    {/* Pulsing Back Glow */}
-                    <div className="absolute inset-0 bg-accent/20 rounded-full blur-3xl animate-pulse scale-150"></div>
-
-                    {/* Main Icon Circle */}
-                    <div className="relative w-24 h-24 bg-accent rounded-full flex items-center justify-center shadow-2xl shadow-accent/40 animate-bounce-in">
-                        <Check size={48} strokeWidth={3} className="text-white animate-check-draw" />
-                    </div>
+                <div className="relative inline-block translate-y-5">
+                    <video
+                        className="w-full h-full object-cover"
+                        src={completeIcon}
+                        muted
+                        autoPlay
+                        loop
+                        playsInline
+                        preload="metadata"
+                    />
 
                     {/* Smaller Floating Orbs */}
-                    <div className="absolute -top-4 -right-2 w-6 h-6 bg-green-400 rounded-full animate-float-slow shadow-lg"></div>
-                    <div className="absolute top-12 -left-6 w-4 h-4 bg-amber-400 rounded-full animate-float shadow-md"></div>
+                    <div className="absolute top-10 -right-2 w-6 h-6 bg-green-400 rounded-full animate-float-slow shadow-lg"></div>
+                    <div className="absolute top-16 left-0 w-4 h-4 bg-amber-400 rounded-full animate-float shadow-md"></div>
                 </div>
 
                 {/* Celebration Text */}

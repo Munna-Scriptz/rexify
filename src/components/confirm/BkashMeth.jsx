@@ -23,7 +23,7 @@ const BkashNagadMeth = ({ paymentMethod }) => {
                     <div>
                         <h5 className="font-bold text-text-primary mb-1">How to pay via {paymentMethod === 'bkash' ? 'bKash' : 'Nagad'}?</h5>
                         <p className="text-xs text-text-secondary leading-relaxed">
-                            1. Dial *247# or open the app<br />
+                            1. Dial *{paymentMethod === 'bkash' ? '247' : '167'}# or open the app<br />
                             2. Choose "Send Money" or "Payment"<br />
                             3. Enter our merchant number: 01300000000<br />
                             4. Enter the total amount and your PIN<br />

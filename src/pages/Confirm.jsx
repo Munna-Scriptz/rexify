@@ -26,7 +26,7 @@ const Confirm = () => {
         <div className="min-h-screen bg-surface py-12 px-4 sm:px-6 lg:px-12 font-primary">
             <div className="container">
                 {/* Breadcrumbs / Back */}
-                
+
                 <BackUi to={"/cart"} name={"Cart"}/>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
@@ -90,7 +90,7 @@ const Confirm = () => {
                     </div>
 
                     {/* Right Column: Order Summary */}
-                    <OrderSummary cartItems={cartItems} buttonText="Pay Now" />
+                    <OrderSummary cartItems={cartItems} buttonText="Pay Now" to="/auth/complete" />
                 </div>
             </div>
         </div>

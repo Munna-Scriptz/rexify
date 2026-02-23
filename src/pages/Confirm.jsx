@@ -16,10 +16,10 @@ const Confirm = () => {
     ]);
 
     const methods = [
-        { id: 'visa', label: 'Visa / Mastercard', icon: CreditCard, description: 'Pay with your credit or debit card' },
-        { id: 'bank', label: 'Bank Transfer', icon: Landmark, description: 'Direct transfer from your bank account' },
-        { id: 'bkash', label: 'bKash', icon: Wallet, description: 'Fast mobile payment via bKash' },
-        { id: 'nagad', label: 'Nagad', icon: Smartphone, description: 'Secure payment via Nagad' },
+        { id: 'visa', label: 'Visa / Mastercard', icon: "https://cdn-icons-png.flaticon.com/512/5968/5968397.png", description: 'Pay with your credit or debit card' },
+        { id: 'bank', label: 'Bank Transfer', icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Dutch-bangla-bank-ltd.svg/960px-Dutch-bangla-bank-ltd.svg.png?20240925084741", description: 'Direct transfer from your bank account' },
+        { id: 'bkash', label: 'bKash', icon: "https://static.vecteezy.com/system/resources/previews/068/764/270/non_2x/bkash-logo-mobile-banking-app-icon-transparent-background-free-png.png", description: 'Fast mobile payment via bKash' },
+        { id: 'nagad', label: 'Nagad', icon: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREF090FK9Ks_Z2IlfIJwGl-ulTAmR9om-QGA&s", description: 'Secure payment via Nagad' },
     ];
 
     return (
@@ -46,9 +46,8 @@ const Confirm = () => {
                                             : 'border-border hover:border-gray-300 hover:bg-gray-50'
                                             }`}
                                     >
-                                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${paymentMethod === method.id ? 'bg-accent text-white' : 'bg-surface text-text-muted'
-                                            }`}>
-                                            <method.icon size={24} />
+                                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0`}>
+                                            <img src={method.icon} className='object-cover' alt="options" />
                                         </div>
                                         <div>
                                             <h4 className="font-bold text-text-primary mb-1">{method.label}</h4>

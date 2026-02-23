@@ -52,7 +52,7 @@ const Cart = () => {
                     <CartItem cartItems={cartItems} setCartItems={setCartItems} />
 
                     {/* Order Summary */}
-                    <OrderSummary cartItems={cartItems}/>
+                    <OrderSummary cartItems={cartItems} to={"/auth/confirm"}/>
 
                 </div>
             </div>

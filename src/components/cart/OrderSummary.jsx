@@ -1,7 +1,8 @@
 import React from 'react'
 import { ShoppingBag, ArrowRight, Wallet, ChevronRight } from 'lucide-react'
+import { Link } from 'react-router';
 
-const OrderSummary = ({ cartItems, buttonText = "Checkout" }) => {
+const OrderSummary = ({ cartItems, buttonText, to}) => {
     const subtotal = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
     const tax = subtotal * 0.08;
     const shipping = subtotal > 1000 ? 0 : 25;
@@ -38,9 +39,9 @@ const OrderSummary = ({ cartItems, buttonText = "Checkout" }) => {
                         </div>
                     </div>
 
-                    <button className="w-full py-4 bg-accent text-white font-bold rounded-xl hover:bg-blue-700 transition-all flex items-center justify-center gap-2 shadow-lg shadow-accent/20">
-                        {buttonText} <ArrowRight size={20} />
-                    </button>
+                    <Link to={to || "/"} className="w-full py-4 bg-accent text-white font-bold rounded-xl hover:bg-blue-700 transition-all flex items-center justify-center gap-2 shadow-lg shadow-accent/20">
+                        {buttonText || "Checkout"} <ArrowRight size={20} />
+                    </Link>
 
                     <p className="text-center text-xs text-text-muted mt-4 flex items-center justify-center gap-1">
                         <ShoppingBag size={12} /> Secure Checkout

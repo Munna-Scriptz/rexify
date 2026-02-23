@@ -1,16 +1,10 @@
 import React, { useState } from 'react';
-import {
-    CreditCard,
-    Landmark,
-    Smartphone,
-    ShieldCheck,
-    ChevronRight,
-    CircleCheck,
-    ArrowLeft,
-    Wallet
-} from 'lucide-react';
+import { CreditCard, Landmark, Smartphone, ShieldCheck, CircleCheck, ArrowLeft, Wallet } from 'lucide-react';
 import { Link } from 'react-router';
 import OrderSummary from '../components/cart/OrderSummary';
+import VisaMeth from '../components/confirm/VisaMeth';
+import BankMeth from '../components/confirm/BankNagadMeth';
+import BkashNagadMeth from '../components/confirm/BkashMeth';
 
 const Confirm = () => {
     const [paymentMethod, setPaymentMethod] = useState('visa');
@@ -30,7 +24,7 @@ const Confirm = () => {
 
     return (
         <div className="min-h-screen bg-surface py-12 px-4 sm:px-6 lg:px-12 font-primary">
-            <div className="max-w-7xl mx-auto">
+            <div className="container">
                 {/* Breadcrumbs / Back */}
                 <Link to="/cart" className="flex items-center gap-2 text-text-secondary hover:text-accent transition-colors mb-8 group">
                     <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
@@ -74,87 +68,15 @@ const Confirm = () => {
                             {/* Payment Forms */}
                             <div className="animate-in fade-in slide-in-from-top-2 duration-300">
                                 {paymentMethod === 'visa' && (
-                                    <div className="space-y-6">
-                                        <div className="grid grid-cols-1 gap-6">
-                                            <div>
-                                                <label className="block text-sm font-bold text-text-primary mb-2">Card Holder Name</label>
-                                                <input type="text" placeholder="John Doe" className="w-full px-4 py-3 rounded-xl border border-border focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all" />
-                                            </div>
-                                            <div>
-                                                <label className="block text-sm font-bold text-text-primary mb-2">Card Number</label>
-                                                <div className="relative">
-                                                    <input type="text" placeholder="0000 0000 0000 0000" className="w-full px-4 py-3 rounded-xl border border-border focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all pl-12" />
-                                                    <CreditCard size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted" />
-                                                </div>
-                                            </div>
-                                            <div className="grid grid-cols-2 gap-6">
-                                                <div>
-                                                    <label className="block text-sm font-bold text-text-primary mb-2">Expiry Date</label>
-                                                    <input type="text" placeholder="MM/YY" className="w-full px-4 py-3 rounded-xl border border-border focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all" />
-                                                </div>
-                                                <div>
-                                                    <label className="block text-sm font-bold text-text-primary mb-2">CVV</label>
-                                                    <input type="text" placeholder="123" className="w-full px-4 py-3 rounded-xl border border-border focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <VisaMeth />
                                 )}
 
                                 {paymentMethod === 'bank' && (
-                                    <div className="space-y-6">
-                                        <div>
-                                            <label className="block text-sm font-bold text-text-primary mb-2">Select Bank</label>
-                                            <select className="w-full px-4 py-3 rounded-xl border border-border focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all bg-white">
-                                                <option>Chase Bank</option>
-                                                <option>Bank of America</option>
-                                                <option>Wells Fargo</option>
-                                                <option>HSBC</option>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-bold text-text-primary mb-2">Account Number</label>
-                                            <input type="text" placeholder="Enter your bank account number" className="w-full px-4 py-3 rounded-xl border border-border focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all" />
-                                        </div>
-                                        <div className="p-4 bg-muted/30 rounded-xl border border-dashed border-border">
-                                            <p className="text-xs text-text-secondary leading-relaxed">
-                                                Note: Direct bank transfers may take up to 24 hours to process. Your order will be confirmed once funds are received.
-                                            </p>
-                                        </div>
-                                    </div>
+                                    <BankMeth />
                                 )}
 
                                 {(paymentMethod === 'bkash' || paymentMethod === 'nagad') && (
-                                    <div className="space-y-6">
-                                        <div>
-                                            <label className="block text-sm font-bold text-text-primary mb-2">{paymentMethod === 'bkash' ? 'bKash' : 'Nagad'} Number</label>
-                                            <div className="relative">
-                                                <input type="text" placeholder="01XXXXXXXXX" className="w-full px-4 py-3 rounded-xl border border-border focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all pl-12" />
-                                                <Smartphone size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-text-muted" />
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-bold text-text-primary mb-2">Transaction ID</label>
-                                            <input type="text" placeholder="TRX12345678" className="w-full px-4 py-3 rounded-xl border border-border focus:ring-2 focus:ring-accent/20 focus:border-accent outline-none transition-all" />
-                                        </div>
-                                        <div className="p-5 bg-accent/5 rounded-2xl border border-accent/10">
-                                            <div className="flex gap-4">
-                                                <div className="w-10 h-10 rounded-full bg-accent flex items-center justify-center shrink-0 text-white">
-                                                    <Smartphone size={20} />
-                                                </div>
-                                                <div>
-                                                    <h5 className="font-bold text-text-primary mb-1">How to pay via {paymentMethod === 'bkash' ? 'bKash' : 'Nagad'}?</h5>
-                                                    <p className="text-xs text-text-secondary leading-relaxed">
-                                                        1. Dial *247# or open the app<br />
-                                                        2. Choose "Send Money" or "Payment"<br />
-                                                        3. Enter our merchant number: 01300000000<br />
-                                                        4. Enter the total amount and your PIN<br />
-                                                        5. Copy the Transaction ID and paste it above
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <BkashNagadMeth paymentMethod={paymentMethod} />
                                 )}
                             </div>
                         </div>

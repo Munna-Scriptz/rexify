@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { CreditCard, Landmark, Smartphone, ShieldCheck, CircleCheck, ArrowLeft, Wallet } from 'lucide-react';
-import { Link } from 'react-router';
+import { CreditCard, Landmark, Smartphone, ShieldCheck, CircleCheck, Wallet } from 'lucide-react';
 import OrderSummary from '../components/cart/OrderSummary';
 import VisaMeth from '../components/confirm/VisaMeth';
 import BankMeth from '../components/confirm/BankNagadMeth';
 import BkashNagadMeth from '../components/confirm/BkashMeth';
+import BackUi from '../utils/BackUi';
 
 const Confirm = () => {
     const [paymentMethod, setPaymentMethod] = useState('visa');
@@ -26,10 +26,8 @@ const Confirm = () => {
         <div className="min-h-screen bg-surface py-12 px-4 sm:px-6 lg:px-12 font-primary">
             <div className="container">
                 {/* Breadcrumbs / Back */}
-                <Link to="/cart" className="flex items-center gap-2 text-text-secondary hover:text-accent transition-colors mb-8 group">
-                    <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
-                    <span className="font-semibold text-sm">Back to Cart</span>
-                </Link>
+                
+                <BackUi to={"/cart"} name={"Cart"}/>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
                     {/* Left Column: Payment Methods & Forms */}

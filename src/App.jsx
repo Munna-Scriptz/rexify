@@ -29,7 +29,6 @@ const App = () => {
         <Route path='cart' element={<Cart />} />
         <Route path='wishlist' element={<Wishlist />} />
         <Route path='profile' element={<Profile />} />
-        <Route path='confirm' element={<Confirm />} />
       </Route>
 
       {/* --------------- Auth Router ---------------- */}
@@ -37,6 +36,7 @@ const App = () => {
         <Route index element={<Navigate to="signUp" replace />} />
         <Route path="signUp" element={<SignUp />} />
         <Route path="signIn" element={<SignIn />} />
+        <Route path='confirm' element={<Confirm />} />
       </Route>
     </Route>
   ))

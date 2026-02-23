@@ -6,6 +6,7 @@ import { EmailField, InfoField, PasswordField } from '../components/signUp/Input
 import Header from '../components/signUp/Header';
 import OrDivider from '../components/signUp/OrDivider';
 import { IsValidEmail } from '../utils/Validations';
+import BackUi from '../utils/BackUi';
 
 const SignUp = () => {
     const [step, setStep] = useState(1)
@@ -55,33 +56,36 @@ const SignUp = () => {
 
 
     return (
-        <div className="min-h-screen flex items-center justify-center overflow-hidden">
-            <form onSubmit={handleForm} className="w-full max-w-170 flex flex-col items-center animate-slide-in">
+        <>
+            <BackUi to={'/'} name={'Home'} absolute={true}/>
+            <div className="min-h-screen flex items-center justify-center overflow-hidden">
+                <form onSubmit={handleForm} className="w-full max-w-170 flex flex-col items-center animate-slide-in">
 
-                {/* -------- Header */}
-                <Header header={"Create an account"} text={"Already have an account?"} linkText={"Sign In"} linkPath={"/auth/signIn"}/>
+                    {/* -------- Header */}
+                    <Header header={"Create an account"} text={"Already have an account?"} linkText={"Sign In"} linkPath={"/auth/signIn"} />
 
-                {/* -------- Stepper */}
-                <Stepper step={step} setStep={setStep} />
+                    {/* -------- Stepper */}
+                    <Stepper step={step} setStep={setStep} />
 
-                {/* -------- Form input */}
-                {step == 1 && <EmailField error={formData.emailError} onChange={(value) => setFormData(prev => ({ ...prev, email: value, emailError: "" }))} />}
-                {step == 2 && <InfoField fullnameError={formData.fullnameError} phoneError={formData.phoneError} onChangeFullname={(value) => setFormData(prev => ({ ...prev, fullname: value, fullnameError: "" }))} onChangePhone={(value) => setFormData(prev => ({ ...prev, phone: value, phoneError: "" }))} />}
-                {step == 3 && <PasswordField passwordError={formData.passwordError} ConfirmError={formData.confirmPassError} onChangePassword={(value) => setFormData(prev => ({ ...prev, password: value, passwordError: "" }))} onChangConfirmPass={(value) => setFormData(prev => ({ ...prev, confirmPass: value, confirmPassError: "" }))} />}
+                    {/* -------- Form input */}
+                    {step == 1 && <EmailField error={formData.emailError} onChange={(value) => setFormData(prev => ({ ...prev, email: value, emailError: "" }))} />}
+                    {step == 2 && <InfoField fullnameError={formData.fullnameError} phoneError={formData.phoneError} onChangeFullname={(value) => setFormData(prev => ({ ...prev, fullname: value, fullnameError: "" }))} onChangePhone={(value) => setFormData(prev => ({ ...prev, phone: value, phoneError: "" }))} />}
+                    {step == 3 && <PasswordField passwordError={formData.passwordError} ConfirmError={formData.confirmPassError} onChangePassword={(value) => setFormData(prev => ({ ...prev, password: value, passwordError: "" }))} onChangConfirmPass={(value) => setFormData(prev => ({ ...prev, confirmPass: value, confirmPassError: "" }))} />}
 
-                {/* -------- Next button */}
-                <Button variant='authButton' loading={loading} type="submit">
-                    Next
-                </Button>
+                    {/* -------- Next button */}
+                    <Button variant='authButton' loading={loading} type="submit">
+                        Next
+                    </Button>
 
-                {/* -------- Or Divider */}
-                <OrDivider />
+                    {/* -------- Or Divider */}
+                    <OrDivider />
 
-                {/* -------- Social button */}
-                <SocialButtons />
+                    {/* -------- Social button */}
+                    <SocialButtons />
 
-            </form>
-        </div>
+                </form>
+            </div>
+        </>
     );
 };
 

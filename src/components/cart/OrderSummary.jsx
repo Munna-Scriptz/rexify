@@ -1,10 +1,10 @@
 import React from 'react'
 import { ShoppingBag, ArrowRight } from 'lucide-react'
 
-const OrderSummary = ({ cartItems }) => {
+const OrderSummary = ({ cartItems, buttonText = "Checkout" }) => {
     const subtotal = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-    const tax = subtotal * 0.08; // Assuming 8% tax
-    const shipping = subtotal > 1000 ? 0 : 25; // Free shipping over $1000  
+    const tax = subtotal * 0.08; 
+    const shipping = subtotal > 1000 ? 0 : 25;
     const total = subtotal + tax + shipping;
 
     return (
@@ -37,7 +37,7 @@ const OrderSummary = ({ cartItems }) => {
                 </div>
 
                 <button className="w-full py-4 bg-accent text-white font-bold rounded-xl hover:bg-blue-700 transition-all flex items-center justify-center gap-2 shadow-lg shadow-accent/20">
-                    Checkout <ArrowRight size={20} />
+                    {buttonText} <ArrowRight size={20} />
                 </button>
 
                 <p className="text-center text-xs text-text-muted mt-4 flex items-center justify-center gap-1">

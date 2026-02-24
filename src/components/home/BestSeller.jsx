@@ -5,47 +5,6 @@ import Slider from 'react-slick';
 const BestSeller = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
 
-    const settings = {
-        arrows: true,
-        infinite: false,
-        speed: 500,
-        slidesToShow: 4,
-        slidesToScroll: 1,
-        beforeChange: (_, next) => setCurrentSlide(next),
-        nextArrow: currentSlide < 9 - 7 ? <ChevronRight /> : null,
-        prevArrow: currentSlide > 0 ? <ChevronLeft /> : null,
-    };
-
-
-    function ChevronRight({ onClick }) {
-        return (
-            <button
-                onClick={onClick}
-                className="absolute right-0 top-1/2 -translate-y-1/2 z-10
-                 h-12 w-12 text-xl rounded-full bg-[#5087ff]/80 hover:bg-accent active:bg-sky-400 text-surface cursor-pointer shadow-lg
-                 flex items-center justify-center
-                 hover:scale-105 transition"
-            >
-                ❯
-            </button>
-        );
-    }
-
-    function ChevronLeft({ onClick }) {
-        return (
-            <button
-                onClick={onClick}
-                className="absolute left-0 top-1/2 -translate-y-1/2 z-10
-                 h-12 w-12 text-xl rounded-full bg-[#5087ff]/80 hover:bg-accent active:bg-sky-400 text-surface cursor-pointer shadow-lg
-                 flex items-center justify-center
-                 hover:scale-105 transition"
-            >
-                ❮
-            </button>
-        );
-    }
-
-
     const demoProducts = [
         {
             id: 1,
@@ -108,6 +67,72 @@ const BestSeller = () => {
             image: "https://www.startech.com.bd/image/cache/catalog/mouse/logitech/mx-master-3s/logitech-mx-master-3s-01-228x228.jpg",
         },
     ];
+    
+    const settings = {
+        arrows: true,
+        infinite: false,
+        speed: 500,
+        slidesToShow: 4,
+        slidesToScroll: 1,
+        beforeChange: (_, next) => setCurrentSlide(next),
+        nextArrow: currentSlide < demoProducts.length - 4 ? <ChevronRight /> : null,
+        prevArrow: currentSlide > 0 ? <ChevronLeft /> : null,
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 3,
+                    nextArrow: currentSlide < demoProducts.length - 3 ? <ChevronRight /> : null,
+                }
+            },
+            {
+                breakpoint: 768,
+                settings: {
+                    slidesToShow: 2,
+                    nextArrow: currentSlide < demoProducts.length - 2 ? <ChevronRight /> : null,
+                }
+            },
+            {
+                breakpoint: 640,
+                settings: {
+                    slidesToShow: 1,
+                    nextArrow: currentSlide < demoProducts.length - 1 ? <ChevronRight /> : null,
+                }
+            }
+        ]
+    };
+
+
+    function ChevronRight({ onClick }) {
+        return (
+            <button
+                onClick={onClick}
+                className="absolute right-0 top-1/2 -translate-y-1/2 z-10
+                 h-12 w-12 text-xl rounded-full bg-[#5087ff]/80 hover:bg-accent active:bg-sky-400 text-surface cursor-pointer shadow-lg
+                 flex items-center justify-center
+                 hover:scale-105 transition"
+            >
+                ❯
+            </button>
+        );
+    }
+
+    function ChevronLeft({ onClick }) {
+        return (
+            <button
+                onClick={onClick}
+                className="absolute left-0 top-1/2 -translate-y-1/2 z-10
+                 h-12 w-12 text-xl rounded-full bg-[#5087ff]/80 hover:bg-accent active:bg-sky-400 text-surface cursor-pointer shadow-lg
+                 flex items-center justify-center
+                 hover:scale-105 transition"
+            >
+                ❮
+            </button>
+        );
+    }
+
+
+
 
     return (
         <>

@@ -66,7 +66,8 @@ const Navbar = () => {
                         <div className="flex md:hidden">
                             <button
                                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                                className={`p-2 rounded-lg`}
+                                className={`p-2 cursor-pointer`}
+                                title="Menu"
                             >
                                 <HiMiniBars3BottomLeft className={`w-7 h-7 group-hover:text-text-primary ${isNavbarWhite && 'text-text-primary'}`} />
 
@@ -107,7 +108,7 @@ const Navbar = () => {
                             </div>
 
                             {/* --------- icons  */}
-                            <button onClick={() => { setSearch(!search); setProductMenuOpen(false); }} className={`w-8 h-8 hover:bg-text-muted/20 duration-300 group-hover:text-text-primary ${isNavbarWhite && 'text-text-primary'} text-xl rounded-full cursor-pointer relative`}>
+                            <button onClick={() => { setSearch(!search); setProductMenuOpen(false); }} className={`md:hidden flex items-center justify-center w-8 h-8 hover:bg-text-muted/20 duration-300 group-hover:text-text-primary ${isNavbarWhite && 'text-text-primary'} text-xl rounded-full cursor-pointer relative`}>
                                 <Search strokeWidth={1} />
                             </button>
 
@@ -140,12 +141,12 @@ const Navbar = () => {
                     {/* Drawer */}
                     <div className={`absolute top-0 left-0 bottom-0 w-70 bg-white shadow-2xl transition-transform duration-300 transform ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
                         <div className="flex flex-col h-full">
-                            <div className="px-6 py-4 border-b flex items-center justify-between">
+                            <div className="px-6 py-4 border-b border-accent-soft flex items-center justify-between">
                                 <img src={logo} className="w-24 invert" alt="Rexify" />
                                 <button
                                     onClick={() => setIsMenuOpen(false)}
                                     className="w-10 h-10 flex items-center justify-center rounded-xl border border-gray-200 text-gray-500 hover:text-red-500 hover:border-red-200 hover:bg-red-50 transition cursor-pointer"
-                                    title="Close (Esc)"
+                                    title="Close"
                                 >
                                     <X size={20} />
                                 </button>
@@ -183,15 +184,15 @@ const Navbar = () => {
                                 </div>
                             </div>
 
-                            <div className="p-6 border-t bg-gray-50/50 backdrop-blur-md">
+                            <div className="p-4 border-t border-accent-soft bg-gray-50/50 backdrop-blur-md">
                                 <div className="grid grid-cols-2 gap-3">
-                                    <Link onClick={() => setIsMenuOpen(false)} to="/auth" className="flex flex-col items-center justify-center gap-1.5 py-4 bg-white border border-gray-100 rounded-2xl text-[13px] font-bold text-gray-900 shadow-sm hover:border-accent/30 hover:text-accent transition-all duration-300">
+                                    <Link onClick={() => setIsMenuOpen(false)} to="/auth" className="flex items-center justify-center px-2 bg-white border border-gray-100 rounded-lg text-[13px] font-bold text-gray-900 shadow-sm hover:border-accent/30 hover:text-accent transition-all duration-300">
                                         <div className="w-10 h-10 rounded-full bg-accent/5 flex items-center justify-center">
                                             <User size={18} className="text-accent" />
                                         </div>
                                         Account
                                     </Link>
-                                    <Link onClick={() => setIsMenuOpen(false)} to="/wishlist" className="flex flex-col items-center justify-center gap-1.5 py-4 bg-white border border-gray-100 rounded-2xl text-[13px] font-bold text-gray-900 shadow-sm hover:border-accent/30 hover:text-accent transition-all duration-300">
+                                    <Link onClick={() => setIsMenuOpen(false)} to="/wishlist" className="flex items-center justify-center px-2 bg-white border border-gray-100 rounded-lg text-[13px] font-bold text-gray-900 shadow-sm hover:border-accent/30 hover:text-accent transition-all duration-300">
                                         <div className="w-10 h-10 rounded-full bg-accent/5 flex items-center justify-center">
                                             <Heart size={18} className="text-accent" />
                                         </div>

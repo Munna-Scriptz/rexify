@@ -22,10 +22,40 @@ const SmallCategory = () => {
         infinite: false,
         speed: 500,
         slidesToShow: 7,
-        slidesToScroll: 1,
+        slidesToScroll: 2,
         beforeChange: (_, next) => setCurrentSlide(next),
-        nextArrow: currentSlide < 9 - 7 ? <ChevronRight /> : null,
+        nextArrow: currentSlide < products.length - 7 ? <ChevronRight /> : null,
         prevArrow: currentSlide > 0 ? <ChevronLeft /> : null,
+        responsive: [
+            {
+                breakpoint: 1280,
+                settings: {
+                    slidesToShow: 5,
+                    nextArrow: currentSlide < products.length - 5 ? <ChevronRight /> : null,
+                }
+            },
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 4,
+                    nextArrow: currentSlide < products.length - 4 ? <ChevronRight /> : null,
+                }
+            },
+            {
+                breakpoint: 768,
+                settings: {
+                    slidesToShow: 3,
+                    nextArrow: currentSlide < products.length - 3 ? <ChevronRight /> : null,
+                }
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 2,
+                    nextArrow: currentSlide < products.length - 2 ? <ChevronRight /> : null,
+                }
+            }
+        ]
     };
 
 
@@ -33,8 +63,8 @@ const SmallCategory = () => {
         return (
             <button
                 onClick={onClick}
-                className="absolute right-5 top-1/2 -translate-y-1/2 z-10
-                 h-12 w-12 text-xl rounded-full bg-[#5087ff]/80 hover:bg-accent active:bg-sky-400 text-surface cursor-pointer shadow-lg
+                className="absolute right-0 md:right-5 top-1/2 -translate-y-1/2 z-10
+                 h-10 w-10 md:h-12 md:w-12 text-xl rounded-full bg-[#5087ff]/80 hover:bg-accent active:bg-sky-400 text-surface cursor-pointer shadow-lg
                  flex items-center justify-center
                  hover:scale-105 transition"
             >
@@ -47,8 +77,8 @@ const SmallCategory = () => {
         return (
             <button
                 onClick={onClick}
-                className="absolute left-5 top-1/2 -translate-y-1/2 z-10
-                 h-12 w-12 text-xl rounded-full bg-[#5087ff]/80 hover:bg-accent active:bg-sky-400 text-surface cursor-pointer shadow-lg
+                className="absolute left-0 md:left-5 top-1/2 -translate-y-1/2 z-10
+                 h-10 w-10 md:h-12 md:w-12 text-xl rounded-full bg-[#5087ff]/80 hover:bg-accent active:bg-sky-400 text-surface cursor-pointer shadow-lg
                  flex items-center justify-center
                  hover:scale-105 transition"
             >
@@ -64,15 +94,15 @@ const SmallCategory = () => {
                 <div id='Small-Category-Row'>
 
                     {/* 1. Header Section */}
-                    <div className="flex flex-col md:flex-row justify-between items-start mb-18 gap-8">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 md:mb-18 gap-4 md:gap-8 px-4 md:px-0">
 
                         {/* Left: Big Title */}
-                        <h1 className="text-6xl md:text-[80px] font-bold tracking-tight leading-none text-text-primary">
+                        <h1 className="text-5xl md:text-[80px] font-bold tracking-tight leading-none text-text-primary">
                             Store.
                         </h1>
 
                         {/* Right: Subtext */}
-                        <h2 className="text-xl md:text-2xl font-semibold mb-2 text-text-primary text-right">
+                        <h2 className="text-lg md:text-2xl font-semibold text-text-primary text-left md:text-right">
                             The best way to buy the <br className="hidden md:block" />
                             products you love.
                         </h2>

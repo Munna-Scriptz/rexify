@@ -67,7 +67,7 @@ const BestSeller = () => {
             image: "https://www.startech.com.bd/image/cache/catalog/mouse/logitech/mx-master-3s/logitech-mx-master-3s-01-228x228.jpg",
         },
     ];
-    
+
     const settings = {
         arrows: true,
         infinite: false,
@@ -107,8 +107,8 @@ const BestSeller = () => {
         return (
             <button
                 onClick={onClick}
-                className="absolute right-0 top-1/2 -translate-y-1/2 z-10
-                 h-12 w-12 text-xl rounded-full bg-[#5087ff]/80 hover:bg-accent active:bg-sky-400 text-surface cursor-pointer shadow-lg
+                className="absolute right-0 md:right-0 top-1/2 -translate-y-1/2 z-10
+                 h-10 w-10 md:h-12 md:w-12 text-xl rounded-full bg-[#5087ff]/80 hover:bg-accent active:bg-sky-400 text-surface cursor-pointer shadow-lg
                  flex items-center justify-center
                  hover:scale-105 transition"
             >
@@ -121,8 +121,8 @@ const BestSeller = () => {
         return (
             <button
                 onClick={onClick}
-                className="absolute left-0 top-1/2 -translate-y-1/2 z-10
-                 h-12 w-12 text-xl rounded-full bg-[#5087ff]/80 hover:bg-accent active:bg-sky-400 text-surface cursor-pointer shadow-lg
+                className="absolute left-0 md:left-0 top-1/2 -translate-y-1/2 z-10
+                 h-10 w-10 md:h-12 md:w-12 text-xl rounded-full bg-[#5087ff]/80 hover:bg-accent active:bg-sky-400 text-surface cursor-pointer shadow-lg
                  flex items-center justify-center
                  hover:scale-105 transition"
             >
@@ -138,12 +138,12 @@ const BestSeller = () => {
         <>
             <section id='Best-Seller' className='mt-28'>
                 <div className="container">
-                    <div id="Header-Row" className="mb-10 flex items-end justify-between">
-                        <h2 className="text-4xl font-semibold text-text-primary">
+                    <div id="Header-Row" className="mb-6 md:mb-10 flex items-center md:items-end justify-between px-4 md:px-0">
+                        <h2 className="text-2xl md:text-4xl font-semibold text-text-primary">
                             Best Seller.
                         </h2>
 
-                        <button className="text-base font-medium text-text-secondary hover:text-neutral-900 flex items-center gap-1 transition cursor-pointer " >
+                        <button className="text-sm md:text-base font-medium text-text-secondary hover:text-neutral-900 flex items-center gap-1 transition cursor-pointer " >
                             View all
                             <span className="text-base">→</span>
                         </button>

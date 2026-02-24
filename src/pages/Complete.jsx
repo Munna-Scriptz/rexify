@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Check, ShoppingBag, Package, Home, ArrowRight, Share2 } from 'lucide-react';
+import { ShoppingBag, Package, Home, ArrowRight, Share2 } from 'lucide-react';
 import { Link } from 'react-router';
 import completeIcon from "../assets/completPayment.webm"
 

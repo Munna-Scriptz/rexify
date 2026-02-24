@@ -48,27 +48,27 @@ const ProductMenu = () => {
     return (
         <div className="w-full bg-white backdrop-blur-md shadow animate-in fade-in slide-in-from-top-2 duration-200">
             <div className="container">
-                <div className="flex">
+                <div className="flex flex-col lg:flex-row">
 
                     {/* Sidebar Categories */}
-                    <div className="w-64 border-r border-gray-100 py-6 pr-6">
-                        <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4 px-4 font-space">Categories</h3>
-                        <div className="space-y-1">
+                    <div className="w-full lg:w-64 border-b lg:border-b-0 lg:border-r border-gray-100 py-4 lg:py-6 lg:pr-6 px-4 lg:px-0">
+                        <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 lg:mb-4 font-space">Categories</h3>
+                        <div className="flex lg:flex-col overflow-x-auto lg:overflow-x-visible gap-2 lg:space-y-1 pb-4 lg:pb-0 scrollbar-hide">
                             {categories.map((cat) => (
                                 <div
                                     key={cat.name}
                                     onMouseEnter={() => setActiveCategory(cat.name)}
-                                    className={`flex items-center justify-between px-4 py-3 rounded-xl cursor-pointer transition-all duration-200 group ${activeCategory === cat.name ? 'bg-accent/5 text-accent font-medium' : 'text-gray-600 hover:bg-gray-50'}`}
+                                    className={`flex items-center justify-between px-4 py-2 lg:py-3 rounded-xl cursor-pointer transition-all duration-200 group whitespace-nowrap lg:whitespace-normal ${activeCategory === cat.name ? 'bg-accent/5 text-accent font-medium' : 'text-gray-600 hover:bg-gray-50'}`}
                                 >
-                                    <div className="flex items-center gap-3">
+                                    <div className="flex items-center gap-2 lg:gap-3">
                                         {cat.icon}
-                                        <span>{cat.name}</span>
+                                        <span className="text-sm lg:text-base">{cat.name}</span>
                                     </div>
-                                    <ChevronRight size={14} className={`opacity-0 group-hover:opacity-100 transition-opacity ${activeCategory === cat.name ? 'opacity-100' : ''}`} />
+                                    <ChevronRight size={14} className={`hidden lg:block opacity-0 group-hover:opacity-100 transition-opacity ${activeCategory === cat.name ? 'opacity-100' : ''}`} />
                                 </div>
                             ))}
                         </div>
-                        <div className="mt-6 px-4">
+                        <div className="hidden lg:block mt-6 px-4">
                             <Link to="/category" className="flex items-center gap-2 text-sm font-bold text-gray-900 hover:text-accent transition-colors">
                                 View All Categories <ArrowRight size={16} />
                             </Link>
@@ -76,13 +76,13 @@ const ProductMenu = () => {
                     </div>
 
                     {/* Product Grid */}
-                    <div className="flex-1 p-8">
-                        <div className="flex items-center justify-between mb-6">
-                            <h3 className="text-xl font-bold font-space text-gray-900">{activeCategory}</h3>
-                            <Link to="/category" className="text-sm font-medium text-accent hover:underline">See all {activeCategory}</Link>
+                    <div className="flex-1 p-4 lg:p-8">
+                        <div className="flex items-center justify-between mb-4 lg:mb-6">
+                            <h3 className="text-lg lg:text-xl font-bold font-space text-gray-900">{activeCategory}</h3>
+                            <Link to="/category" className="text-xs lg:text-sm font-medium text-accent hover:underline">See all {activeCategory}</Link>
                         </div>
 
-                        <div className="grid grid-cols-4 gap-6">
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6">
                             {products[activeCategory]?.map((product, index) => (
                                 <div key={index} className="group cursor-pointer">
                                     <div className="aspect-4/3 bg-gray-50 rounded-xl overflow-hidden mb-3 border border-gray-100 group-hover:border-accent/30 transition-all shadow-sm group-hover:shadow-md">

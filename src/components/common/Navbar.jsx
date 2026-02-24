@@ -5,7 +5,7 @@ import { FiHeart } from 'react-icons/fi'
 import { PiUser } from 'react-icons/pi'
 import SearchField from './SearchField'
 import ProductMenu from './ProductMenu'
-import { Search, ShoppingCart, X } from 'lucide-react'
+import { Search, ShoppingCart, X, Home, ShoppingBag, LayoutGrid, Info, PhoneCall, Zap, Heart, User } from 'lucide-react'
 import { HiMiniBars3BottomLeft } from 'react-icons/hi2'
 
 const Navbar = () => {
@@ -138,31 +138,64 @@ const Navbar = () => {
                     <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setIsMenuOpen(false)}></div>
 
                     {/* Drawer */}
-                    <div className={`absolute top-0 left-0 bottom-0 w-[280px] bg-white shadow-2xl transition-transform duration-300 transform ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+                    <div className={`absolute top-0 left-0 bottom-0 w-70 bg-white shadow-2xl transition-transform duration-300 transform ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
                         <div className="flex flex-col h-full">
-                            <div className="p-6 border-b flex items-center justify-between">
+                            <div className="px-6 py-4 border-b flex items-center justify-between">
                                 <img src={logo} className="w-24 invert" alt="Rexify" />
-                                <button onClick={() => setIsMenuOpen(false)} className="p-2 text-gray-400 hover:text-text-primary">
-                                    <X size={24} />
+                                <button
+                                    onClick={() => setIsMenuOpen(false)}
+                                    className="w-10 h-10 flex items-center justify-center rounded-xl border border-gray-200 text-gray-500 hover:text-red-500 hover:border-red-200 hover:bg-red-50 transition cursor-pointer"
+                                    title="Close (Esc)"
+                                >
+                                    <X size={20} />
                                 </button>
                             </div>
 
-                            <div className="flex-1 overflow-y-auto py-6 px-6 space-y-4">
-                                <NavLink onClick={() => setIsMenuOpen(false)} className="block text-lg font-medium text-gray-900 border-b border-gray-50 pb-2" to={'/'}>Home</NavLink>
-                                <NavLink onClick={() => setIsMenuOpen(false)} className="block text-lg font-medium text-gray-900 border-b border-gray-50 pb-2" to={'/shop'}>Shop</NavLink>
-                                <NavLink onClick={() => setIsMenuOpen(false)} className="block text-lg font-medium text-gray-900 border-b border-gray-50 pb-2" to={'/category'}>Products</NavLink>
-                                <NavLink onClick={() => setIsMenuOpen(false)} className="block text-lg font-medium text-gray-900 border-b border-gray-50 pb-2" to={'/category'}>Categories</NavLink>
-                                <NavLink onClick={() => setIsMenuOpen(false)} className="block text-lg font-medium text-gray-900 border-b border-gray-50 pb-2" to={'/about'}>About</NavLink>
-                                <NavLink onClick={() => setIsMenuOpen(false)} className="block text-lg font-medium text-gray-900 border-b border-gray-50 pb-2" to={'/contact'}>Contact</NavLink>
+                            <div className="flex-1 overflow-y-auto py-8 px-6 space-y-2">
+                                <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4 px-3 font-space">Main Menu</h3>
+
+                                <NavLink onClick={() => setIsMenuOpen(false)} className={({ isActive }) => `flex items-center gap-4 px-4 py-3.5 rounded-2xl text-base font-bold transition-all duration-300 ${isActive ? 'bg-accent text-white shadow-lg shadow-accent/20' : 'text-gray-600 hover:bg-surface hover:text-accent'}`} to={'/'}>
+                                    <Home size={20} strokeWidth={2} /> <span>Home</span>
+                                </NavLink>
+
+                                <NavLink onClick={() => setIsMenuOpen(false)} className={({ isActive }) => `flex items-center gap-4 px-4 py-3.5 rounded-2xl text-base font-bold transition-all duration-300 ${isActive ? 'bg-accent text-white shadow-lg shadow-accent/20' : 'text-gray-600 hover:bg-surface hover:text-accent'}`} to={'/shop'}>
+                                    <ShoppingBag size={20} strokeWidth={2} /> <span>Shop</span>
+                                </NavLink>
+
+                                <NavLink onClick={() => setIsMenuOpen(false)} className={({ isActive }) => `flex items-center gap-4 px-4 py-3.5 rounded-2xl text-base font-bold transition-all duration-300 ${isActive ? 'bg-accent text-white shadow-lg shadow-accent/20' : 'text-gray-600 hover:bg-surface hover:text-accent'}`} to={'/category'}>
+                                    <Zap size={20} strokeWidth={2} /> <span>Products</span>
+                                </NavLink>
+
+                                <NavLink onClick={() => setIsMenuOpen(false)} className={({ isActive }) => `flex items-center gap-4 px-4 py-3.5 rounded-2xl text-base font-bold transition-all duration-300 ${isActive ? 'bg-accent text-white shadow-lg shadow-accent/20' : 'text-gray-600 hover:bg-surface hover:text-accent'}`} to={'/category'}>
+                                    <LayoutGrid size={20} strokeWidth={2} /> <span>Categories</span>
+                                </NavLink>
+
+                                <div className="pt-4 mt-4 border-t border-gray-100 italic">
+                                    <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-4 px-3 font-space">Organization</h3>
+
+                                    <NavLink onClick={() => setIsMenuOpen(false)} className={({ isActive }) => `flex items-center gap-4 px-4 py-3.5 rounded-2xl text-base font-bold transition-all duration-300 ${isActive ? 'bg-accent text-white shadow-lg shadow-accent/20' : 'text-gray-600 hover:bg-surface hover:text-accent'}`} to={'/about'}>
+                                        <Info size={20} strokeWidth={2} /> <span>About</span>
+                                    </NavLink>
+
+                                    <NavLink onClick={() => setIsMenuOpen(false)} className={({ isActive }) => `flex items-center gap-4 px-4 py-3.5 rounded-2xl text-base font-bold transition-all duration-300 ${isActive ? 'bg-accent text-white shadow-lg shadow-accent/20' : 'text-gray-600 hover:bg-surface hover:text-accent'}`} to={'/contact'}>
+                                        <PhoneCall size={20} strokeWidth={2} /> <span>Contact Support</span>
+                                    </NavLink>
+                                </div>
                             </div>
 
-                            <div className="p-6 border-t bg-gray-50">
-                                <div className="grid grid-cols-2 gap-4">
-                                    <Link onClick={() => setIsMenuOpen(false)} to="/auth" className="flex items-center justify-center gap-2 py-3 bg-white border rounded-xl text-sm font-bold">
-                                        <PiUser size={18} /> Account
+                            <div className="p-6 border-t bg-gray-50/50 backdrop-blur-md">
+                                <div className="grid grid-cols-2 gap-3">
+                                    <Link onClick={() => setIsMenuOpen(false)} to="/auth" className="flex flex-col items-center justify-center gap-1.5 py-4 bg-white border border-gray-100 rounded-2xl text-[13px] font-bold text-gray-900 shadow-sm hover:border-accent/30 hover:text-accent transition-all duration-300">
+                                        <div className="w-10 h-10 rounded-full bg-accent/5 flex items-center justify-center">
+                                            <User size={18} className="text-accent" />
+                                        </div>
+                                        Account
                                     </Link>
-                                    <Link onClick={() => setIsMenuOpen(false)} to="/wishlist" className="flex items-center justify-center gap-2 py-3 bg-white border rounded-xl text-sm font-bold">
-                                        <FiHeart size={18} /> Wishlist
+                                    <Link onClick={() => setIsMenuOpen(false)} to="/wishlist" className="flex flex-col items-center justify-center gap-1.5 py-4 bg-white border border-gray-100 rounded-2xl text-[13px] font-bold text-gray-900 shadow-sm hover:border-accent/30 hover:text-accent transition-all duration-300">
+                                        <div className="w-10 h-10 rounded-full bg-accent/5 flex items-center justify-center">
+                                            <Heart size={18} className="text-accent" />
+                                        </div>
+                                        Wishlist
                                     </Link>
                                 </div>
                             </div>

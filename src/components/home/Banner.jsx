@@ -78,13 +78,13 @@ const Banner = () => {
                 </Slider>
 
                 {/* Timeline Controls */}
-                <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-full z-30">
-                    <div className="flex w-full justify-center gap-2 h-1.5 cursor-pointer">
+                <div className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 w-full z-30 px-6">
+                    <div className="flex w-full justify-center gap-1.5 md:gap-2 h-1 cursor-pointer">
                         {videoContent.map((_, i) => (
                             <div
                                 key={i}
                                 onClick={() => sliderRef.current.slickGoTo(i)}
-                                className="w-30 bg-white/30 rounded-full overflow-hidden relative group"
+                                className="flex-1 max-w-20 md:max-w-30 bg-white/30 rounded-full overflow-hidden relative group"
                             >
                                 <div
                                     className="h-full bg-white transition-all duration-100 ease-linear absolute top-0 left-0"

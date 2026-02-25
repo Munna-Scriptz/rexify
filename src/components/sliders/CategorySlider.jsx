@@ -47,6 +47,7 @@ const CategorySlider = ({ products }) => {
             }
         ]
     };
+
     return (
         <div>
             <Slider {...settings}>

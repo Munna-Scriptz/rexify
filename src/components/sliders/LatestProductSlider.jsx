@@ -35,7 +35,7 @@ const LatestProductSlider = ({ products }) => {
 
     return (
         <div id="Cards-Row" className='pl-4 md:pl-10'>
-            <div>
+            <div className='md:mr-7'>
                 <Slider {...settings}>
                     {products.map((item, i) => (
                         <SingleLatestCard key={i} item={item} />

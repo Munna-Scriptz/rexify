@@ -22,18 +22,18 @@ const SmallCategory = () => {
                         <h1 className="text-5xl md:text-[80px] font-bold tracking-tight leading-none text-text-primary">
                             Store.
                         </h1>
-                        
+
                         <h2 className="text-[17px] md:text-2xl font-semibold text-text-primary text-left md:text-right">
                             The best way to buy the <br />
                             products you love.
                         </h2>
                     </div>
                 </div>
+
+
+                {/* ------------- SLider content -------------- */}
+                <CategorySlider products={products} />
             </div>
-
-
-            {/* ------------- SLider content -------------- */}
-                <CategorySlider products={products}/>
         </section >
     );
 };

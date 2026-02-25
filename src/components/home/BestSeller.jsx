@@ -136,9 +136,9 @@ const BestSeller = () => {
 
     return (
         <>
-            <section id='Best-Seller' className='mt-28'>
+            <section id='Best-Seller' className='md:mt-28 mt-20'>
                 <div className="container">
-                    <div id="Header-Row" className="mb-6 md:mb-10 flex items-center md:items-end justify-between px-4 md:px-0">
+                    <div id="Header-Row" className="mb-6 md:mb-10 flex items-center md:items-end justify-between">
                         <h2 className="text-2xl md:text-4xl font-semibold text-text-primary">
                             Best Seller.
                         </h2>

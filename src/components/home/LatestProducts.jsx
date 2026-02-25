@@ -78,8 +78,8 @@ const LatestProducts = () => {
             <section id='LatestProduct' className='mt-28 overflow-x-hidden'>
                 <div className="container">
                     {/* ------------ Text  */}
-                    <div id="Header-Row" className='mb-6 md:mb-10 px-4 md:px-0'>
-                        <h2 className='text-2xl md:text-3xl font-semibold text-text-primary'>The latest. <span className='text-text-secondary block md:inline'>Take a look at what’s new, right now.</span></h2>
+                    <div id="Header-Row" className='mb-6 md:mb-10 text-2xl md:text-3xl font-semibold '>
+                        <h2 className='text-text-primary'>The latest. <span className='text-text-secondary'>Take a look at what’s new, right now.</span></h2>
                     </div>
                 </div>
 

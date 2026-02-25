@@ -2,7 +2,7 @@ import { FiHeart, FiShoppingBag } from 'react-icons/fi'
 
 const SingleEssentialCard = ({ img, name, variant }) => {
     return (
-        <div className="w-87 rounded-3xl border border-neutral-200 overflow-hidden group relative transition-all duration-500 ease-out hover:-translate-y-2 shadow-[0_12px_40px_rgba(0,0,0,0.12)] hover:shadow-[0_30px_70px_-15px_rgba(0,0,0,0.35)]">
+        <div className="w-87 rounded-3xl border border-neutral-200 cursor-pointer overflow-hidden group relative transition-all duration-500 ease-out hover:-translate-y-2 shadow-[0_12px_40px_rgba(0,0,0,0.12)] hover:shadow-[0_30px_70px_-15px_rgba(0,0,0,0.35)]">
 
             {/* Image ------------ */}
             <div className="relative h-70 flex items-center justify-center">

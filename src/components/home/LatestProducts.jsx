@@ -5,6 +5,7 @@ import pro3 from '../../assets/latestPro3.jpg'
 import pro4 from '../../assets/latestPro4.jpg'
 import SingleLatestCard from '../common/SingleLatestCard'
 import Slider from 'react-slick'
+import { LeftArrow, RightArrow } from '../../utils/SliderUtils'
 
 const LatestProducts = () => {
     const products = [
@@ -25,54 +26,26 @@ const LatestProducts = () => {
         slidesToShow: 3,
         slidesToScroll: 1,
         beforeChange: (_, next) => setCurrentSlide(next),
-        nextArrow: currentSlide < products.length - 3 ? <ChevronRight /> : null,
-        prevArrow: currentSlide > 0 ? <ChevronLeft /> : null,
+        nextArrow: currentSlide < products.length - 3 ? <RightArrow /> : null,
+        prevArrow: currentSlide > 0 ? <LeftArrow /> : null,
         responsive: [
             {
                 breakpoint: 1024,
                 settings: {
                     slidesToShow: 2,
-                    nextArrow: currentSlide < products.length - 2 ? <ChevronRight /> : null,
+                    nextArrow: currentSlide < products.length - 2 ? <RightArrow /> : null,
                 }
             },
             {
                 breakpoint: 768,
                 settings: {
                     slidesToShow: 1,
-                    nextArrow: currentSlide < products.length - 1 ? <ChevronRight /> : null,
+                    nextArrow: currentSlide < products.length - 1 ? <RightArrow /> : null,
                 }
             }
         ]
     };
 
-
-    function ChevronRight({ onClick }) {
-        return (
-            <button
-                onClick={onClick}
-                className="absolute right-0 md:right-0 top-1/2 -translate-y-1/2 z-10
-                 h-10 w-10 md:h-12 md:w-12 text-xl rounded-full bg-[#5087ff]/80 hover:bg-accent active:bg-sky-400 text-surface cursor-pointer shadow-lg
-                 flex items-center justify-center
-                 hover:scale-105 transition"
-            >
-                ❯
-            </button>
-        );
-    }
-
-    function ChevronLeft({ onClick }) {
-        return (
-            <button
-                onClick={onClick}
-                className="absolute left-0 md:-left-7 top-1/2 -translate-y-1/2 z-10
-                 h-10 w-10 md:h-12 md:w-12 text-xl rounded-full bg-[#5087ff]/80 hover:bg-accent active:bg-sky-400 text-surface cursor-pointer shadow-lg
-                 flex items-center justify-center
-                 hover:scale-105 transition"
-            >
-                ❮
-            </button>
-        );
-    }
     return (
         <>
             <section id='LatestProduct' className='mt-28 overflow-x-hidden'>

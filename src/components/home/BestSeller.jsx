@@ -1,12 +1,9 @@
-import React, { useState } from 'react'
-import SingleSellerCard from '../common/SingleSellerCard'
-import Slider from 'react-slick';
-import { LeftArrow, RightArrow } from '../../utils/SliderUtils';
+import React from 'react'
+import ProductSlider from '../sliders/ProductSlider';
 
 const BestSeller = () => {
-    const [currentSlide, setCurrentSlide] = useState(0);
 
-    const demoProducts = [
+    const products = [
         {
             id: 1,
             title: "Xiaomi Redmi Watch 4",
@@ -69,41 +66,6 @@ const BestSeller = () => {
         },
     ];
 
-    const settings = {
-        arrows: true,
-        infinite: false,
-        speed: 500,
-        slidesToShow: 4,
-        slidesToScroll: 1,
-        beforeChange: (_, next) => setCurrentSlide(next),
-        nextArrow: currentSlide < demoProducts.length - 4 ? <RightArrow /> : null,
-        prevArrow: currentSlide > 0 ? <LeftArrow /> : null,
-        responsive: [
-            {
-                breakpoint: 1024,
-                settings: {
-                    slidesToShow: 3,
-                    nextArrow: currentSlide < demoProducts.length - 3 ? <RightArrow /> : null,
-                }
-            },
-            {
-                breakpoint: 768,
-                settings: {
-                    slidesToShow: 2,
-                    nextArrow: currentSlide < demoProducts.length - 2 ? <RightArrow /> : null,
-                }
-            },
-            {
-                breakpoint: 640,
-                settings: {
-                    slidesToShow: 1,
-                    nextArrow: currentSlide < demoProducts.length - 1 ? <RightArrow /> : null,
-                }
-            }
-        ]
-    };
-
-
 
     return (
         <>
@@ -121,20 +83,8 @@ const BestSeller = () => {
                     </div>
 
 
-                    {/* ----------- Cards ----------- */}
-                    <div id="content-Row">
-
-                        <Slider {...settings}>
-                            {
-                                demoProducts.map((item, i) => (
-                                    <div key={i}>
-                                        <SingleSellerCard img={item.image} badge={item.badge} name={item.title} variant={item.variant} price={item.price} rating={item.rating} reviews={item.reviews} />
-                                    </div>
-                                ))
-                            }
-                        </Slider>
-
-                    </div>
+                    {/* ----------- Slider Content ----------- */}
+                    <ProductSlider products={products} />
                 </div>
             </section>
         </>

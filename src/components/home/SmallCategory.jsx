@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import Slider from 'react-slick';
-import { LeftArrow, RightArrow } from '../../utils/SliderUtils';
+import React from 'react';
+import CategorySlider from '../sliders/CategorySlider';
 
 const SmallCategory = () => {
     const products = [
@@ -15,66 +14,15 @@ const SmallCategory = () => {
         { name: "HomePod", image: "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/store-card-13-homepod-nav-202301?wid=400&hei=260&fmt=png-alpha&.v=WVcvamRucHVMMWs5SXZ3bVJ3Q2hpZGR0czFXNWdCUW14eTN2U29pLzNMcld1aTN5QlRYNG5PRjJxc2d1RklXbVM0TjRWdzF2UjRGVEY0c3dBQVZ6VFJmbWU0TjJLamxsdTltNkZVZ1RhbDA" },
     ];
 
-    // ------------- Slider 
-    const [currentSlide, setCurrentSlide] = useState(0);
-
-    const settings = {
-        arrows: true,
-        infinite: false,
-        speed: 500,
-        slidesToShow: 7,
-        slidesToScroll: 2,
-        beforeChange: (_, next) => setCurrentSlide(next),
-        nextArrow: currentSlide < products.length - 7 ? <RightArrow /> : null,
-        prevArrow: currentSlide > 0 ? <LeftArrow /> : null,
-        responsive: [
-            {
-                breakpoint: 1280,
-                settings: {
-                    slidesToShow: 5,
-                    nextArrow: currentSlide < products.length - 5 ? <RightArrow /> : null,
-                }
-            },
-            {
-                breakpoint: 1024,
-                settings: {
-                    slidesToShow: 4,
-                    nextArrow: currentSlide < products.length - 4 ? <RightArrow /> : null,
-                }
-            },
-            {
-                breakpoint: 768,
-                settings: {
-                    slidesToShow: 3,
-                    nextArrow: currentSlide < products.length - 3 ? <RightArrow /> : null,
-                }
-            },
-            {
-                breakpoint: 480,
-                settings: {
-                    slidesToShow: 3,
-                    nextArrow: currentSlide < products.length - 3 ? <RightArrow /> : null,
-                }
-            }
-        ]
-    };
-
-
-
     return (
         <section className="md:mt-28 mt-20 overflow-x-hidden">
             <div className="container">
                 <div id='Small-Category-Row'>
-
-                    {/* 1. Header Section */}
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 md:mb-18 gap-2 md:gap-8">
-
-                        {/* Left: Big Title */}
                         <h1 className="text-5xl md:text-[80px] font-bold tracking-tight leading-none text-text-primary">
                             Store.
                         </h1>
-
-                        {/* Right: Subtext */}
+                        
                         <h2 className="text-[17px] md:text-2xl font-semibold text-text-primary text-left md:text-right">
                             The best way to buy the <br />
                             products you love.
@@ -83,32 +31,9 @@ const SmallCategory = () => {
                 </div>
             </div>
 
-            <div className="slider-container relative">
-                <div>
-                    <Slider {...settings}>
-                        {products.map((item, index) => (
-                            <div key={index}>
-                                <div className="cursor-pointer flex flex-col items-center gap-3 justify-center pt-2">
-                                    {/* Image Container */}
-                                    <div className="duration-300 hover:-translate-y-2">
-                                        <img
-                                            src={item.image}
-                                            alt={item.name}
-                                            className="md:w-30 w-25 object-contain"
-                                        />
-                                    </div>
 
-                                    {/* Product Name */}
-                                    <p className="text-sm font-medium text-[#1D1D1F] hover:underline decoration-[#1D1D1F] underline-offset-2">
-                                        {item.name}
-                                    </p>
-                                </div>
-
-                            </div>
-                        ))}
-                    </Slider>
-                </div>
-            </div>
+            {/* ------------- SLider content -------------- */}
+                <CategorySlider products={products}/>
         </section >
     );
 };

@@ -51,8 +51,8 @@ const SmallCategory = () => {
             {
                 breakpoint: 480,
                 settings: {
-                    slidesToShow: 2,
-                    nextArrow: currentSlide < products.length - 2 ? <ChevronRight /> : null,
+                    slidesToShow: 3,
+                    nextArrow: currentSlide < products.length - 3 ? <ChevronRight /> : null,
                 }
             }
         ]
@@ -89,12 +89,12 @@ const SmallCategory = () => {
 
 
     return (
-        <section className="mt-28 overflow-x-hidden">
+        <section className="md:mt-28 mt-20 overflow-x-hidden">
             <div className="container">
                 <div id='Small-Category-Row'>
 
                     {/* 1. Header Section */}
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 md:mb-18 gap-4 md:gap-8 px-4 md:px-0">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 md:mb-18 gap-2 md:gap-8">
 
                         {/* Left: Big Title */}
                         <h1 className="text-5xl md:text-[80px] font-bold tracking-tight leading-none text-text-primary">
@@ -102,8 +102,8 @@ const SmallCategory = () => {
                         </h1>
 
                         {/* Right: Subtext */}
-                        <h2 className="text-lg md:text-2xl font-semibold text-text-primary text-left md:text-right">
-                            The best way to buy the <br className="hidden md:block" />
+                        <h2 className="text-[17px] md:text-2xl font-semibold text-text-primary text-left md:text-right">
+                            The best way to buy the <br />
                             products you love.
                         </h2>
                     </div>
@@ -121,7 +121,7 @@ const SmallCategory = () => {
                                         <img
                                             src={item.image}
                                             alt={item.name}
-                                            className="w-30 object-contain"
+                                            className="md:w-30 w-25 object-contain"
                                         />
                                     </div>
 

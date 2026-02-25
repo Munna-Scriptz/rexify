@@ -1,7 +1,5 @@
 import { ShieldCheck, Truck, Cpu, Headphones } from "lucide-react";
 
-
-
 const Services = () => {
     const servicesItem = [
         {
@@ -30,11 +28,11 @@ const Services = () => {
         <section id="Services">
             <div className="container">
                 {/* Section Header */}
-                <div className="flex flex-col md:flex-row justify-between items-center md:items-end text-center md:text-left mb-10 md:mb-15 gap-6 px-4 md:px-0">
-                    <h2 className="text-3xl md:text-6xl font-bold tracking-tight text-text-primary font-display">
-                        The <span className="text-blue-600">Rexify</span> <span className="block text-3xl md:text-5xl md:text-left mt-2">Standard</span>
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-end text-center md:text-left mb-10 md:mb-15 gap-0">
+                    <h2 className="text-4xl md:text-6xl font-bold tracking-tight text-text-primary font-display">
+                        The <span className="text-blue-600">Rexify</span> <span className="block text-3xl md:text-5xl text-left md:mt-2">Standard</span>
                     </h2>
-                    <p className="mt-4 text-text-muted text-base md:text-lg font-medium leading-relaxed max-w-lg md:text-right">
+                    <p className="mt-4 text-text-muted text-sm md:text-lg font-medium leading-relaxed max-w-lg text-left md:text-right">
                         We don't just sell tech; we curate a premium experience.
                         Built for speed, trust, and the future.
                     </p>

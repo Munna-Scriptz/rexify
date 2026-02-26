@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { ChevronDown, X, SlidersHorizontal, LayoutGrid, List, } from 'lucide-react';
 import ShopFilterPanel from '../components/shop/ShopFilterPanel';
 import Pagination from '../components/shop/Pagination';
@@ -45,6 +45,18 @@ const Shop = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [viewMode, setViewMode] = useState('grid');
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+
+    // Lock body scroll when mobile drawer is open
+    useEffect(() => {
+        if (mobileFiltersOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [mobileFiltersOpen]);
 
     const filteredProducts = useMemo(() => {
         let products = [...ALL_PRODUCTS];
@@ -115,7 +127,7 @@ const Shop = () => {
                 <div className="container">
                     <div className="flex gap-8">
 
-                        {/* ── Sidebar Filter ── */}
+                        {/* ── Sidebar Filter (Desktop) ── */}
                         <div className="hidden lg:block w-64 shrink-0">
                             <div className="sticky top-4">
                                 <ShopFilterPanel filters={filters} setFilters={handleFilterChange} onReset={handleReset} />
@@ -130,7 +142,7 @@ const Shop = () => {
                                 {/* Left: count + mobile filter toggle */}
                                 <div className="flex items-center gap-3">
                                     <button
-                                        onClick={() => setMobileFiltersOpen(!mobileFiltersOpen)}
+                                        onClick={() => setMobileFiltersOpen(true)}
                                         className="lg:hidden flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-xl border border-border hover:border-accent hover:text-accent transition-all"
                                     >
                                         <SlidersHorizontal size={15} /> Filters
@@ -141,15 +153,44 @@ const Shop = () => {
                                 </div>
 
                                 {/* Right: sort + view toggles */}
-                                <SortProduct sortBy={sortBy} setSortBy={setSortBy} setCurrentPage={setCurrentPage} setViewMode={setViewMode} viewMode={viewMode}/>
+                                <SortProduct sortBy={sortBy} setSortBy={setSortBy} setCurrentPage={setCurrentPage} setViewMode={setViewMode} viewMode={viewMode} />
                             </div>
 
-                            {/* Mobile Filters Drawer */}
-                            {mobileFiltersOpen && (
-                                <div className="lg:hidden mb-6 p-4 bg-surface rounded-2xl border border-border">
-                                    <ShopFilterPanel filters={filters} setFilters={handleFilterChange} onReset={handleReset} />
+                            {/* Mobile Filters Drawer Layer */}
+                            {/* Backdrop */}
+                            <div
+                                className={`fixed inset-0 bg-black/60 z-100 backdrop-blur-sm transition-opacity duration-300 lg:hidden ${mobileFiltersOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+                                onClick={() => setMobileFiltersOpen(false)}
+                            />
+
+                            {/* Drawer */}
+                            <div
+                                className={`fixed bottom-0 left-0 right-0 z-101 bg-surface rounded-t-4xl border-t border-border p-4 pb-4 transition-transform duration-500 cubic-bezier(0.4, 0, 0.2, 1) lg:hidden h-[70vh] flex flex-col shadow-2xl ${mobileFiltersOpen ? 'translate-y-0' : 'translate-y-full'}`}
+                            >
+                                {/* Drawer Handle */}
+                                <div
+                                    className="w-12 h-1.5 bg-border rounded-full mx-auto mb-6 shrink-0 cursor-pointer hover:bg-accent/40 transition-colors"
+                                    onClick={() => setMobileFiltersOpen(false)}
+                                />
+
+                                <div className="overflow-y-auto flex-1 pr-1 custom-scrollbar">
+                                    <ShopFilterPanel
+                                        filters={filters}
+                                        setFilters={handleFilterChange}
+                                        onReset={handleReset}
+                                        isMobileDrawer={true}
+                                        onClose={() => setMobileFiltersOpen(false)}
+                                    />
                                 </div>
-                            )}
+
+                                {/* Apply button (optional but good for UX) */}
+                                <button
+                                    onClick={() => setMobileFiltersOpen(false)}
+                                    className="mt-4 w-full py-3 bg-accent text-white font-bold rounded-2xl shadow-lg shadow-accent/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                                >
+                                    Apply Filters
+                                </button>
+                            </div>
 
                             {/* Active filter chips */}
                             {activeFilters.length > 0 && (

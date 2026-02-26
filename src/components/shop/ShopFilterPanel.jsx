@@ -12,7 +12,7 @@ import FilterSection from './FilterSection';
 import RatingStars from './RatingStars';
 import RangeSlider from './RangeSlider';
 
-const ShopFilterPanel = ({ filters, setFilters, onReset }) => {
+const ShopFilterPanel = ({ filters, setFilters, onReset, isMobileDrawer, onClose }) => {
 
     const categories = ['All', 'Smartphones', 'Laptops', 'Tablets', 'Audio', 'Wearables', 'Gaming'];
     const brands = ['Apple', 'Samsung', 'Sony', 'Dell', 'Asus', 'Bose', 'Logitech'];
@@ -52,7 +52,7 @@ const ShopFilterPanel = ({ filters, setFilters, onReset }) => {
     };
 
     return (
-        <aside className="w-full border-r border-border pr-6">
+        <aside className={`w-full ${!isMobileDrawer ? 'border-r border-border pr-6' : ''}`}>
             {/* Header */}
             <div className="flex items-center justify-between mb-1 pb-4 border-b border-border">
                 <div className="flex items-center gap-2.5 font-bold text-text-primary text-base">
@@ -61,12 +61,22 @@ const ShopFilterPanel = ({ filters, setFilters, onReset }) => {
                     </span>
                     Filters
                 </div>
-                <button
-                    onClick={onReset}
-                    className="flex items-center gap-1 text-xs text-text-secondary hover:text-red-500 cursor-pointer transition-colors font-medium px-2 py-1 rounded-md hover:bg-red-50"
-                >
-                    <X size={12} /> Reset
-                </button>
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={onReset}
+                        className="flex items-center gap-1 text-xs text-text-secondary hover:text-red-500 cursor-pointer transition-colors font-medium px-2 py-1 rounded-md hover:bg-red-50"
+                    >
+                        Reset
+                    </button>
+                    {isMobileDrawer && (
+                        <button
+                            onClick={onClose}
+                            className="flex items-center justify-center w-8 h-8 rounded-full bg-muted text-text-primary hover:bg-accent hover:text-white transition-all"
+                        >
+                            <X size={16} />
+                        </button>
+                    )}
+                </div>
             </div>
 
             {/* Category */}

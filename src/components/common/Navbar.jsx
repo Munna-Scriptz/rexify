@@ -66,7 +66,7 @@ const Navbar = () => {
                         <div className="flex md:hidden">
                             <button
                                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                                className={`p-2 cursor-pointer`}
+                                className={`cursor-pointer`}
                                 title="Menu"
                             >
                                 <HiMiniBars3BottomLeft className={`w-7 h-7 group-hover:text-text-primary ${isNavbarWhite && 'text-text-primary'}`} />

@@ -40,8 +40,8 @@ const SignIn = () => {
   return (
     <>
       <BackUi to={'/'} name={'Home'} absolute={true} />
-      <div className="min-h-screen flex items-center justify-center overflow-hidden">
-        <form onSubmit={handleForm} className="w-full max-w-140 flex flex-col items-center animate-slide-in">
+      <div className="min-h-screen flex items-center justify-center p-6 sm:p-10 overflow-x-hidden">
+        <form onSubmit={handleForm} className="w-full max-w-md lg:max-w-lg flex flex-col items-center animate-slide-in">
 
           {/* -------- Header */}
           <Header header={"Welcome back!"} text={"Don't have an account?"} linkText={"Sign Up"} linkPath={"/auth/signUp"} />
@@ -53,12 +53,15 @@ const SignIn = () => {
 
             <div className="flex items-center gap-2 pt-2 pb-6 cursor-pointer" onClick={() => setRememberMe(!rememberMe)}>
               <button className={` w-4 h-4 rounded-sm border transition-all duration-200 ${rememberMe ? 'bg-coil border-coil' : 'bg-transparent border-zinc-400'}`} aria-label="Keep me signed in" />
-              <span className="text-[13px] text-zinc-600 font-medium select-none">
+              <span className="text-[13px] text-zinc-600 font-medium select-none hidden md:inline-block">
                 Keep me signed in until I sign out
+              </span>
+              <span className="text-[13px] text-zinc-600 font-medium select-none md:hidden">
+                Remember me
               </span>
             </div>
 
-            <Link href="/forgot-password" className="text-[13px] text-coil font-medium underline underline-offset-4 hover:text-coil transition-colors">
+            <Link to="/forgot-password" size="sm" className="text-[13px] text-coil font-medium underline underline-offset-4 hover:text-coil transition-colors whitespace-nowrap">
               Forget your password
             </Link>
 

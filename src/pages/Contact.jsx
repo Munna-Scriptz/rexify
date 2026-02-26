@@ -14,7 +14,7 @@ const Contact = () => {
 
                         {/* Main Content Section */}
                         <section className="py-20">
-                            <div className="container grid lg:grid-cols-2 gap-12 lg:gap-24">
+                            <div className="grid lg:grid-cols-2 gap-12 lg:gap-24">
 
                                 {/* Left Column: Contact Info */}
                                 <div className="space-y-12">
@@ -64,7 +64,7 @@ const Contact = () => {
 
                                 {/* Right Column: Form */}
                                 <div className="bg-bg rounded-3xl p-1 shadow-2xl shadow-accent/5 border border-border">
-                                    <div className="bg-surface rounded-[1.3rem] p-8 md:p-10 h-full">
+                                    <div className="bg-surface rounded-[1.3rem] p-4 md:p-10 h-full">
                                         <h3 className="text-2xl font-bold font-space mb-6">Send a Message</h3>
                                         <form className="space-y-6">
                                             <div className="grid md:grid-cols-2 gap-6">
@@ -101,30 +101,28 @@ const Contact = () => {
 
                         {/* FAQ Section */}
                         <section className="py-20 bg-surface border-t border-border">
-                            <div className="container max-w-4xl">
-                                <div className="text-center mb-16">
-                                    <h2 className="text-3xl font-bold font-space mb-4">Frequently Asked Questions</h2>
-                                    <p className="text-text-secondary">Everything you need to know about contacting us.</p>
-                                </div>
+                            <div className="text-center mb-16">
+                                <h2 className="text-3xl font-bold font-space mb-4">Frequently Asked Questions</h2>
+                                <p className="text-text-secondary">Everything you need to know about contacting us.</p>
+                            </div>
 
-                                <div className="grid md:grid-cols-2 gap-6">
-                                    <FAQItem
-                                        question="What is the typical response time?"
-                                        answer="We generally respond to all inquiries within 24 hours during business days."
-                                    />
-                                    <FAQItem
-                                        question="Do you offer technical support?"
-                                        answer="Yes! Our dedicated support team is available 24/7 to help with any technical issues."
-                                    />
-                                    <FAQItem
-                                        question="Where are you located?"
-                                        answer="Our headquarters is in San Francisco, but we have a distributed team worldwide."
-                                    />
-                                    <FAQItem
-                                        question="Can I request a demo?"
-                                        answer="Absolutely. You can schedule a personalized demo via our pricing page or by contacting sales."
-                                    />
-                                </div>
+                            <div className="grid md:grid-cols-2 gap-6">
+                                <FAQItem
+                                    question="What is the typical response time?"
+                                    answer="We generally respond to all inquiries within 24 hours during business days."
+                                />
+                                <FAQItem
+                                    question="Do you offer technical support?"
+                                    answer="Yes! Our dedicated support team is available 24/7 to help with any technical issues."
+                                />
+                                <FAQItem
+                                    question="Where are you located?"
+                                    answer="Our headquarters is in San Francisco, but we have a distributed team worldwide."
+                                />
+                                <FAQItem
+                                    question="Can I request a demo?"
+                                    answer="Absolutely. You can schedule a personalized demo via our pricing page or by contacting sales."
+                                />
                             </div>
                         </section>
 

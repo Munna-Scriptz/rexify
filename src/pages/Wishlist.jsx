@@ -69,7 +69,7 @@ const Wishlist = () => {
 
     return (
         <div className="min-h-screen bg-bg font-primary py-12">
-            <div className="container mx-auto px-4 md:px-8">
+            <div className="container">
 
                 {/* Header */}
                 <WishlistHeader />

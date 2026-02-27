@@ -67,12 +67,12 @@ export const WishlistHeader = () => {
                 </span>
             </div>
 
-            <h1 className="text-4xl md:text-5xl font-bold font-space mb-6 text-text-primary">
+            <h1 className="text-3xl md:text-5xl font-bold font-space mb-6 text-text-primary">
                 My <span className="text-accent">wishlist</span>
             </h1>
 
             {/* Tabs / Sub-nav */}
-            <div className="flex items-center gap-8 text-sm font-medium text-text-muted border-b border-border pb-4 w-full md:w-auto justify-center">
+            <div className="flex items-center gap-8 md:text-sm text-xs font-medium text-text-muted border-b border-border pb-4 w-full md:w-auto justify-center">
                 <button className="hover:text-text-primary transition-colors">Create a wishlist</button>
                 <button className="text-text-primary border-b-2 border-text-primary pb-4 -mb-4.5">Your wishlists</button>
                 <button className="hover:text-text-primary transition-colors">Search wishlist</button>

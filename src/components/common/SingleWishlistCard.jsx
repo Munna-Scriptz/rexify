@@ -1,5 +1,5 @@
 import { HeartOff } from 'lucide-react';
-import { FiHeart, FiShoppingBag } from 'react-icons/fi'
+import { FiShoppingBag } from 'react-icons/fi'
 
 
 const SingleWishlistCard = ({ img, badge, name, variant, price, rating, reviews }) => {

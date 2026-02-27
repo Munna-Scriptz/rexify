@@ -23,25 +23,24 @@ const Confirm = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-surface py-12 px-4 sm:px-6 lg:px-12 font-primary">
+        <section className="md:py-12 py-6">
             <div className="container">
                 {/* Breadcrumbs / Back */}
-
                 <BackUi to={"/cart"} name={"Cart"}/>
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
                     {/* Left Column: Payment Methods & Forms */}
                     <div className="lg:col-span-2 space-y-8">
-                        <div className="bg-white rounded-2xl p-8 border border-border shadow-sm">
-                            <h2 className="text-2xl font-bold font-space text-text-primary mb-2">Payment Method</h2>
-                            <p className="text-text-secondary mb-8">Select your preferred payment method and enter your details.</p>
+                        <div className="bg-white rounded-2xl md:p-8 p-5 border border-border shadow-sm">
+                            <h2 className="md:text-2xl text-xl font-bold font-space text-text-primary mb-2">Payment Method</h2>
+                            <p className="text-text-secondary mb-8 md:text-base text-sm">Select your preferred payment method and enter your details.</p>
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
                                 {methods.map((method) => (
                                     <button
                                         key={method.id}
                                         onClick={() => setPaymentMethod(method.id)}
-                                        className={`flex items-start gap-4 p-5 rounded-2xl border transition-all duration-300 relative text-left cursor-pointer ${paymentMethod === method.id
+                                        className={`flex items-start gap-4 md:p-5 p-3 rounded-2xl border transition-all duration-300 relative text-left cursor-pointer ${paymentMethod === method.id
                                             ? 'border-accent bg-accent/5 ring-1 ring-accent/20 shadow-md'
                                             : 'border-border hover:border-gray-300 hover:bg-gray-50'
                                             }`}
@@ -93,7 +92,7 @@ const Confirm = () => {
                     <OrderSummary cartItems={cartItems} buttonText="Pay Now" to="/auth/complete" />
                 </div>
             </div>
-        </div>
+        </section>
     );
 };
 

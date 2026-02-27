@@ -54,16 +54,16 @@ const Complete = () => {
 
                 {/* Celebration Text */}
                 <div className="space-y-4 mb-10 animate-fade-up">
-                    <h1 className="text-4xl font-black text-text-primary font-space tracking-tight">
+                    <h1 className="md:text-4xl text-3xl font-black text-text-primary font-space tracking-tight">
                         Order Confirmed!
                     </h1>
-                    <p className="text-text-secondary text-lg max-w-md mx-auto leading-relaxed">
+                    <p className="text-text-secondary md:text-lg text-base max-w-md mx-auto leading-relaxed">
                         Hooray! Your payment was successful and your order <span className="text-accent font-bold">#{orderNumber}</span> is now being prepared for shipping.
                     </p>
                 </div>
 
                 {/* Order Status Timeline Card */}
-                <div className="bg-white rounded-3xl p-8 border border-border shadow-xl shadow-black/5 mb-10 animate-fade-up delay-200">
+                <div className="bg-white rounded-3xl md:p-8 p-6 border border-border shadow-xl shadow-black/5 mb-10 animate-fade-up delay-200">
                     <div className="flex items-center justify-between mb-8 pb-6 border-b border-border/50">
                         <div className="flex items-center gap-3">
                             <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center text-accent">

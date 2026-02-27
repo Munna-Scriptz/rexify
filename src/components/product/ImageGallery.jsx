@@ -10,11 +10,11 @@ const ImageGallery = (product) => {
                 <img
                     src={product.images[selectedImage]}
                     alt={product.name}
-                    className="w-full h-full object-contain p-8 transition-transform duration-500 group-hover:scale-105"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 />
-                <div className="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button className="p-2 bg-white rounded-full shadow-sm hover:text-accent transition-colors"><Heart size={20} /></button>
-                    <button className="p-2 bg-white rounded-full shadow-sm hover:text-accent transition-colors"><Share2 size={20} /></button>
+                <div className="absolute top-4 right-4 flex flex-col gap-2 lg:opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button className="p-2 bg-white rounded-full shadow-sm hover:text-accent transition-colors cursor-pointer"><Heart size={20} /></button>
+                    <button className="p-2 bg-white rounded-full shadow-sm hover:text-accent transition-colors cursor-pointer"><Share2 size={20} /></button>
                 </div>
             </div>
 

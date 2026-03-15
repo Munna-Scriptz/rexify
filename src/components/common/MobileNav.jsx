@@ -27,20 +27,6 @@ const MobileNav = () => {
     return (
         <>
             <div className="fixed bottom-0 left-0 right-0 z-40 lg:hidden">
-                <style>{`
-                    .mobile-nav-indicator {
-                        position: absolute;
-                        top: -21px;
-                        width: 56px;
-                        height: 56px;
-                        background-color: var(--color-accent);
-                        border-radius: 50%;
-                        border: 6px solid #ffffff;
-                        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-                        left: calc(20% * var(--active-index) + 10% - 28px);
-                        z-index: 10;
-                    }
-                `}</style>
                 <div className="bg-white h-17.5 relative flex items-center">
                     <div className="mobile-nav-indicator" style={{ '--active-index': activeIndex }}></div>
                     {navItems.map((item, index) => {
@@ -57,7 +43,7 @@ const MobileNav = () => {
                                 }}
                                 className="flex-1 flex flex-col items-center justify-center relative z-20 h-full bg-transparent border-none outline-none cursor-pointer group"
                             >
-                                <div className={`transition-all duration-300 flex items-center justify-center ${isActive ? '-translate-y-7 text-white' : 'text-coil group-hover:text-gray-900 translate-y-0'}`}>
+                                <div className={`transition-all duration-300 flex items-center justify-center ${isActive ? '-translate-y-5.5 text-white' : 'text-coil group-hover:text-gray-900 translate-y-0'}`}>
                                     <item.icon size={24} strokeWidth={isActive ? 2 : 1} />
                                 </div>
                                 <span className={`text-[10px] absolute font-medium bottom-3 transition-all duration-300 ${isActive ? 'opacity-100 text-accent translate-y-0' : 'opacity-0 translate-y-4'}`}>
@@ -68,6 +54,21 @@ const MobileNav = () => {
                     })}
                 </div>
             </div>
+
+            <style>{`
+                    .mobile-nav-indicator {
+                        position: absolute;
+                        top: -16px;
+                        width: 56px;
+                        height: 56px;
+                        background-color: var(--color-accent);
+                        border-radius: 50%;
+                        border: 6px solid #ffffff;
+                        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                        left: calc(20% * var(--active-index) + 10% - 28px);
+                        z-index: 10;
+                    }
+                `}</style>
         </>
     )
 }

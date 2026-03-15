@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router'
-import { Home, LayoutGrid, ShoppingBag, Search as SearchIcon, User } from 'lucide-react'
-import SearchField from './SearchField'
+import { Home, LayoutGrid, ShoppingBag, Heart, User } from 'lucide-react'
 
 const MobileNav = () => {
     const location = useLocation()
     const navigate = useNavigate()
     const [activeIndex, setActiveIndex] = useState(0)
-    const [searchOpen, setSearchOpen] = useState(false)
 
     const navItems = [
         { path: '/', icon: Home, label: 'Home' },
         { path: '/shop', icon: ShoppingBag, label: 'Shop' },
-        { isAction: true, action: () => setSearchOpen(true), icon: SearchIcon, label: 'Search' },
         { path: '/category', icon: LayoutGrid, label: 'Category' },
+        { path: '/wishlist', icon: Heart, label: 'wishlist' },
         { path: '/profile', icon: User, label: 'Profile' }
     ]
 
@@ -21,7 +19,8 @@ const MobileNav = () => {
         const currentPath = location.pathname
         if (currentPath === '/') setActiveIndex(0)
         else if (currentPath.includes('/shop')) setActiveIndex(1)
-        else if (currentPath.includes('/category')) setActiveIndex(3)
+        else if (currentPath.includes('/category')) setActiveIndex(2)
+        else if (currentPath.includes('/wishlist')) setActiveIndex(3)
         else if (currentPath.includes('/profile')) setActiveIndex(4)
     }, [location.pathname])
 
@@ -64,7 +63,7 @@ const MobileNav = () => {
                         box-shadow: -1px -10px 0 0 #ffffff;
                     }
                 `}</style>
-                <div className="bg-white shadow-[0_-4px_10px_rgba(0,0,0,0.05)] h-[70px] relative flex items-center">
+                <div className="bg-white shadow-[0_-4px_10px_rgba(0,0,0,0.05)] h-17.5 relative flex items-center">
                     <div className="mobile-nav-indicator shadow-lg shadow-accent/40" style={{ '--active-index': activeIndex }}></div>
                     {navItems.map((item, index) => {
                         const isActive = activeIndex === index
@@ -80,10 +79,10 @@ const MobileNav = () => {
                                 }}
                                 className="flex-1 flex flex-col items-center justify-center relative z-20 h-full bg-transparent border-none outline-none cursor-pointer group"
                             >
-                                <div className={`transition-all duration-300 flex items-center justify-center ${isActive ? '-translate-y-[28px] text-white' : 'text-gray-400 group-hover:text-gray-900 translate-y-0'}`}>
-                                    <item.icon size={24} strokeWidth={isActive ? 2.5 : 2} />
+                                <div className={`transition-all duration-300 flex items-center justify-center ${isActive ? '-translate-y-7 text-white' : 'text-coil group-hover:text-gray-900 translate-y-0'}`}>
+                                    <item.icon size={24} strokeWidth={isActive ? 2 : 1} />
                                 </div>
-                                <span className={`text-[10px] absolute font-medium bottom-[12px] transition-all duration-300 ${isActive ? 'opacity-100 text-accent translate-y-0' : 'opacity-0 translate-y-4'}`}>
+                                <span className={`text-[10px] absolute font-medium bottom-3 transition-all duration-300 ${isActive ? 'opacity-100 text-accent translate-y-0' : 'opacity-0 translate-y-4'}`}>
                                     {item.label}
                                 </span>
                             </button>
@@ -91,13 +90,6 @@ const MobileNav = () => {
                     })}
                 </div>
             </div>
-
-            {/* Search Modal */}
-            {searchOpen && (
-                <div className="lg:hidden relative z-[100] bg-white">
-                    <SearchField close={setSearchOpen} />
-                </div>
-            )}
         </>
     )
 }

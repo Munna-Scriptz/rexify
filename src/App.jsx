@@ -5,7 +5,7 @@ import LayoutOne from './layout/LayoutOne'
 import Home from './pages/Home'
 import LayoutTwo from './layout/LayoutTwo'
 import SignUp from './pages/SignUp'
-import SignIn from './pages/SignIn'
+import Signin from './pages/Signin'
 import Category from './pages/Category'
 import About from './pages/About'
 import Contact from './pages/Contact'
@@ -36,7 +36,7 @@ const App = () => {
       <Route path='/auth' element={<LayoutTwo />}>
         <Route index element={<Navigate to="signUp" replace />} />
         <Route path="signUp" element={<SignUp />} />
-        <Route path="signIn" element={<SignIn />} />
+        <Route path="signin" element={<Signin />} />
         <Route path='confirm' element={<Confirm />} />
         <Route path='complete' element={<Complete />} />
       </Route>

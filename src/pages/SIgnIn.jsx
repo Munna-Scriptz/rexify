@@ -8,7 +8,7 @@ import { Link } from 'react-router';
 import OrDivider from '../components/signUp/OrDivider';
 import BackUi from '../utils/BackUi';
 
-const SignIn = () => {
+const Signin = () => {
   const [loading, setLoading] = useState(false)
   const [rememberMe, setRememberMe] = useState(false);
 
@@ -83,4 +83,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default Signin;

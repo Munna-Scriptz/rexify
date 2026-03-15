@@ -30,7 +30,7 @@ const MobileNav = () => {
                 <style>{`
                     .mobile-nav-indicator {
                         position: absolute;
-                        top: -24px;
+                        top: -21px;
                         width: 56px;
                         height: 56px;
                         background-color: var(--color-accent);
@@ -40,31 +40,9 @@ const MobileNav = () => {
                         left: calc(20% * var(--active-index) + 10% - 28px);
                         z-index: 10;
                     }
-                    .mobile-nav-indicator::before {
-                        content: '';
-                        position: absolute;
-                        top: 24px;
-                        left: -22px;
-                        width: 20px;
-                        height: 20px;
-                        background-color: transparent;
-                        border-top-right-radius: 20px;
-                        box-shadow: 1px -10px 0 0 #ffffff;
-                    }
-                    .mobile-nav-indicator::after {
-                        content: '';
-                        position: absolute;
-                        top: 24px;
-                        right: -22px;
-                        width: 20px;
-                        height: 20px;
-                        background-color: transparent;
-                        border-top-left-radius: 20px;
-                        box-shadow: -1px -10px 0 0 #ffffff;
-                    }
                 `}</style>
-                <div className="bg-white shadow-[0_-4px_10px_rgba(0,0,0,0.05)] h-17.5 relative flex items-center">
-                    <div className="mobile-nav-indicator shadow-lg shadow-accent/40" style={{ '--active-index': activeIndex }}></div>
+                <div className="bg-white h-17.5 relative flex items-center">
+                    <div className="mobile-nav-indicator" style={{ '--active-index': activeIndex }}></div>
                     {navItems.map((item, index) => {
                         const isActive = activeIndex === index
                         return (

@@ -83,12 +83,13 @@ const Essentials = () => {
                     </div>
 
                     {/* -------------- Cards --------------- */}
+                    {/* Desktop Layout */}
                     <div
                         id="content-Row"
-                        className="flex md:flex-row flex-col justify-center gap-8"
+                        className="hidden md:flex flex-row justify-center gap-8"
                     >
                         {/* Left Column */}
-                        <div className="flex flex-col gap-6 md:gap-8 md:translate-y-6">
+                        <div className="flex flex-col gap-8 translate-y-6 select-none">
                             {demoProducts
                                 .filter((_, i) => i % 3 === 0)
                                 .map((item, i) => (
@@ -106,7 +107,7 @@ const Essentials = () => {
                         </div>
 
                         {/* Middle Column (Raised) */}
-                        <div className="flex flex-col gap-6 md:gap-8 md:-translate-y-6">
+                        <div className="flex flex-col gap-8 -translate-y-6">
                             {demoProducts
                                 .filter((_, i) => i % 3 === 1)
                                 .map((item, i) => (
@@ -124,7 +125,7 @@ const Essentials = () => {
                         </div>
 
                         {/* Right Column */}
-                        <div className="flex flex-col gap-6 md:gap-8 md:translate-y-6">
+                        <div className="flex flex-col gap-8 translate-y-6">
                             {demoProducts
                                 .filter((_, i) => i % 3 === 2)
                                 .map((item, i) => (
@@ -140,6 +141,23 @@ const Essentials = () => {
                                     />
                                 ))}
                         </div>
+                    </div>
+
+                    {/* Mobile Layout (Horizontal Scroll) */}
+                    <div className="flex md:hidden overflow-x-auto snap-x snap-mandatory gap-4 pb-8 -mx-4 px-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                        {demoProducts.map((item, i) => (
+                            <div key={i} className="w-[42vw] min-w-[42vw] snap-start shrink-0">
+                                <SingleEssentialCard
+                                    img={item.image}
+                                    badge={item.badge}
+                                    name={item.title}
+                                    variant={item.variant}
+                                    price={item.price}
+                                    rating={item.rating}
+                                    reviews={item.reviews}
+                                />
+                            </div>
+                        ))}
                     </div>
 
 

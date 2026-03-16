@@ -5,11 +5,11 @@ const SingleEssentialCard = ({ img, name, variant }) => {
         <div className="md:w-87 w-full rounded-3xl border border-neutral-200 cursor-pointer overflow-hidden group relative transition-all duration-500 ease-out hover:-translate-y-2 shadow-[0_12px_40px_rgba(0,0,0,0.12)] hover:shadow-[0_30px_70px_-15px_rgba(0,0,0,0.35)]">
 
             {/* Image ------------ */}
-            <div className="relative h-[200px] md:h-70 flex items-center justify-center">
+            <div className="relative h-50 md:h-70 flex items-center justify-center">
                 <img
                     src={img}
                     alt={name}
-                    className="max-h-[140px] md:max-h-[210px] w-auto object-contain transition-transform duration-500 group-hover:scale-105"
+                    className="max-h-35 md:max-h-52.5 w-auto object-contain transition-transform duration-500 group-hover:scale-105"
                 />
 
                 {/* Hover ------- */}

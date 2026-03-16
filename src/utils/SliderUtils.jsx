@@ -1,38 +1,40 @@
 import React from 'react'
 import { ChevronRight, ChevronLeft } from 'lucide-react'
 
-export const RightArrow = ({ onClick }) => {
+export const RightArrow = ({ onClick, disabled, className }) => {
     return (
         <button
             onClick={onClick}
-            className="absolute right-0 md:-right-5 top-1/2 -translate-y-1/2 z-20
-                 h-10 w-10 md:h-14 md:w-14 rounded-full 
-                 bg-white/80 backdrop-blur-md border border-gray-200
-                 text-text-primary shadow-xl hover:shadow-2xl
-                 flex items-center justify-center
-                 hover:bg-accent hover:text-white hover:border-accent
+            disabled={disabled}
+            className={`absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-20
+                 h-8 w-8 md:h-10 md:w-10 rounded-full 
+                 bg-white/90 backdrop-blur-md border border-gray-200
+                 text-text-primary flex items-center justify-center
                  transition-all duration-300 ease-out group
-                 active:scale-90 cursor-pointer"
+                 active:scale-90
+                 ${disabled ? 'opacity-0 pointer-events-none' : 'opacity-100 shadow-lg hover:shadow-xl hover:bg-accent hover:text-white hover:border-accent cursor-pointer'} 
+                 ${className || ''}`}
         >
-            <ChevronRight size={28} className="transition-transform group-hover:translate-x-0.5" strokeWidth={2.5} />
+            <ChevronRight size={20} className="transition-transform group-hover:translate-x-0.5" strokeWidth={2.5} />
         </button>
     )
 }
 
-export const LeftArrow = ({ onClick }) => {
+export const LeftArrow = ({ onClick, disabled, className }) => {
     return (
         <button
             onClick={onClick}
-            className="absolute left-0 md:-left-5 top-1/2 -translate-y-1/2 z-20
-                 h-10 w-10 md:h-14 md:w-14 rounded-full 
-                 bg-white/80 backdrop-blur-md border border-gray-200
-                 text-text-primary shadow-xl hover:shadow-2xl
-                 flex items-center justify-center
-                 hover:bg-accent hover:text-white hover:border-accent
+            disabled={disabled}
+            className={`absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-20
+                 h-8 w-8 md:h-10 md:w-10 rounded-full 
+                 bg-white/90 backdrop-blur-md border border-gray-200
+                 text-text-primary flex items-center justify-center
                  transition-all duration-300 ease-out group
-                 active:scale-90 cursor-pointer"
+                 active:scale-90 
+                 ${disabled ? 'opacity-0 pointer-events-none' : 'opacity-100 shadow-lg hover:shadow-xl hover:bg-accent hover:text-white hover:border-accent cursor-pointer'}
+                 ${className || ''}`}
         >
-            <ChevronLeft size={28} className="transition-transform group-hover:-translate-x-0.5" strokeWidth={2.5} />
+            <ChevronLeft size={20} className="transition-transform group-hover:-translate-x-0.5" strokeWidth={2.5} />
         </button>
     )
 }

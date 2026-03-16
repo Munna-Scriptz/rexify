@@ -1,72 +1,68 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import SingleSellerCard from "../common/SingleSellerCard";
 import { LeftArrow, RightArrow } from "../../utils/SliderUtils";
 
 const ProductSlider = ({ products }) => {
-  const [emblaRef, emblaApi] = useEmblaCarousel({
-    dragFree: true,
-    align: "start",
-    containScroll: "trimSnaps"
-  });
+    const [emblaRef, emblaApi] = useEmblaCarousel({
+        dragFree: true,
+        align: "start",
+        containScroll: "trimSnaps"
+    });
 
-  const scrollPrev = useCallback(() => {
-    if (emblaApi) emblaApi.scrollPrev();
-  }, [emblaApi]);
+    const [prevBtnDisabled, setPrevBtnDisabled] = useState(true);
+    const [nextBtnDisabled, setNextBtnDisabled] = useState(true);
 
-  const scrollNext = useCallback(() => {
-    if (emblaApi) emblaApi.scrollNext();
-  }, [emblaApi]);
+    const scrollPrev = useCallback(() => {
+        if (emblaApi) emblaApi.scrollPrev();
+    }, [emblaApi]);
 
-  return (
-    <div className="relative">
+    const scrollNext = useCallback(() => {
+        if (emblaApi) emblaApi.scrollNext();
+    }, [emblaApi]);
 
-      {/* arrows */}
-      <button
-        onClick={scrollPrev}
-        className="absolute left-0 top-1/2 z-10 -translate-y-1/2"
-      >
-        <LeftArrow />
-      </button>
+    const onSelect = useCallback((emblaApi) => {
+        setPrevBtnDisabled(!emblaApi.canScrollPrev());
+        setNextBtnDisabled(!emblaApi.canScrollNext());
+    }, []);
 
-      <button
-        onClick={scrollNext}
-        className="absolute right-0 top-1/2 z-10 -translate-y-1/2"
-      >
-        <RightArrow />
-      </button>
+    useEffect(() => {
+        if (!emblaApi) return;
 
-      {/* embla */}
-      <div className="overflow-hidden" ref={emblaRef}>
-        <div className="flex gap-4">
+        onSelect(emblaApi);
+        emblaApi.on("reInit", onSelect).on("select", onSelect);
+    }, [emblaApi, onSelect]);
 
-          {products.map((item, i) => (
-            <div
-              key={i}
-              className="
-                flex-[0_0_100%]
-                sm:flex-[0_0_50%]
-                md:flex-[0_0_33.33%]
-                lg:flex-[0_0_25%]
-              "
-            >
-              <SingleSellerCard
-                img={item.image}
-                badge={item.badge}
-                name={item.title}
-                variant={item.variant}
-                price={item.price}
-                rating={item.rating}
-                reviews={item.reviews}
-              />
+    return (
+        <div className="relative group">
+
+            {/* arrows */}
+            <LeftArrow disabled={prevBtnDisabled} onClick={scrollPrev} className="hidden md:flex" />
+            <RightArrow disabled={nextBtnDisabled} onClick={scrollNext} className="hidden md:flex" />
+
+            {/* embla */}
+            <div className="overflow-hidden -mx-4 px-4" ref={emblaRef}>
+                <div className="flex gap-4 pb-4">
+
+                    {products.map((item, i) => (
+                        <div key={i} className="flex-[0_0_42vw] sm:flex-[0_0_35%] md:flex-[0_0_30%] lg:flex-[0_0_22%]">
+                            <SingleSellerCard
+                                img={item.image}
+                                badge={item.badge}
+                                name={item.title}
+                                variant={item.variant}
+                                price={item.price}
+                                rating={item.rating}
+                                reviews={item.reviews}
+                            />
+                        </div>
+                    ))}
+
+                </div>
             </div>
-          ))}
 
         </div>
-      </div>
-
-    </div>
-  );
+    );
 };
 
 export default ProductSlider;

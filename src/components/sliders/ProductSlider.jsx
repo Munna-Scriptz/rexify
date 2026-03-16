@@ -1,58 +1,72 @@
-import React, { useState } from 'react'
-import SingleSellerCard from '../common/SingleSellerCard'
-import Slider from 'react-slick';
-import { LeftArrow, RightArrow } from '../../utils/SliderUtils';
+import React, { useCallback } from "react";
+import useEmblaCarousel from "embla-carousel-react";
+import SingleSellerCard from "../common/SingleSellerCard";
+import { LeftArrow, RightArrow } from "../../utils/SliderUtils";
 
 const ProductSlider = ({ products }) => {
-    const [currentSlide, setCurrentSlide] = useState(0);
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    dragFree: true,
+    align: "start",
+    containScroll: "trimSnaps"
+  });
 
-    const settings = {
-        arrows: true,
-        infinite: false,
-        speed: 500,
-        slidesToShow: 4,
-        slidesToScroll: 1,
-        beforeChange: (_, next) => setCurrentSlide(next),
-        nextArrow: currentSlide < products.length - 4 ? <RightArrow /> : null,
-        prevArrow: currentSlide > 0 ? <LeftArrow /> : null,
-        responsive: [
-            {
-                breakpoint: 1024,
-                settings: {
-                    slidesToShow: 3,
-                    nextArrow: currentSlide < products.length - 3 ? <RightArrow /> : null,
-                }
-            },
-            {
-                breakpoint: 768,
-                settings: {
-                    slidesToShow: 2,
-                    nextArrow: currentSlide < products.length - 2 ? <RightArrow /> : null,
-                }
-            },
-            {
-                breakpoint: 640,
-                settings: {
-                    slidesToShow: 1,
-                    nextArrow: currentSlide < products.length - 1 ? <RightArrow /> : null,
-                }
-            }
-        ]
-    };
+  const scrollPrev = useCallback(() => {
+    if (emblaApi) emblaApi.scrollPrev();
+  }, [emblaApi]);
 
-    return (
-        <div id="Slider-Row">
-            <Slider {...settings}>
-                {
-                    products.map((item, i) => (
-                        <div key={i}>
-                            <SingleSellerCard img={item.image} badge={item.badge} name={item.title} variant={item.variant} price={item.price} rating={item.rating} reviews={item.reviews} />
-                        </div>
-                    ))
-                }
-            </Slider>
+  const scrollNext = useCallback(() => {
+    if (emblaApi) emblaApi.scrollNext();
+  }, [emblaApi]);
+
+  return (
+    <div className="relative">
+
+      {/* arrows */}
+      <button
+        onClick={scrollPrev}
+        className="absolute left-0 top-1/2 z-10 -translate-y-1/2"
+      >
+        <LeftArrow />
+      </button>
+
+      <button
+        onClick={scrollNext}
+        className="absolute right-0 top-1/2 z-10 -translate-y-1/2"
+      >
+        <RightArrow />
+      </button>
+
+      {/* embla */}
+      <div className="overflow-hidden" ref={emblaRef}>
+        <div className="flex gap-4">
+
+          {products.map((item, i) => (
+            <div
+              key={i}
+              className="
+                flex-[0_0_100%]
+                sm:flex-[0_0_50%]
+                md:flex-[0_0_33.33%]
+                lg:flex-[0_0_25%]
+              "
+            >
+              <SingleSellerCard
+                img={item.image}
+                badge={item.badge}
+                name={item.title}
+                variant={item.variant}
+                price={item.price}
+                rating={item.rating}
+                reviews={item.reviews}
+              />
+            </div>
+          ))}
+
         </div>
-    )
-}
+      </div>
 
-export default ProductSlider
+    </div>
+  );
+};
+
+export default ProductSlider;

@@ -2,6 +2,7 @@ import React from 'react'
 import SingleEssentialCard from '../common/SingleEssentialCard';
 import { Link } from 'react-router';
 import Button from '../../ui/Button';
+import EssentialSlider from '../sliders/EsstentialSlider';
 
 const Essentials = () => {
     const demoProducts = [
@@ -143,23 +144,10 @@ const Essentials = () => {
                         </div>
                     </div>
 
-                    {/* Mobile Layout (Horizontal Scroll) */}
-                    <div className="flex md:hidden overflow-x-auto snap-x snap-mandatory gap-4 pb-8 -mx-4 px-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-                        {demoProducts.map((item, i) => (
-                            <div key={i} className="w-[42vw] min-w-[42vw] snap-start shrink-0">
-                                <SingleEssentialCard
-                                    img={item.image}
-                                    badge={item.badge}
-                                    name={item.title}
-                                    variant={item.variant}
-                                    price={item.price}
-                                    rating={item.rating}
-                                    reviews={item.reviews}
-                                />
-                            </div>
-                        ))}
+                    {/* mobile slider --------------- */}
+                    <div className='md:hidden block'>
+                        <EssentialSlider products={demoProducts} />
                     </div>
-
 
                     {/* -------------- Explore more ------------- */}
                     <Link to={'/'} className='flex items-center justify-center mt-10 md:mt-14'>

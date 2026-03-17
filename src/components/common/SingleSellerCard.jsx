@@ -3,7 +3,7 @@ import { FiHeart, FiShoppingBag } from 'react-icons/fi'
 
 const SingleSellerCard = ({ img, badge, name, variant, price, rating, reviews }) => {
     return (
-        <div className="w-77.5 mx-auto rounded-2xl border border-border overflow-hidden group relative">
+        <div className="w-77.5 mx-auto rounded-2xl border border-border overflow-hidden group relative select-none">
 
             {/* Image Section */}
             <div className="relative h-65 flex items-center justify-center">

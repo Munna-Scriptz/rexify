@@ -10,13 +10,13 @@ const ProductSlider = ({ products }) => {
     });
 
     return (
-        <div className="relative group">
-            <div className="overflow-hidden -mx-4 px-4" ref={emblaRef}>
-                <div className="flex gap-4 pb-4">
-
+        <div className="relative overflow-hidden">
+            <div ref={emblaRef}>
+                <div className="flex gap-4">
                     {products.map((item, i) => (
-                        <div key={i} className="flex-[0_0_42vw] sm:flex-[0_0_35%] md:flex-[0_0_30%] lg:flex-[0_0_22%]">
+                        <div className="shrink-0 basis-22 md:basis-35.5">
                             <SingleSellerCard
+                                key={i}
                                 img={item.image}
                                 badge={item.badge}
                                 name={item.title}

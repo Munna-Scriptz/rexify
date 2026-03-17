@@ -11,8 +11,6 @@ const ProductSlider = ({ products }) => {
 
     return (
         <div className="relative group">
-
-            {/* embla */}
             <div className="overflow-hidden -mx-4 px-4" ref={emblaRef}>
                 <div className="flex gap-4 pb-4">
 

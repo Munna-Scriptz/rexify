@@ -1,15 +1,23 @@
-import React, { useState } from 'react'
+import React from 'react'
+import useEmblaCarousel from "embla-carousel-react";
 import SingleLatestCard from '../common/SingleLatestCard'
-import Slider from 'react-slick'
 
 const LatestProductSlider = ({ products }) => {
-
+    const [emblaRef] = useEmblaCarousel({
+        dragFree: true,
+        align: "start",
+        containScroll: "trimSnaps"
+    });
     return (
-        <div id="Cards-Row" className='pl-4 md:pl-10'>
-            <div className='md:mr-7'>
-                {products.map((item, i) => (
-                    <SingleLatestCard key={i} item={item} />
-                ))}
+        <div className="relative group">
+            <div ref={emblaRef}>
+                <div className="flex gap-4 pb-4">
+                    {products.map((item, i) => (
+                        <div className='shrink-0 basis-[90%] md:basis-100'>
+                            <SingleLatestCard key={i} item={item} />
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     )

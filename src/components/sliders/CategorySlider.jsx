@@ -11,20 +11,21 @@ const CategorySlider = ({ products }) => {
     return (
         <div className="relative group">
             <div ref={emblaRef}>
-                <div className="flex w-full gap-10 pb-4">
+                <div className="flex gap-10 pb-4">
                     {products.map((item, index) => (
-                        <div className="cursor-pointer flex flex-col items-center gap-3 md:gap-4 justify-center pt-2 select-none shrink-0" key={index}>
-                            {/*Image */}
+                        <div
+                            key={index}
+                            className="shrink-0 basis-22 md:basis-35.5 flex flex-col items-center gap-3 md:gap-4 justify-center pt-2 select-none cursor-pointer"
+                        >
                             <div className="duration-300 hover:-translate-y-2">
                                 <img
                                     src={item.image}
                                     alt={item.name}
-                                    className="md:w-32 w-28 object-contain"
+                                    className="w-full object-contain"
                                 />
                             </div>
 
-                            {/* Name */}
-                            <p className="text-sm md:text-base font-medium text-[#1D1D1F] hover:underline decoration-[#1D1D1F] underline-offset-2">
+                            <p className="text-sm md:text-base font-medium text-[#1D1D1F] hover:underline underline-offset-2">
                                 {item.name}
                             </p>
                         </div>

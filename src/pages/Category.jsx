@@ -3,6 +3,7 @@ import { ArrowRight, Smartphone, Laptop, Tablet, Headphones, Watch, Gamepad2 } f
 import { PageHeader } from '../components/common/PageHeader';
 
 const Category = () => {
+    // -------- Dummy data
     const categories = [
         {
             id: 1,

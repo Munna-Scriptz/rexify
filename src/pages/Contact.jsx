@@ -3,6 +3,31 @@ import { Mail, Phone, MapPin, Send, HelpCircle } from 'lucide-react'
 import { PageHeader } from '../components/common/PageHeader'
 
 const Contact = () => {
+
+    const ContactItem = ({ icon, title, detail, subDetail }) => (
+        <div className="flex gap-4 items-start">
+            <div className="w-12 h-12 rounded-xl bg-white border border-border flex items-center justify-center text-accent shadow-sm shrink-0">
+                {icon}
+            </div>
+            <div>
+                <h4 className="font-bold text-lg text-text-primary">{title}</h4>
+                <p className="text-text-primary font-medium">{detail}</p>
+                <p className="text-sm text-text-muted mt-1">{subDetail}</p>
+            </div>
+        </div>
+    )
+
+    const FAQItem = ({ question, answer }) => (
+        <div className="bg-bg p-6 rounded-2xl border border-border hover:border-accent/30 transition-colors">
+            <div className="flex gap-3 mb-3">
+                <HelpCircle size={20} className="text-accent shrink-0" />
+                <h4 className="font-bold text-lg text-text-primary">{question}</h4>
+            </div>
+            <p className="text-text-secondary text-sm leading-relaxed pl-8">
+                {answer}
+            </p>
+        </div>
+    )
     return (
         <>
             <section id='Contact'>
@@ -133,29 +158,5 @@ const Contact = () => {
     )
 }
 
-const ContactItem = ({ icon, title, detail, subDetail }) => (
-    <div className="flex gap-4 items-start">
-        <div className="w-12 h-12 rounded-xl bg-white border border-border flex items-center justify-center text-accent shadow-sm shrink-0">
-            {icon}
-        </div>
-        <div>
-            <h4 className="font-bold text-lg text-text-primary">{title}</h4>
-            <p className="text-text-primary font-medium">{detail}</p>
-            <p className="text-sm text-text-muted mt-1">{subDetail}</p>
-        </div>
-    </div>
-)
-
-const FAQItem = ({ question, answer }) => (
-    <div className="bg-bg p-6 rounded-2xl border border-border hover:border-accent/30 transition-colors">
-        <div className="flex gap-3 mb-3">
-            <HelpCircle size={20} className="text-accent shrink-0" />
-            <h4 className="font-bold text-lg text-text-primary">{question}</h4>
-        </div>
-        <p className="text-text-secondary text-sm leading-relaxed pl-8">
-            {answer}
-        </p>
-    </div>
-)
 
 export default Contact

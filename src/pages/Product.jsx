@@ -5,7 +5,6 @@ import ProductDetails from '../components/product/ProductDetails'
 import Specifications from '../components/product/Specifications'
 
 const Product = () => {
-  // --- Mock Data: Product Details ---
   const product = {
     id: "IP17ProMax",
     name: "iPhone 17 Pro Max",
@@ -61,7 +60,6 @@ const Product = () => {
 
         {/* ================= Specs & Description ================= */}
         <Specifications product={product}/>
-
       </div>
     </div>
   )

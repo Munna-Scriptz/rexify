@@ -58,7 +58,7 @@ const Product = () => {
           <ProductDetails product={product} />
         </div>
 
-        {/* ================= Specs & Description ================= */}
+        {/* ================= Specs & Description ================= */} 
         <Specifications product={product}/>
       </div>
     </div>

@@ -58,7 +58,7 @@ const SignUp = () => {
     return (
         <>
             <BackUi to={'/'} name={'Home'} absolute={true}  />
-            <div className="min-h-screen flex items-center justify-center p-6 sm:p-10 overflow-x-hidden">
+            <div className="min-h-screen flex items-center justify-center p-6 overflow-x-hidden">
                 <form onSubmit={handleForm} className="w-full max-w-lg lg:max-w-xl flex flex-col items-center animate-slide-in">
 
                     {/* -------- Header */}

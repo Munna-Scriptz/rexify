@@ -40,7 +40,7 @@ const Signin = () => {
   return (
     <>
       <BackUi to={'/'} name={'Home'} absolute={true} />
-      <div className="min-h-screen flex items-center justify-center p-6 sm:p-10 overflow-x-hidden">
+      <div className="min-h-screen flex items-center justify-center p-6 md:mt-0 mt-8 overflow-x-hidden">
         <form onSubmit={handleForm} className="w-full max-w-md lg:max-w-lg flex flex-col items-center animate-slide-in">
 
           {/* -------- Header */}

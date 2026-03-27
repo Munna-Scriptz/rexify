@@ -30,7 +30,7 @@ const Cart = () => {
             storage: "512GB",
             price: 1299,
             quantity: 1,
-            image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca4?q=80&w=200&auto=format&fit=crop"
+            image: "https://www.applegadgetsbd.com/_next/image?url=https%3A%2F%2Fadminapi.applegadgetsbd.com%2Fstorage%2Fmedia%2Fmedium%2FMacBook-Air-M3-13-Inch-Midnight-7621.jpg&w=640&q=100"
         }
     ]);
 

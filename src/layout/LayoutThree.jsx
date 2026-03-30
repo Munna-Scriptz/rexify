@@ -1,12 +1,12 @@
 import React from 'react'
 import { Outlet } from 'react-router'
 
-const LayoutTwo = () => {
+const LayoutThree = () => {
   return (
     <>
-      <Outlet />
+        <Outlet />
     </>
   )
 }
 
-export default LayoutTwo
+export default LayoutThree

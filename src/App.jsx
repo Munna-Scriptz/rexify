@@ -16,6 +16,7 @@ import Shop from './pages/Shop'
 import Profile from './pages/Profile'
 import Confirm from './pages/Confirm'
 import Complete from './pages/Complete'
+import LayoutThree from './layout/LayoutThree'
 
 const App = () => {
   const MyRouter = createBrowserRouter(createRoutesFromElements(
@@ -37,9 +38,15 @@ const App = () => {
         <Route index element={<Navigate to="signUp" replace />} />
         <Route path="signUp" element={<SignUp />} />
         <Route path="signin" element={<Signin />} />
-        <Route path='confirm' element={<Confirm />} />
+      </Route>
+
+      {/* --------------- Auth Router ---------------- */}
+      <Route path='/checkout' element={<LayoutThree />}>
+        <Route index element={<Confirm />} />
         <Route path='complete' element={<Complete />} />
       </Route>
+
+
     </Route>
   ))
 

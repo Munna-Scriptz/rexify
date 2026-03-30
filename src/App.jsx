@@ -14,8 +14,9 @@ import Product from './pages/Product'
 import Wishlist from './pages/Wishlist'
 import Shop from './pages/Shop'
 import Profile from './pages/Profile'
-import Confirm from './pages/Confirm'
+import Checkout from './pages/Checkout'
 import Complete from './pages/Complete'
+import CheckoutError from './pages/CheckoutError'
 import LayoutThree from './layout/LayoutThree'
 
 const App = () => {
@@ -42,8 +43,9 @@ const App = () => {
 
       {/* --------------- Auth Router ---------------- */}
       <Route path='/checkout' element={<LayoutThree />}>
-        <Route index element={<Confirm />} />
+        <Route index element={<Checkout />} />
         <Route path='complete' element={<Complete />} />
+        <Route path='error' element={<CheckoutError />} />
       </Route>
 
 

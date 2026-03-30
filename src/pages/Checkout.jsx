@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { CreditCard, Landmark, Smartphone, ShieldCheck, CircleCheck, Wallet } from 'lucide-react';
+import { ShieldCheck, CircleCheck } from 'lucide-react';
 import OrderSummary from '../components/cart/OrderSummary';
 import VisaMeth from '../components/confirm/VisaMeth';
 import BankMeth from '../components/confirm/BankNagadMeth';
 import BkashNagadMeth from '../components/confirm/BkashMeth';
 import BackUi from '../utils/BackUi';
 
-const Confirm = () => {
+const Checkout = () => {
     const [paymentMethod, setPaymentMethod] = useState('visa');
 
     // Mock cart items for the summary
@@ -89,11 +89,11 @@ const Confirm = () => {
                     </div>
 
                     {/* Right Column: Order Summary */}
-                    <OrderSummary cartItems={cartItems} buttonText="Pay Now" to="/auth/complete" />
+                    <OrderSummary cartItems={cartItems} buttonText="Pay Now" to="/checkout/complete" />
                 </div>
             </div>
         </section>
     );
 };
 
-export default Confirm;
+export default Checkout;

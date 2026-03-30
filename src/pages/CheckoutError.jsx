@@ -1,6 +1,7 @@
 import React from 'react';
-import { XCircle, RefreshCw, ShoppingCart, HelpCircle, AlertCircle, ArrowLeft } from 'lucide-react';
+import { RefreshCw, ShoppingCart, HelpCircle, AlertCircle, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router';
+import completeIcon from "../assets/cancelPayment.webm"
 
 const CheckoutError = () => {
     // Troubleshooting steps for a professional look
@@ -13,7 +14,7 @@ const CheckoutError = () => {
 
     return (
         <div className="min-h-screen bg-surface flex items-center justify-center p-4 overflow-hidden relative">
-            
+
             {/* Background Decorative Elements */}
             <div className="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
                 <div className="absolute top-[-10%] right-[-5%] w-[40%] h-[40%] bg-error/5 rounded-full blur-[120px]"></div>
@@ -21,20 +22,24 @@ const CheckoutError = () => {
             </div>
 
             <div className="max-w-xl w-full z-10">
-                {/* Error Illustration / Icon Section */}
                 <div className="text-center mb-10 animate-fade-down">
-                    <div className="relative inline-flex items-center justify-center mb-6">
-                        {/* Outer Glow */}
-                        <div className="absolute inset-0 bg-error/20 rounded-full blur-2xl animate-pulse"></div>
-                        
+                    <div className="relative inline-flex items-center justify-center mb-2">
                         {/* Icon Container */}
-                        <div className="relative w-24 h-24 bg-white rounded-3xl shadow-2xl flex items-center justify-center text-error border border-error/10">
-                            <XCircle size={48} strokeWidth={1.5} className="animate-bounce-subtle" />
+                        <div className="relative inline-block translate-y-5">
+                            <video
+                                className="w-full h-full object-cover"
+                                src={completeIcon}
+                                muted
+                                autoPlay
+                                loop
+                                playsInline
+                                preload="metadata"
+                            />
+
+                            {/* Smaller Floating Orbs */}
+                            <div className="absolute top-10 -right-2 w-6 h-6 bg-red-400 rounded-full animate-float-slow shadow-lg"></div>
+                            <div className="absolute top-16 left-0 w-4 h-4 bg-pink-400 rounded-full animate-float shadow-md"></div>
                         </div>
-                        
-                        {/* Floating Small Orbs */}
-                        <div className="absolute -top-2 -right-2 w-6 h-6 bg-error/10 rounded-full border border-error/20 animate-float"></div>
-                        <div className="absolute -bottom-1 -left-3 w-4 h-4 bg-text-muted/10 rounded-full border border-text-muted/20 animate-float-slow"></div>
                     </div>
 
                     <h1 className="md:text-4xl text-3xl font-black text-text-primary font-space tracking-tight mb-4">
@@ -46,7 +51,7 @@ const CheckoutError = () => {
                 </div>
 
                 {/* Error Details Card */}
-                <div className="bg-white rounded-3xl md:p-8 p-6 border border-border shadow-2xl shadow-black/[0.03] mb-8 animate-fade-up">
+                <div className="bg-white rounded-3xl md:p-8 p-6 border border-border shadow-2xl shadow-black/3 mb-8 animate-fade-up">
                     <div className="flex items-center gap-3 mb-6 pb-4 border-b border-border/50">
                         <div className="w-10 h-10 rounded-xl bg-error/10 flex items-center justify-center text-error">
                             <AlertCircle size={20} />
@@ -65,7 +70,7 @@ const CheckoutError = () => {
                         <ul className="space-y-3">
                             {troubleshootingTips.map((tip, index) => (
                                 <li key={index} className="flex gap-3 text-sm text-text-secondary leading-snug items-start">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-error/40 mt-1.5 flex-shrink-0"></div>
+                                    <div className="w-1.5 h-1.5 rounded-full bg-error/40 mt-1.5 shrink-0"></div>
                                     {tip}
                                 </li>
                             ))}

@@ -35,7 +35,6 @@ const Complete = () => {
             ))}
 
             <div className="max-w-xl w-full text-center z-10">
-                {/* Success Animation Container */}
                 <div className="relative inline-block translate-y-5">
                     <video
                         className="w-full h-full object-cover"

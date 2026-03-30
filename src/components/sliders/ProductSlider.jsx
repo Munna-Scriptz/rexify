@@ -1,6 +1,6 @@
 import React from "react";
 import useEmblaCarousel from "embla-carousel-react";
-import SingleSellerCard from "../common/SingleSellerCard";
+import SellerCard from "../cards/SellerCard";
 
 const ProductSlider = ({ products }) => {
     const [emblaRef] = useEmblaCarousel({
@@ -14,9 +14,8 @@ const ProductSlider = ({ products }) => {
             <div ref={emblaRef}>
                 <div className="flex gap-4">
                     {products.map((item, i) => (
-                        <div className="shrink-0 basis-22 md:basis-35.5">
-                            <SingleSellerCard
-                                key={i}
+                        <div key={i} className="shrink-0 basis-22 md:basis-35.5">
+                            <SellerCard
                                 img={item.image}
                                 badge={item.badge}
                                 name={item.title}

@@ -1,6 +1,6 @@
 import { FiHeart, FiShoppingBag } from 'react-icons/fi'
 
-const SingleEssentialCard = ({ img, name, variant }) => {
+const EssentialCard = ({ img, name, variant }) => {
     return (
         <div className=" md:w-87 w-50 rounded-3xl border select-none border-neutral-200 cursor-pointer overflow-hidden group relative transition-all duration-500 ease-out hover:-translate-y-2 hover:shadow-[0_30px_70px_-15px_rgba(0,0,0,0.35)]">
 
@@ -46,4 +46,4 @@ const SingleEssentialCard = ({ img, name, variant }) => {
     );
 };
 
-export default SingleEssentialCard;
+export default EssentialCard;

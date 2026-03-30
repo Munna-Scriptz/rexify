@@ -1,6 +1,6 @@
 import React from "react";
 import useEmblaCarousel from "embla-carousel-react";
-import SingleEssentialCard from "../common/SingleEssentialCard";
+import EssentialCard from "../cards/EssentialCard";
 
 const EssentialSlider = ({ products }) => {
     const [emblaRef] = useEmblaCarousel({
@@ -14,9 +14,8 @@ const EssentialSlider = ({ products }) => {
             <div ref={emblaRef}>
                 <div className="flex gap-4">
                     {products.map((item, i) => (
-                        <div className="shrink-0 basis-22 md:basis-35.5">
-                            <SingleEssentialCard
-                                key={i}
+                        <div key={i} className="shrink-0 basis-22 md:basis-35.5">
+                            <EssentialCard
                                 img={item.image}
                                 badge={item.badge}
                                 name={item.title}

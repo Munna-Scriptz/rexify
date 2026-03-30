@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router'
 import { Heart, ArrowRight } from 'lucide-react'
-import SingleWishlistCard from '../components/common/SingleWishlistCard'
+import WishlistCard from '../components/cards/WishlistCard'
 import { WishlistHeader } from '../components/common/PageHeader'
 
 const Wishlist = () => {
@@ -78,7 +78,7 @@ const Wishlist = () => {
                 {/* Grid Content */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                     {wishlistItems.map((item) => (
-                        <SingleWishlistCard
+                        <WishlistCard
                             key={item.id}
                             img={item.image}
                             name={item.name}

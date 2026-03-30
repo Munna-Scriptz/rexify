@@ -1,5 +1,5 @@
 import React from 'react'
-import SingleEssentialCard from '../common/SingleEssentialCard';
+import EssentialCard from '../cards/EssentialCard';
 import { Link } from 'react-router';
 import Button from '../../ui/Button';
 import EssentialSlider from '../sliders/EsstentialSlider';
@@ -94,7 +94,7 @@ const Essentials = () => {
                             {demoProducts
                                 .filter((_, i) => i % 3 === 0)
                                 .map((item, i) => (
-                                    <SingleEssentialCard
+                                    <EssentialCard
                                         key={i}
                                         img={item.image}
                                         badge={item.badge}
@@ -112,7 +112,7 @@ const Essentials = () => {
                             {demoProducts
                                 .filter((_, i) => i % 3 === 1)
                                 .map((item, i) => (
-                                    <SingleEssentialCard
+                                    <EssentialCard
                                         key={i}
                                         img={item.image}
                                         badge={item.badge}
@@ -130,7 +130,7 @@ const Essentials = () => {
                             {demoProducts
                                 .filter((_, i) => i % 3 === 2)
                                 .map((item, i) => (
-                                    <SingleEssentialCard
+                                    <EssentialCard
                                         key={i}
                                         img={item.image}
                                         badge={item.badge}

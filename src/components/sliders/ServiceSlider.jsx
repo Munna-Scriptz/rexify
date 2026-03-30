@@ -14,8 +14,8 @@ const ServiceSlider = ({ products }) => {
             <div ref={emblaRef}>
                 <div className="flex gap-4">
                     {products.map((item, i) => (
-                        <div className="shrink-0 basis-75 select-none">
-                            <ServiceCard item={item} key={i} />
+                        <div key={i} className="shrink-0 basis-75 select-none">
+                            <ServiceCard item={item} />
                         </div>
                     ))}
                 </div>

@@ -1,10 +1,8 @@
-import { HeartOff } from 'lucide-react';
-import { FiShoppingBag } from 'react-icons/fi'
+import { FiHeart, FiShoppingBag } from 'react-icons/fi'
 
-
-const SingleWishlistCard = ({ img, badge, name, variant, price, rating, reviews }) => {
+const SellerCard = ({ img, badge, name, variant, price, rating, reviews }) => {
     return (
-        <div className="w-77.5 mx-auto rounded-2xl border border-border overflow-hidden group relative">
+        <div className="md:w-77.5 w-70 mx-auto rounded-2xl border border-border overflow-hidden group relative select-none">
 
             {/* Image Section */}
             <div className="relative h-65 flex items-center justify-center">
@@ -19,13 +17,21 @@ const SingleWishlistCard = ({ img, badge, name, variant, price, rating, reviews 
                     {badge}
                 </span>
 
-                {/* Remove  */}
-                <button
-                    className="absolute top-2 right-3 h-8 w-8 rounded-full cursor-pointer bg-coil/40 hover:bg-red-500 text-white hover:text- flex items-center justify-center duration-300 shadow-sm hover:shadow-md translate-y-2"
-                    aria-label="Remove"
-                >
-                    <HeartOff size={18} />
-                </button>
+                {/* Hover Actions */}
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-3 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                    {/* Add to Cart */}
+                    <button
+                        className="h-11 w-11 rounded-full cursor-pointer border border-neutral-300 bg-white flex items-center justify-center text-text-primary hover:border-neutral-900 hover:text-neutral-900 transition"
+                        aria-label="Add to cart">
+                        <FiShoppingBag size={18} />
+                    </button>
+
+                    {/* Wishlist */}
+                    <button className="h-11 w-11 rounded-full cursor-pointer border border-neutral-300 bg-white flex items-center justify-center text-text-primary hover:border-neutral-900 hover:text-neutral-900 transition"
+                        aria-label="Add to wishlist" >
+                        <FiHeart size={18} />
+                    </button>
+                </div>
             </div>
 
             {/* Content */}
@@ -48,14 +54,6 @@ const SingleWishlistCard = ({ img, badge, name, variant, price, rating, reviews 
                         <span className="text-neutral-400">({reviews})</span>
                     </div>
                 </div>
-
-
-                {/* Hover Actions */}
-                    <button
-                    className='w-full py-2.5 mt-3 bg-accent cursor-pointer text-white font-medium rounded-xl hover:bg-blue-700 transition-all flex items-center justify-center gap-2 shadow-lg shadow-accent/20'
-                        aria-label="Add to cart">
-                        <FiShoppingBag size={16} /> Add to Cart
-                    </button>
             </div>
 
             {/* Bottom Accent Line */}
@@ -64,4 +62,4 @@ const SingleWishlistCard = ({ img, badge, name, variant, price, rating, reviews 
     );
 };
 
-export default SingleWishlistCard;
+export default SellerCard;

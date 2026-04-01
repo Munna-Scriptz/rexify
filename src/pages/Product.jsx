@@ -3,6 +3,7 @@ import { Cpu, Camera, Battery, Smartphone, Maximize, HardDrive } from 'lucide-re
 import ImageGallery from '../components/product/ImageGallery'
 import ProductDetails from '../components/product/ProductDetails'
 import Specifications from '../components/product/Specifications'
+import RelatedProduct from '../components/common/RelatedProduct'
 
 const Product = () => {
   const product = {
@@ -58,8 +59,11 @@ const Product = () => {
           <ProductDetails product={product} />
         </div>
 
-        {/* ================= Specs & Description ================= */} 
-        <Specifications product={product}/>
+        {/* ================= Specs & Description ================= */}
+        <Specifications product={product} />
+
+        {/* ================= Related Products ================= */}
+        <RelatedProduct product={product} />
       </div>
     </div>
   )

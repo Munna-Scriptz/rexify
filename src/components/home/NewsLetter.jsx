@@ -1,7 +1,7 @@
 import React from 'react'
-import Button from '../../ui/Button'
+import Button from '../../components/ui/Buttons'
 import wiggleImg from '../../assets/wiggleImg.png'
-import MoveEyes from '../../ui/MoveEyes'
+import MoveEyes from '../../components/ui/MoveEyes'
 
 const NewsLetter = () => {
     return (

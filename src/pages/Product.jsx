@@ -48,7 +48,6 @@ const Product = () => {
   return (
     <div className="text-text-primary pb-20">
       <div className="container pt-12">
-
         {/* ================= Product Top Section ================= */}
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 mb-20">
 

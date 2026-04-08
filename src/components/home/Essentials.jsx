@@ -1,8 +1,8 @@
 import React from 'react'
 import EssentialCard from '../cards/EssentialCard';
 import { Link } from 'react-router';
-import Button from '../../ui/Button';
 import EssentialSlider from '../sliders/EsstentialSlider';
+import Button from '../../components/ui/Buttons';
 
 const Essentials = () => {
     const demoProducts = [

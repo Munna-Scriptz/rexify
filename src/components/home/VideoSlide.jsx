@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import Button from '../../ui/Button';
+import Button from '../../components/ui/Buttons';
 
 
 export const VideoSlide = ({ item, isActive, onVideoEnd }) => {
@@ -34,9 +34,9 @@ export const VideoSlide = ({ item, isActive, onVideoEnd }) => {
                 <p className='text-center text-sm md:text-lg text-gray-100 mb-8 md:mb-6 drop-shadow-md max-w-2xl'>
                     {item.text}
                 </p>
-                <Button variant="primary" className='uppercase shadow-lg py-2.5 px-6 md:py-3 md:px-8 text-sm md:text-base'>
+                <button className={`uppercase shadow-lg py-2.5 px-6 md:py-3 md:px-8 text-sm md:text-base relative overflow-hidden font-semibold text-surface border border-surface rounded-[34px] transition-all duration-300 [transition-timing-function:cubic-bezier(0.23,1,0.32,1) before:content-[''] before:absolute before:inset-0 before:m-auto before:w-12.5 before:h-12.5 before:rounded-[inherit] before:scale-0 before:-z-10 before:bg-accent before:transition-all before:duration-600 before:[transition-timing-function:cubic-bezier(0.23,1,0.32,1) hover:before:scale-[3] hover:text-surface hover:scale-110 hover:shadow-[0_0_20px_rgba(193,163,98,0.4)] active:scale-100`}>
                     Learn More
-                </Button>
+                </button>
             </div>
 
             {/* Video Element */}

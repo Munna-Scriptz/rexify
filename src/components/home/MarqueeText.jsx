@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router'
-import Button from '../../ui/Button'
+import Button from '../../components/ui/Buttons'
 
 const MarqueeText = () => {
     return (
@@ -53,9 +53,9 @@ const MarqueeText = () => {
                         </p>
 
                         <Link to={'/'}>
-                            <Button variant="outline">
+                            <button className={` relative overflow-hidden px-6 py-2 text-base font-semibold uppercase text-text-primary border border-text-muted rounded-[34px] transition-all duration-300 [transition-timing-function:cubic-bezier(0.23,1,0.32,1) before:content-[''] before:absolute before:inset-0 before:m-auto before:w-12.5 before:h-12.5 before:rounded-[inherit] before:scale-0 before:-z-10 before:bg-accent before:transition-all before:duration-900 before:[transition-timing-function:cubic-bezier(0.23,1,0.32,1) hover:before:scale-[6] hover:text-surface hover:scale-110 hover:shadow-[0_0_20px_rgba(193,163,98,0.4)] active:scale-100`}>
                                 Learn More about us
-                            </Button>
+                            </button>
                         </Link>
                     </div>
                 </div>

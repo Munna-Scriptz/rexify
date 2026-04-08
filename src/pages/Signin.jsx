@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Button from '../ui/Button';
+import Button from '../components/ui/Buttons';
 import SocialButtons from '../components/signUp/SocialButtons';
 import { EmailField, SinglePasswordField } from '../components/signUp/InputFields';
 import Header from '../components/signUp/Header';

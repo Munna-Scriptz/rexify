@@ -3,6 +3,20 @@ import { Rocket, Shield, Zap, Globe, Users, ArrowRight } from 'lucide-react'
 import { AboutHeader } from '../components/common/PageHeader'
 
 const About = () => {
+
+    const ValueCard = ({ icon, title, description }) => (
+        <div className="p-8 rounded-2xl bg-surface border border-transparent hover:border-accent/20 hover:bg-white hover:shadow-lg transition-all duration-300 group">
+            <div className="w-12 h-12 rounded-xl bg-accent/10 text-accent flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                {icon}
+            </div>
+            <h3 className="text-xl font-bold mb-3 font-space">{title}</h3>
+            <p className="text-text-secondary text-sm leading-relaxed">
+                {description}
+            </p>
+        </div>
+    )
+
+
     return (
         <div className="font-primary text-text-primary bg-bg min-h-screen">
 
@@ -134,17 +148,5 @@ const About = () => {
         </div>
     )
 }
-
-const ValueCard = ({ icon, title, description }) => (
-    <div className="p-8 rounded-2xl bg-surface border border-transparent hover:border-accent/20 hover:bg-white hover:shadow-lg transition-all duration-300 group">
-        <div className="w-12 h-12 rounded-xl bg-accent/10 text-accent flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-            {icon}
-        </div>
-        <h3 className="text-xl font-bold mb-3 font-space">{title}</h3>
-        <p className="text-text-secondary text-sm leading-relaxed">
-            {description}
-        </p>
-    </div>
-)
 
 export default About

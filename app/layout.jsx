@@ -1,4 +1,4 @@
-import { Poppins, Space_Grotesk } from 'next/font/google'
+import { Poppins, Manrope, Space_Grotesk } from 'next/font/google'
 import "./globals.css";
 
 // ---------- Meta -------------
@@ -13,6 +13,11 @@ const poppins = Poppins({
     weight: ['400', '500', '600', '700'],
     subsets: ['latin'],
 })
+const manrope = Manrope({
+    variable: '--font-manrope',
+    weight: ['400', '500', '600', '700'],
+    subsets: ['latin'],
+})
 const space = Space_Grotesk({
     variable: '--font-space',
     weight: ['400', '500', '600', '700'],
@@ -22,8 +27,8 @@ const space = Space_Grotesk({
 
 export default function Layout({ children }) {
     return (
-        <html lang="en" className={`${poppins.variable} ${space.variable}`}>
-            <body className="antialiased">
+        <html lang="en" className={`${poppins.variable} ${manrope.variable} ${space.variable}`}>
+            <body>
                 <main>
                     {children}
                 </main>

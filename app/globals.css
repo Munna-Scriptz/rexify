@@ -7,7 +7,8 @@
 }
 
 @theme {
-  --font-poppins: var(--font-poppins);
+  --font-primary:  var(--font-poppins);
+  --font-secondary: var(--font-manrope);
   --font-space: var(--font-space);
   /* ================= Base ================= */
   --color-bg: #ffffff;

@@ -1,12 +1,16 @@
-import React, { Suspense } from 'react';
-import ShopFiltersClient from '../../components/shop/ShopFiltersClient';
-import ShopProductsServer from '../../components/shop/ShopProductsServer';
-import SortProductClient from '../../components/shop/SortProductClient';
-import ActiveFiltersClient from '../../components/shop/ActiveFiltersClient';
-import PaginationClient from '../../components/shop/PaginationClient';
-import ProductCountServer from '../../components/shop/ProductCountServer';
+"use client"
+import React, { useState, useMemo, useEffect } from 'react';
+import { X, SlidersHorizontal } from 'lucide-react';
+import ShopFilterPanel from '../../components/shop/ShopFilterPanel';
+import Pagination from '../../components/shop/Pagination';
+import ShopCard from '../../components/shop/ShopCard';
+import ProductListView from '../../components/shop/ShopListCard';
+import ShopEmptyState from '../../components/emptyState/ShopEmptyState';
+import SortProduct from '../../components/shop/SortProduct';
 
-const PRODUCTS_PER_PAGE = 9;
+/* ------------------------------------------------------------------ */
+/*  Mock product data                                                    */
+/* ------------------------------------------------------------------ */
 const ALL_PRODUCTS = [
     { id: 1, name: 'iPhone 16 Pro', brand: 'Apple', category: 'Smartphones', price: 1099, rating: 4.9, reviews: 1824, inStock: true, badge: 'New Arrival', img: 'https://www.applegadgetsbd.com/_next/image?url=https%3A%2F%2Fadminapi.applegadgetsbd.com%2Fstorage%2Fmedia%2Flarge%2FiPhone-16-Pro-Max---16-Pro-Black-Titanium-2734.jpg&w=1920&q=100' },
     { id: 2, name: 'MacBook Pro 14"', brand: 'Apple', category: 'Laptops', price: 1999, rating: 4.8, reviews: 952, inStock: true, badge: 'Best Seller', img: 'https://www.applegadgetsbd.com/_next/image?url=https%3A%2F%2Fadminapi.applegadgetsbd.com%2Fstorage%2Fmedia%2Flarge%2FMacBook-Pro-M5-Pro-14-Inch-241TB-18-Core-CPU-20-Core-GPUa-1124.png&w=1920&q=100' },
@@ -26,35 +30,97 @@ const ALL_PRODUCTS = [
     { id: 16, name: 'Galaxy Watch 6', brand: 'Samsung', category: 'Wearables', price: 299, rating: 4.4, reviews: 712, inStock: true, badge: 'Sale', img: 'https://images.unsplash.com/photo-1508685096489-7aacd43bd3b1?q=80&w=800&auto=format&fit=crop' },
 ];
 
-// Helper to get total pages
-function getTotalPages(filters) {
-    let products = [...ALL_PRODUCTS];
-    const category = filters?.category || 'All';
-    const brandsParam = filters?.brands ? filters.brands.split(',') : [];
-    const minPrice = parseInt(filters?.minPrice) || 0;
-    const maxPrice = parseInt(filters?.maxPrice) || 5000;
-    const ratingParam = parseInt(filters?.rating) || 0;
-    const inStockOnly = filters?.inStock === 'true';
+const PRODUCTS_PER_PAGE = 9;
 
-    if (category !== 'All') {
-        products = products.filter(p => p.category === category);
-    }
-    if (brandsParam.length > 0) {
-        products = products.filter(p => brandsParam.includes(p.brand));
-    }
-    products = products.filter(p => p.price >= minPrice && p.price <= maxPrice);
-    if (ratingParam > 0) {
-        products = products.filter(p => p.rating >= ratingParam);
-    }
-    if (inStockOnly) {
-        products = products.filter(p => p.inStock);
+const DEFAULT_FILTERS = {
+    category: 'All',
+    brands: [],
+    priceRange: { min: 0, max: 5000 },
+    rating: 0,
+    inStockOnly: false,
+};
+
+const page = () => {
+    const [filters, setFilters] = useState({ ...DEFAULT_FILTERS });
+    const [sortBy, setSortBy] = useState('featured');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [viewMode, setViewMode] = useState('grid');
+    const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+
+    // Lock body scroll when mobile drawer is open
+    useEffect(() => {
+        if (mobileFiltersOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [mobileFiltersOpen]);
+
+    const filteredProducts = useMemo(() => {
+        let products = [...ALL_PRODUCTS];
+
+        if (filters.category !== 'All') {
+            products = products.filter(p => p.category === filters.category);
+        }
+        if (filters.brands.length > 0) {
+            products = products.filter(p => filters.brands.includes(p.brand));
+        }
+        products = products.filter(p => p.price >= filters.priceRange.min && p.price <= filters.priceRange.max);
+        if (filters.rating > 0) {
+            products = products.filter(p => p.rating >= filters.rating);
+        }
+        if (filters.inStockOnly) {
+            products = products.filter(p => p.inStock);
+        }
+
+        // Sort
+        switch (sortBy) {
+            case 'price-asc': products.sort((a, b) => a.price - b.price); break;
+            case 'price-desc': products.sort((a, b) => b.price - a.price); break;
+            case 'rating': products.sort((a, b) => b.rating - a.rating); break;
+            case 'reviews': products.sort((a, b) => b.reviews - a.reviews); break;
+            default: break;
+        }
+
+        return products;
+    }, [filters, sortBy]);
+
+    const totalPages = Math.max(1, Math.ceil(filteredProducts.length / PRODUCTS_PER_PAGE));
+    const safePage = Math.min(currentPage, totalPages);
+    const paginatedProducts = filteredProducts.slice((safePage - 1) * PRODUCTS_PER_PAGE, safePage * PRODUCTS_PER_PAGE);
+
+    const handleFilterChange = (newFilters) => {
+        setFilters(newFilters);
+        setCurrentPage(1);
+    };
+
+    const handleReset = () => {
+        setFilters({ ...DEFAULT_FILTERS });
+        setSortBy('featured');
+        setCurrentPage(1);
+    };
+
+    // Active filter chips
+    const activeFilters = [];
+    if (filters.category !== 'All') activeFilters.push({ label: filters.category, key: 'category' });
+    filters.brands.forEach(b => activeFilters.push({ label: b, key: 'brand', value: b }));
+    if (filters.rating > 0) activeFilters.push({ label: `${filters.rating}★ & Up`, key: 'rating' });
+    if (filters.inStockOnly) activeFilters.push({ label: 'In Stock', key: 'inStockOnly' });
+    if (filters.priceRange.min > 0 || filters.priceRange.max < 5000) {
+        activeFilters.push({ label: `$${filters.priceRange.min} – $${filters.priceRange.max}`, key: 'price' });
     }
 
-    return Math.max(1, Math.ceil(products.length / PRODUCTS_PER_PAGE));
-}
-
-const page = ({ searchParams }) => {
-    const totalPages = getTotalPages(searchParams);
+    const removeFilter = (f) => {
+        if (f.key === 'category') setFilters(prev => ({ ...prev, category: 'All' }));
+        else if (f.key === 'brand') setFilters(prev => ({ ...prev, brands: prev.brands.filter(b => b !== f.value) }));
+        else if (f.key === 'rating') setFilters(prev => ({ ...prev, rating: 0 }));
+        else if (f.key === 'inStockOnly') setFilters(prev => ({ ...prev, inStockOnly: false }));
+        else if (f.key === 'price') setFilters(prev => ({ ...prev, priceRange: { min: 0, max: 5000 } }));
+        setCurrentPage(1);
+    };
 
     return (
         <>
@@ -62,40 +128,115 @@ const page = ({ searchParams }) => {
                 <div className="container">
                     <div className="flex gap-8">
 
-                        {/* ── Left Sidebar: Filters (Client Component) ── */}
-                        <ShopFiltersClient />
+                        {/* ── Sidebar Filter (Desktop) ── */}
+                        <div className="hidden lg:block w-64 shrink-0">
+                            <div className="sticky top-4">
+                                <ShopFilterPanel filters={filters} setFilters={handleFilterChange} onReset={handleReset} />
+                            </div>
+                        </div>
 
-                        {/* ── Main Content Area ── */}
+                        {/* ── Main Content ── */}
                         <div className="flex-1 min-w-0">
 
-                            {/* Toolbar: Mobile Filter Button + Sort + View Toggle */}
+                            {/* Toolbar */}
                             <div className="flex flex-wrap items-center justify-between gap-4 mb-6 pb-4 border-b border-border">
-                                {/* Left: Mobile Filters Button + Product Count */}
+                                {/* Left: count + mobile filter toggle */}
                                 <div className="flex items-center gap-3">
-                                    {/* Mobile filter button is built into ShopFiltersClient */}
-                                    <Suspense fallback={<div>Loading...</div>}>
-                                        <ProductCountServer searchParams={searchParams} />
-                                    </Suspense>
+                                    <button
+                                        onClick={() => setMobileFiltersOpen(true)}
+                                        className="lg:hidden flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-xl border border-border hover:border-accent hover:text-accent transition-all"
+                                    >
+                                        <SlidersHorizontal size={15} /> Filters
+                                    </button>
+                                    <p className="text-base text-text-secondary">
+                                        <span className="font-bold text-text-primary">{filteredProducts.length}</span> products found
+                                    </p>
                                 </div>
 
-                                {/* Right: Sort and View toggles */}
-                                <SortProductClient />
+                                {/* Right: sort + view toggles */}
+                                <SortProduct sortBy={sortBy} setSortBy={setSortBy} setCurrentPage={setCurrentPage} setViewMode={setViewMode} viewMode={viewMode} />
+                            </div>
+
+                            {/* Mobile Filters Drawer Layer */}
+                            {/* Backdrop */}
+                            <div
+                                className={`fixed inset-0 bg-black/60 z-100 backdrop-blur-sm transition-opacity duration-300 lg:hidden ${mobileFiltersOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+                                onClick={() => setMobileFiltersOpen(false)}
+                            />
+
+                            {/* Drawer */}
+                            <div
+                                className={`fixed bottom-0 left-0 right-0 z-101 bg-surface rounded-t-4xl border-t border-border p-4 pb-4 transition-transform duration-500 cubic-bezier(0.4, 0, 0.2, 1) lg:hidden h-[70vh] flex flex-col shadow-2xl ${mobileFiltersOpen ? 'translate-y-0' : 'translate-y-full'}`}
+                            >
+                                {/* Drawer Handle */}
+                                <div
+                                    className="w-12 h-1.5 bg-border rounded-full mx-auto mb-6 shrink-0 cursor-pointer hover:bg-accent/40 transition-colors"
+                                    onClick={() => setMobileFiltersOpen(false)}
+                                />
+
+                                <div className="overflow-y-auto flex-1 pr-1 custom-scrollbar">
+                                    <ShopFilterPanel
+                                        filters={filters}
+                                        setFilters={handleFilterChange}
+                                        onReset={handleReset}
+                                        isMobileDrawer={true}
+                                        onClose={() => setMobileFiltersOpen(false)}
+                                    />
+                                </div>
+
+                                {/* Apply button (optional but good for UX) */}
+                                <button
+                                    onClick={() => setMobileFiltersOpen(false)}
+                                    className="mt-4 w-full py-3 bg-accent text-white font-bold rounded-2xl shadow-lg shadow-accent/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                                >
+                                    Apply Filters
+                                </button>
                             </div>
 
                             {/* Active filter chips */}
-                            <Suspense fallback={null}>
-                                <ActiveFiltersClient />
-                            </Suspense>
+                            {activeFilters.length > 0 && (
+                                <div className="flex flex-wrap gap-2 mb-6">
+                                    {activeFilters.map((f, i) => (
+                                        <span key={i} className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-accent/10 text-accent rounded-full text-xs font-medium">
+                                            {f.label}
+                                            <button onClick={() => removeFilter(f)} className="hover:text-blue-700 transition-colors">
+                                                <X size={12} />
+                                            </button>
+                                        </span>
+                                    ))}
+                                    <button onClick={handleReset} className="text-xs text-text-secondary hover:text-error transition-colors px-2">
+                                        Clear all
+                                    </button>
+                                </div>
+                            )}
 
-                            {/* Products Grid/List (Server Component) */}
-                            <Suspense fallback={<div className="text-center py-10">Loading products...</div>}>
-                                <ShopProductsServer searchParams={searchParams} />
-                            </Suspense>
+                            {/* Product Grid / List */}
+                            {paginatedProducts.length === 0 ? (
+                                <ShopEmptyState handleReset={handleReset} />
+                            ) : viewMode === 'grid' ? (
+                                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+                                    {paginatedProducts.map(p => <ShopCard key={p.id} product={p} />)}
+                                </div>
+                            ) : (
+                                /* List view */
+                                <div className="flex flex-col gap-4">
+                                    {paginatedProducts.map(item => (
+                                        <ProductListView key={item.id} item={item} />
+                                    ))}
+                                </div>
+                            )}
 
-                            {/* Pagination (Client Component) */}
-                            <Suspense fallback={null}>
-                                <PaginationClient currentPage={parseInt(searchParams?.page) || 1} totalPages={totalPages} />
-                            </Suspense>
+                            {/* Pagination */}
+                            {filteredProducts.length > PRODUCTS_PER_PAGE && (
+                                <Pagination currentPage={safePage} totalPages={totalPages} onPageChange={setCurrentPage} />
+                            )}
+
+                            {/* Showing range */}
+                            {filteredProducts.length > 0 && (
+                                <p className="text-center text-xs text-text-muted mt-4">-
+                                    Showing {(safePage - 1) * PRODUCTS_PER_PAGE + 1}-{Math.min(safePage * PRODUCTS_PER_PAGE, filteredProducts.length)} of {filteredProducts.length} products
+                                </p>
+                            )}
                         </div>
                     </div>
                 </div>

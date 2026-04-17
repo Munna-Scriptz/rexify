@@ -49,12 +49,12 @@ const page = () => {
                                     preload="metadata"
                                 />
 
-                                {/* Smaller Floating Orbs */}
+                                {/* Decorations */}
                                 <div className="absolute top-10 -right-2 w-6 h-6 bg-green-400 rounded-full animate-float-slow shadow-lg"></div>
                                 <div className="absolute top-16 left-0 w-4 h-4 bg-amber-400 rounded-full animate-float shadow-md"></div>
                             </div>
 
-                            {/* Celebration Text */}
+                            {/* Text */}
                             <div className="space-y-4 mb-10 animate-fade-up">
                                 <p className="md:text-4xl text-3xl font-black text-text-primary font-space tracking-tight">
                                     Order Confirmed!
@@ -64,7 +64,7 @@ const page = () => {
                                 </div>
                             </div>
 
-                            {/* Order Status Timeline Card */}
+                            {/* Order status */}
                             <div className="bg-white rounded-3xl md:p-8 p-6 border border-border shadow-xl shadow-black/5 mb-10 animate-fade-up delay-200">
                                 <div className="flex items-center justify-between mb-8 pb-6 border-b border-border/50">
                                     <div className="flex items-center gap-3">

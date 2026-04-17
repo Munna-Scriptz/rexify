@@ -8,9 +8,7 @@ import ProductListView from '../../components/shop/ShopListCard';
 import ShopEmptyState from '../../components/emptyState/ShopEmptyState';
 import SortProduct from '../../components/shop/SortProduct';
 
-/* ------------------------------------------------------------------ */
-/*  Mock product data                                                    */
-/* ------------------------------------------------------------------ */
+//  --------------  Mock product data 
 const ALL_PRODUCTS = [
     { id: 1, name: 'iPhone 16 Pro', brand: 'Apple', category: 'Smartphones', price: 1099, rating: 4.9, reviews: 1824, inStock: true, badge: 'New Arrival', img: 'https://www.applegadgetsbd.com/_next/image?url=https%3A%2F%2Fadminapi.applegadgetsbd.com%2Fstorage%2Fmedia%2Flarge%2FiPhone-16-Pro-Max---16-Pro-Black-Titanium-2734.jpg&w=1920&q=100' },
     { id: 2, name: 'MacBook Pro 14"', brand: 'Apple', category: 'Laptops', price: 1999, rating: 4.8, reviews: 952, inStock: true, badge: 'Best Seller', img: 'https://www.applegadgetsbd.com/_next/image?url=https%3A%2F%2Fadminapi.applegadgetsbd.com%2Fstorage%2Fmedia%2Flarge%2FMacBook-Pro-M5-Pro-14-Inch-241TB-18-Core-CPU-20-Core-GPUa-1124.png&w=1920&q=100' },

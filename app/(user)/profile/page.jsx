@@ -79,12 +79,10 @@ const page = () => {
   ]);
 
 
-
-
   return (
     <>
 
-      <main className="flex min-h-screen bg-surface">
+      <main className="flex min-h-screen">
         {/* --------------- Sidebar ---------------- */}
         <ProfileNavbar user={user} activeTab={activeTab} setActiveTab={setActiveTab} />
 

@@ -14,7 +14,7 @@ const page = () => {
     name: "John Doe",
     email: "john.doe@example.com",
     avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=200&auto=format&fit=crop",
-    isVerified: false,
+    isVerified: true,
   });
 
 

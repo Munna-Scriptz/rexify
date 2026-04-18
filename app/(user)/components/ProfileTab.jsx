@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { User, Mail, Camera, CheckCircle, AlertCircle, ShieldCheck, Edit3 } from 'lucide-react';
+import { User, Mail, Camera, CheckCircle, AlertCircle, ShieldCheck, Edit3, X, Check } from 'lucide-react';
 
 const ProfileTab = ({ userData, setUser }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -10,132 +10,183 @@ const ProfileTab = ({ userData, setUser }) => {
     setIsEditing(false);
   };
 
+  const handleCancel = () => {
+    setNewName(userData.name);
+    setIsEditing(false);
+  };
+
   return (
-    <div className="animate-slide-in-from-bottom-3 duration-500 space-y-6">
-      {/* Profile Card */}
-      <div className="bg-white rounded-2xl p-10 border border-border shadow-sm relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-accent/5 blur-3xl -translate-y-1/2 translate-x-1/2 rounded-full"></div>
-        <div className="relative flex flex-col sm:flex-row items-center gap-10">
-          {/* Avatar Section */}
-          <div className="relative">
-            <div className="w-36 h-36 rounded-full overflow-hidden border-4 border-accent-soft shadow-inner">
+    <div className="space-y-5 animate-in fade-in slide-in-from-bottom-3 duration-500">
+
+      {/* ── Hero Profile Card ── */}
+      <div className="relative rounded-2xl overflow-hidden border border-accent/10 bg-white shadow-[0_2px_24px_#155dfc0d]">
+        {/* Background glow blobs */}
+        <div className="absolute top-0 right-0 w-80 h-80 bg-accent/5 blur-3xl rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#dbeafe]/60 blur-2xl rounded-full translate-y-1/2 -translate-x-1/2 pointer-events-none" />
+
+        {/* Top accent stripe */}
+        <div className="h-1 w-full bg-linear-to-r from-accent via-[#4d8bff] to-accent/30" />
+
+        <div className="relative p-8 flex flex-col sm:flex-row items-center gap-8">
+
+          {/* Avatar */}
+          <div className="relative shrink-0 group">
+            <div className="w-32 h-32 rounded-2xl overflow-hidden border-2 border-accent/20 shadow-[0_0_0_4px_#155dfc0f,0_16px_40px_#155dfc14]">
               <img
                 src={userData.avatar}
                 alt="User avatar"
-                className="w-full h-full object-cover transition-transform duration-700"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
             </div>
-            <button className="absolute bottom-2 right-2 bg-accent text-white p-3 rounded-full shadow-xl border-2 border-white hover:scale-110 active:scale-95 transition-all cursor-pointer">
-              <Camera size={18} />
+            <button className="absolute -bottom-2 -right-2 bg-accent text-white p-2.5 rounded-xl shadow-[0_4px_14px_#155dfc55] border-2 border-white hover:bg-[#1a6aff] hover:scale-110 active:scale-95 transition-all cursor-pointer">
+              <Camera size={15} />
             </button>
           </div>
 
-          {/* User Info Section */}
-          <div className="flex-1 text-center sm:text-left">
-            <div className="flex items-center justify-center sm:justify-start gap-4 mb-2">
+          {/* Info */}
+          <div className="flex-1 text-center sm:text-left min-w-0">
+
+            {/* Name row */}
+            <div className="flex items-center justify-center sm:justify-start gap-3 mb-2 flex-wrap">
               {isEditing ? (
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 flex-wrap">
                   <input
                     type="text"
                     value={newName}
                     onChange={(e) => setNewName(e.target.value)}
-                    className="text-3xl font-bold text-text-primary border-b-2 border-accent focus:outline-none bg-surface/50 px-3 py-1 rounded-t-lg"
+                    className="text-2xl font-semibold text-[#0f172a] bg-[#f8faff] border border-accent/30 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/15 px-3 py-1.5 rounded-xl transition-all"
                     autoFocus
                   />
                   <button
                     onClick={handleNameUpdate}
-                    className="bg-accent text-white px-5 py-2 rounded-xl font-bold hover:shadow-lg hover:shadow-accent/30 transition-all cursor-pointer text-sm"
+                    className="flex items-center gap-1.5 bg-accent text-white px-4 py-2 rounded-xl font-semibold text-sm hover:bg-[#1a6aff] hover:shadow-[0_4px_14px_#155dfc44] transition-all cursor-pointer"
                   >
-                    Save Changes
+                    <Check size={14} /> Save
+                  </button>
+                  <button
+                    onClick={handleCancel}
+                    className="flex items-center gap-1.5 bg-[#f1f5f9] text-[#64748b] px-4 py-2 rounded-xl font-semibold text-sm hover:bg-[#e2e8f0] hover:text-[#334155] transition-all cursor-pointer"
+                  >
+                    <X size={14} /> Cancel
                   </button>
                 </div>
               ) : (
-                <h2 className="text-3xl font-bold text-text-primary font-space">{userData.name}</h2>
-              )}
-              {!isEditing && (
-                <button
-                  onClick={() => setIsEditing(true)}
-                  className="w-10 h-10 flex items-center justify-center rounded-full bg-surface text-text-muted hover:text-accent hover:bg-accent-soft transition-all duration-300"
-                >
-                  <Edit3 size={18} />
-                </button>
+                <>
+                  <h2 className="text-2xl font-semibold text-[#0f172a] tracking-tight">{userData.name}</h2>
+                  <button
+                    onClick={() => setIsEditing(true)}
+                    className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#f1f5f9] border border-[#e2e8f0] text-[#94a3b8] hover:text-accent hover:bg-[#eff6ff] hover:border-accent/20 transition-all duration-200 cursor-pointer"
+                  >
+                    <Edit3 size={14} />
+                  </button>
+                </>
               )}
             </div>
-            <p className="text-text-secondary flex items-center justify-center sm:justify-start gap-2.5 text-lg mb-6">
-              <Mail size={18} className="text-accent" />
+
+            {/* Email */}
+            <p className="text-[#64748b] flex items-center justify-center sm:justify-start gap-2 text-sm mb-5">
+              <Mail size={14} className="text-accent" />
               {userData.email}
             </p>
 
-            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4">
+            {/* Badges row */}
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3">
               {userData.isVerified ? (
-                <div className="flex items-center gap-2 px-4 py-1.5 bg-green-50 text-green-600 text-xs font-bold rounded-full border border-green-100 shadow-sm">
-                  <CheckCircle size={14} /> Verified Account
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-[#f0fdf4] text-success text-[11px] font-semibold rounded-full border border-[#bbf7d0] tracking-wide uppercase">
+                  <CheckCircle size={12} /> Verified Account
                 </div>
               ) : (
-                <div className="flex items-center gap-2 px-4 py-1.5 bg-amber-50 text-amber-600 text-xs font-bold rounded-full border border-amber-100 shadow-sm">
-                  <AlertCircle size={14} /> Identity Not Verified
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-[#fffbeb] text-[#d97706] text-[11px] font-semibold rounded-full border border-[#fde68a] tracking-wide uppercase">
+                  <AlertCircle size={12} /> Not Verified
                 </div>
               )}
-              <button className="text-xs font-bold text-accent hover:bg-accent hover:text-white transition-all duration-300 cursor-pointer border border-accent/30 px-5 py-1.5 rounded-full">
-                {userData.isVerified ? 'View Profile Badge' : 'Complete Verification'}
+              <button className="text-[11px] font-semibold text-accent border border-accent/30 px-4 py-1.5 rounded-full hover:bg-accent hover:text-white hover:border-accent hover:shadow-[0_4px_14px_#155dfc33] transition-all duration-200 cursor-pointer tracking-wide uppercase">
+                {userData.isVerified ? 'View Badge' : 'Get Verified'}
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Details Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="bg-white p-8 rounded-2xl border border-border shadow-sm">
-          <h3 className="text-base font-bold text-text-primary mb-6 flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
-              <User size={16} className="text-accent" />
+      {/* ── Details Grid ── */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+        {/* Personal Details */}
+        <div className="bg-white rounded-2xl border border-[#e8edf5] shadow-[0_2px_16px_#155dfc08] p-7 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-[#eff6ff] blur-2xl rounded-full pointer-events-none" />
+          <h3 className="text-sm font-semibold text-[#0f172a] mb-6 flex items-center gap-3 relative">
+            <div className="w-8 h-8 rounded-lg bg-[#eff6ff] border border-accent/15 flex items-center justify-center">
+              <User size={15} className="text-accent" />
             </div>
             Personal Details
           </h3>
-          <div className="space-y-5">
-            <div className="flex justify-between items-center pb-4 border-b border-border/50">
-              <span className="text-sm font-medium text-text-muted">Full Display Name</span>
-              <span className="text-sm font-bold text-text-primary">{userData.name}</span>
-            </div>
-            <div className="flex justify-between items-center pb-4 border-b border-border/50">
-              <span className="text-sm font-medium text-text-muted">Primary Email</span>
-              <span className="text-sm font-bold text-text-primary">{userData.email}</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-sm font-medium text-text-muted">Account Type</span>
-              <span className="text-sm font-bold text-accent px-2 py-0.5 bg-accent/5 rounded-md">Individual Client</span>
-            </div>
+
+          <div className="space-y-0 relative">
+            {[
+              { label: 'Full Name', value: userData.name },
+              { label: 'Email Address', value: userData.email },
+              { label: 'Account Type', value: 'Individual Client', accent: true },
+            ].map((item, i, arr) => (
+              <div
+                key={item.label}
+                className={`flex justify-between items-center py-4 ${i < arr.length - 1 ? 'border-b border-[#f1f5f9]' : ''}`}
+              >
+                <span className="text-[10px] font-semibold text-[#94a3b8] uppercase tracking-widest">{item.label}</span>
+                <span className={item.accent
+                  ? 'text-accent bg-[#eff6ff] border border-accent/15 px-2.5 py-1 rounded-lg text-xs font-semibold'
+                  : 'text-sm font-semibold text-[#334155]'
+                }>
+                  {item.value}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
-        <div className="bg-white p-8 rounded-2xl border border-border shadow-sm">
-          <h3 className="text-base font-bold text-text-primary mb-6 flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
-              <ShieldCheck size={16} className="text-accent" />
+
+        {/* Verification Center */}
+        <div className="bg-white rounded-2xl border border-[#e8edf5] shadow-[0_2px_16px_#155dfc08] p-7 relative overflow-hidden">
+          <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#fffbeb]/80 blur-2xl rounded-full pointer-events-none" />
+          <h3 className="text-sm font-semibold text-[#0f172a] mb-6 flex items-center gap-3 relative">
+            <div className="w-8 h-8 rounded-lg bg-[#eff6ff] border border-accent/15 flex items-center justify-center">
+              <ShieldCheck size={15} className="text-accent" />
             </div>
             Verification Center
           </h3>
-          <div className="space-y-5">
-            <div className="flex items-center justify-between">
+
+          <div className="space-y-4 relative">
+            <div className="flex items-center justify-between gap-4">
               <div>
-                <span className="text-sm font-bold text-text-primary block">Identity Check</span>
-                <span className="text-xs text-text-secondary">Verify to unlock buying limits</span>
+                <span className="text-sm font-semibold text-[#0f172a] block mb-0.5">Identity Check</span>
+                <span className="text-xs text-[#94a3b8]">Verify to unlock buying limits</span>
               </div>
-              <button className="text-xs py-2 px-5 bg-accent text-white font-bold rounded-xl hover:shadow-lg hover:shadow-accent/25 transition-all cursor-pointer">
+              <button className="shrink-0 text-xs py-2 px-5 bg-accent text-white font-semibold rounded-xl hover:bg-[#1a6aff] hover:shadow-[0_4px_14px_#155dfc44] transition-all cursor-pointer">
                 Start Now
               </button>
             </div>
-            <div className="pt-4 p-4 bg-muted/30 rounded-xl border border-dashed border-border">
-              <p className="text-[12px] text-text-secondary leading-relaxed flex items-start gap-2">
-                <AlertCircle size={14} className="shrink-0 text-amber-500 mt-0.5" />
-                Your account is currently restricted to $5,000 in monthly transactions until verified.
+
+            {/* Warning banner */}
+            <div className="p-4 bg-[#fffbeb] rounded-xl border border-[#fde68a] border-dashed">
+              <p className="text-xs text-[#92400e] leading-relaxed flex items-start gap-2">
+                <AlertCircle size={13} className="shrink-0 text-[#d97706] mt-0.5" />
+                Account is restricted to $5,000 monthly transactions until identity is verified.
               </p>
+            </div>
+
+            {/* Progress */}
+            <div>
+              <div className="flex justify-between text-[10px] text-[#94a3b8] mb-2 uppercase tracking-widest font-semibold">
+                <span>Verification Progress</span>
+                <span>0 / 3 steps</span>
+              </div>
+              <div className="h-1.5 w-full bg-[#f1f5f9] rounded-full overflow-hidden">
+                <div className="h-full w-0 bg-linear-to-r from-accent to-[#4d8bff] rounded-full" />
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ProfileTab
+export default ProfileTab;

@@ -1,11 +1,11 @@
 "use client"
 import React, { useState } from 'react';
-import { User, ChevronRight, ShieldCheck, Bell, LogOut, ShoppingBag, MapPin, } from 'lucide-react';
 import ProfileTab from '../components/ProfileTab';
 import OrderTab from '../components/OrderTab';
 import AddressTab from '../components/AddressTab';
 import SecurityTab from '../components/SecurityTab';
 import NotificationTab from '../components/NotificationTab';
+import ProfileNavbar from '../components/ProfileNavbar';
 
 const page = () => {
   const [activeTab, setActiveTab] = useState('profile');
@@ -30,76 +30,43 @@ const page = () => {
   ]);
 
 
-  const tabs = [
-    { id: 'profile', label: 'Public Profile', icon: User },
-    { id: 'orders', label: 'Order History', icon: ShoppingBag },
-    { id: 'addresses', label: 'My Addresses', icon: MapPin },
-    { id: 'security', label: 'Security', icon: ShieldCheck },
-    { id: 'notifications', label: 'Notifications', icon: Bell },
-  ];
+
 
   return (
     <>
-      <section id="Profile">
-        <div className='container'>
-          <div id="Profile-row" className="w-full py-10">
 
-            <div className="flex gap-10">
-              {/* Sidebar Navigation */}
-              <div className="lg:col-span-3 space-y-1">
-                <div className="bg-white rounded-2xl p-2 border border-border shadow-sm">
-                  {tabs.map((tab) => (
-                    <button
-                      key={tab.id}
-                      onClick={() => setActiveTab(tab.id)}
-                      className={`w-full flex items-center justify-between px-5 py-3.5 rounded-xl text-sm font-semibold transition-all duration-300 cursor-pointer group ${activeTab === tab.id
-                        ? 'bg-accent text-white shadow-lg shadow-accent/25'
-                        : 'text-text-secondary hover:bg-surface hover:text-text-primary'
-                        }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <tab.icon size={18} strokeWidth={2.2} />
-                        {tab.label}
-                      </div>
-                      <ChevronRight size={14} className={activeTab === tab.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100 transition-opacity'} />
-                    </button>
-                  ))}
-                </div>
-                <div className="pt-4 mt-6">
-                  <button className="w-full flex items-center gap-3 px-5 py-3.5 rounded-xl text-sm font-bold text-red-500 hover:bg-red-50 transition-all duration-300 cursor-pointer border border-transparent hover:border-red-100">
-                    <LogOut size={18} strokeWidth={2.2} />
-                    Sign Out
-                  </button>
-                </div>
-              </div>
+      <main className="flex min-h-screen bg-surface">
+        {/* --------------- Sidebar ---------------- */}
+        <ProfileNavbar user={user} activeTab={activeTab} setActiveTab={setActiveTab}/>
 
-              {/* Main Content Area */}
-              <div className="lg:col-span-9 space-y-6">
+        {/*  --------------- Content ---------------- */}
+        <section className="flex-1 h-screen overflow-y-auto pt-10 pb-20 px-10">
+          <div className="space-y-8">
 
-                {activeTab === 'profile' && (
-                  <ProfileTab userData={user} setUser={setUser} />
-                )}
+            <div className="animate-slide-in-from-bottom-3 duration-700">
+              {activeTab === 'profile' && (
+                <ProfileTab userData={user} setUser={setUser} />
+              )}
 
-                {activeTab === 'orders' && (
-                  <OrderTab orderData={orders} />
-                )}
+              {activeTab === 'orders' && (
+                <OrderTab orderData={orders} />
+              )}
 
-                {activeTab === 'addresses' && (
-                  <AddressTab addressData={addresses} />
-                )}
+              {activeTab === 'addresses' && (
+                <AddressTab addressData={addresses} />
+              )}
 
-                {activeTab === 'security' && (
-                  <SecurityTab />
-                )}
+              {activeTab === 'security' && (
+                <SecurityTab />
+              )}
 
-                {activeTab === 'notifications' && (
-                  <NotificationTab />
-                )}
-              </div>
+              {activeTab === 'notifications' && (
+                <NotificationTab />
+              )}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </main>
     </>
   );
 };

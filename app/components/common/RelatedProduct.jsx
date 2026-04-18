@@ -1,4 +1,3 @@
-import React from 'react'
 import ProductSlider from '../sliders/ProductSlider';
 
 const RelatedProduct = () => {

@@ -1,5 +1,3 @@
-import React from 'react'
-
 const Specifications = ({ product }) => {
     return (
         <section className="mt-20 grid lg:grid-cols-3 gap-12">

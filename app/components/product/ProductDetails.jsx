@@ -1,3 +1,4 @@
+"use client"
 import React, { useState } from 'react'
 import { Star, Minus, Plus, ShoppingCart, Zap, Truck, ShieldCheck } from 'lucide-react'
 

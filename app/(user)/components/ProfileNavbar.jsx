@@ -1,11 +1,11 @@
-import { LogOut } from 'lucide-react';
-import { User, ShieldCheck, Bell, ShoppingBag, MapPin, } from 'lucide-react';
+import { User, ShieldCheck, Bell, ShoppingBag,LogOut, Rss, MapPin, } from 'lucide-react';
 
 const ProfileNavbar = ({ user, activeTab , setActiveTab}) => {
 
     const tabs = [
         { id: 'profile', label: 'Public Profile', icon: User },
         { id: 'orders', label: 'Order History', icon: ShoppingBag },
+        { id: 'reviews', label: 'My Reviews', icon: Rss },
         { id: 'addresses', label: 'My Addresses', icon: MapPin },
         { id: 'security', label: 'Security', icon: ShieldCheck },
         { id: 'notifications', label: 'Notifications', icon: Bell },
@@ -13,7 +13,6 @@ const ProfileNavbar = ({ user, activeTab , setActiveTab}) => {
 
     return (
         <aside className="w-72 flex flex-col h-screen sticky top-0 overflow-hidden shrink-0 bg-[#0d1117] border-r border-white/5">
-
             {/* Ambient glow */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-56 h-56 rounded-full bg-accent/10 blur-3xl pointer-events-none z-0" />
 

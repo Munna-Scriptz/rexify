@@ -10,52 +10,12 @@ import VerifyDelete from '../components/common/VerifyDelete';
 import { useGetCategoryQuery } from '../services/api';
 
 const page = () => {
-  // const categories = [
-  //   {
-  //     id: 1,
-  //     image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=2670&auto=format&fit=crop',
-  //     name: 'Premium Apparel',
-  //     subtitle: 'CURATION #01',
-  //     count: 452
-  //   },
-  //   {
-  //     id: 2,
-  //     image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=2670&auto=format&fit=crop',
-  //     name: 'Luxury Watches',
-  //     subtitle: 'CURATION #02',
-  //     count: 128
-  //   },
-  //   {
-  //     id: 3,
-  //     image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2600&auto=format&fit=crop',
-  //     name: 'Bespoke Living',
-  //     subtitle: 'CURATION #03',
-  //     count: 84
-  //   },
-  //   {
-  //     id: 4,
-  //     image: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?q=80&w=2670&auto=format&fit=crop',
-  //     name: 'Artisan Beauty',
-  //     subtitle: 'CURATION #04',
-  //     count: 215
-  //   },
-  //   {
-  //     id: 5,
-  //     image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=2670&auto=format&fit=crop',
-  //     name: 'Sonic High-End',
-  //     subtitle: 'CURATION #05',
-  //     count: 56
-  //   }
-  // ];
-
   const [isOpen, setIsOpen] = useState(false)
   const [isEditOpen, setEditIsOpen] = useState(false)
   const [isDeleteOpen, SetisDeleteOpen] = useState(false)
 
   // ------------ Get data from server -------------
-  const { data: categories, isLoading } = useGetCategoryQuery()
-
-  console.log(categories?.data)
+  const { data: categories, error, isLoading } = useGetCategoryQuery()
 
   return (
     <>

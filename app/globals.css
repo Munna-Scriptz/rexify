@@ -167,6 +167,10 @@ body {
   font-family: var(--font-primary);
   /* color: var(--color-surface); */
 }
+.adminNavbar {
+  scrollbar-width: none;
+} 
+
 
 ::selection {
   background-color: #212121;

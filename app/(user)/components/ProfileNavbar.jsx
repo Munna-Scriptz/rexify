@@ -8,7 +8,6 @@ const ProfileNavbar = ({ user, activeTab , setActiveTab}) => {
         { id: 'reviews', label: 'My Reviews', icon: Rss },
         { id: 'addresses', label: 'My Addresses', icon: MapPin },
         { id: 'security', label: 'Security', icon: ShieldCheck },
-        { id: 'notifications', label: 'Notifications', icon: Bell },
     ];
 
     return (

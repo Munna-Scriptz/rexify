@@ -1,4 +1,3 @@
-"use client"
 import React, { useState } from 'react';
 import ProfileTab from '../components/ProfileTab';
 import OrderTab from '../components/OrderTab';

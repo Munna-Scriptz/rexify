@@ -78,7 +78,6 @@ const page = () => {
                 transition: Bounce,
             });
         }
-
     }
 
 

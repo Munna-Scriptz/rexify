@@ -11,7 +11,7 @@ const VerifyOTP = () => {
     const email = searchParams.get('email')
 
     const [otp, setOtp] = useState('');
-    const [timer, setTimer] = useState(10);
+    const [timer, setTimer] = useState(120);
     const [canResend, setCanResend] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');

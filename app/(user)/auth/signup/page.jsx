@@ -9,6 +9,7 @@ import { IsValidEmail } from '../../../components/utils/Validations';
 import Header from '../../components/Header';
 import BreadCrumbs from '../../../components/utils/BreadCrumbs';
 import { Bounce, toast, ToastContainer } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 
 const page = () => {
     const [step, setStep] = useState(1)
@@ -26,6 +27,8 @@ const page = () => {
         confirmPass: "",
         confirmPassError: ""
     })
+
+    const router = useRouter(); // Initialize router
 
     // ------------ Form handler 
     const handleForm = async (e) => {
@@ -77,6 +80,11 @@ const page = () => {
                 theme: "dark",
                 transition: Bounce,
             });
+
+            setTimeout(() => {
+                setLoading(false)
+                router.push(`/auth/verify?email=${formData.email}`) // Changed to router.push and corrected path
+            }, 3000)
         }
     }
 

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+"use client"
+import { useState } from 'react';
 import ProfileTab from '../components/ProfileTab';
 import OrderTab from '../components/OrderTab';
 import AddressTab from '../components/AddressTab';

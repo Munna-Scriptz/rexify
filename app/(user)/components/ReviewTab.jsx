@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+"use client"
+import { useState } from 'react'
 import { Star, MessageSquare, ThumbsUp, ChevronRight, PackageSearch } from 'lucide-react';
 
 const StarRating = ({ rating, size = 14 }) => (

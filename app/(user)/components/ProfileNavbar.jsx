@@ -1,4 +1,4 @@
-import { User, ShieldCheck, Bell, ShoppingBag,LogOut, Rss, MapPin, } from 'lucide-react';
+import { User, ShieldCheck, ShoppingBag,LogOut, Rss, MapPin, } from 'lucide-react';
 
 const ProfileNavbar = ({ user, activeTab , setActiveTab}) => {
 

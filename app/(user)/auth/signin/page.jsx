@@ -32,30 +32,36 @@ const page = () => {
     if (!formData.password) return setFormData(prev => ({ ...prev, passwordError: "Please enter your password" }))
     setLoading(true)
     // ------------- Fetch ----------------
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/signin`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: formData.email, password: formData.password, })
-    })
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/signin`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: formData.email, password: formData.password, })
+      })
 
-    const data = await res.json();
-    if (!res.ok) {
+      const data = await res.json();
+      if (!res.ok) {
+        setLoading(false)
+        if (data.message === "Invalid or incorrect password!") return setFormData(prev => ({ ...prev, passwordError: data.message }))
+        toast.error(data.message, { theme: "dark", transition: Bounce, });
+        return
+      }
       setLoading(false)
-      if (data.message === "Invalid or incorrect password!") return setFormData(prev => ({ ...prev, passwordError: data.message }))
-      toast.error(data.message, { theme: "dark", transition: Bounce, });
-      return
+      toast.success(data.message, {
+        theme: "dark",
+        transition: Bounce,
+      });
+
+      setTimeout(() => {
+        setLoading(false)
+        redirect('/')
+      }, 2000)
+
+    } catch (error) {
+      setLoading(false)
+      toast.error("Somethind went wrong!", { theme: "light", transition: Bounce, });
     }
-    setLoading(false)
-    toast.success(data.message, {
-      theme: "dark",
-      transition: Bounce,
-    });
-
-    setTimeout(() => {
-      setLoading(false)
-      redirect('/')
-    }, 2000)
   }
 
 

@@ -4,7 +4,6 @@ import ProfileTab from '../components/ProfileTab';
 import OrderTab from '../components/OrderTab';
 import AddressTab from '../components/AddressTab';
 import SecurityTab from '../components/SecurityTab';
-import NotificationTab from '../components/NotificationTab';
 import ProfileNavbar from '../components/ProfileNavbar';
 import ReviewTab from '../components/ReviewTab';
 
@@ -88,31 +87,25 @@ const page = () => {
 
         {/*  --------------- Content ---------------- */}
         <section className="flex-1 h-screen overflow-y-auto pt-6 pb-10 px-6">
-          <div className="animate-slide-in-from-bottom-3 duration-700">
-            {activeTab === 'profile' && (
-              <ProfileTab userData={user} setUser={setUser} />
-            )}
+          {activeTab === 'profile' && (
+            <ProfileTab userData={user} setUser={setUser} />
+          )}
 
-            {activeTab === 'orders' && (
-              <OrderTab orderData={orders} />
-            )}
+          {activeTab === 'orders' && (
+            <OrderTab orderData={orders} />
+          )}
 
-            {activeTab === 'reviews' && (
-              <ReviewTab reviews={reviewData} />
-            )}
+          {activeTab === 'reviews' && (
+            <ReviewTab reviews={reviewData} />
+          )}
 
-            {activeTab === 'addresses' && (
-              <AddressTab addressData={addresses} />
-            )}
+          {activeTab === 'addresses' && (
+            <AddressTab addressData={addresses} />
+          )}
 
-            {activeTab === 'security' && (
-              <SecurityTab />
-            )}
-
-            {activeTab === 'notifications' && (
-              <NotificationTab />
-            )}
-          </div>
+          {activeTab === 'security' && (
+            <SecurityTab />
+          )}
         </section>
       </main>
     </>

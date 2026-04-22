@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 
-const SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
+const SECRET = new TextEncoder().encode(process.env.NEXT_PUBLIC_JWT_SEC);
 
 export async function proxy(req) {
     const token = req.cookies.get("X-AS-TOKEN")?.value;
     const { pathname } = req.nextUrl;
-
+    
     // Only protect admin routes
     if (pathname.startsWith("/admin")) {
         // ❌ No token

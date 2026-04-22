@@ -97,7 +97,7 @@ const VerifyOTP = () => {
         });
         setTimeout(() => {
             setLoading(false);
-            redirect("/")
+            redirect("/auth/signin")
         }, 2000);
     };
 

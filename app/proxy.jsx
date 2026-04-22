@@ -4,7 +4,7 @@ import { jwtVerify } from "jose";
 const SECRET = new TextEncoder().encode(process.env.JWT_SECRET);
 
 export async function proxy(req) {
-    const token = req.cookies.get("token")?.value;
+    const token = req.cookies.get("X-AS-TOKEN")?.value;
     const { pathname } = req.nextUrl;
 
     // Only protect admin routes

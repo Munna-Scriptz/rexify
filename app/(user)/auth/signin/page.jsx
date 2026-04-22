@@ -8,6 +8,8 @@ import OrDivider from '../../components/OrDivider';
 import BreadCrumbs from '../../../components/utils/BreadCrumbs';
 import Link from 'next/link';
 import Header from '../../components/Header';
+import { Bounce, toast, ToastContainer } from 'react-toastify';
+import { redirect } from 'next/navigation';
 
 const page = () => {
   const [loading, setLoading] = useState(false)
@@ -21,25 +23,45 @@ const page = () => {
   })
 
   // ------------ Form handler 
-  const handleForm = (e) => {
+  const handleForm = async (e) => {
     e.preventDefault()
 
     // ------------ Validations 
     if (!formData.email) return setFormData(prev => ({ ...prev, emailError: "Please enter your email address" }))
     if (!IsValidEmail(formData.email)) return setFormData(prev => ({ ...prev, emailError: "Please enter a valid email address" }))
     if (!formData.password) return setFormData(prev => ({ ...prev, passwordError: "Please enter your password" }))
-    // if (formData.password != 1234) return setFormData(prev => ({ ...prev, passwordError: "Wrong password" }))
-
     setLoading(true)
-    setTimeout(() => {
-      setStep(2)
+    // ------------- Fetch ----------------
+    const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/signin`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: formData.email, password: formData.password, })
+    })
+
+    const data = await res.json();
+    if (!res.ok) {
       setLoading(false)
-    }, 800)
+      if (data.message === "Invalid or incorrect password!") return setFormData(prev => ({ ...prev, passwordError: data.message }))
+      toast.error(data.message, { theme: "dark", transition: Bounce, });
+      return
+    }
+    setLoading(false)
+    toast.success(data.message, {
+      theme: "dark",
+      transition: Bounce,
+    });
+
+    setTimeout(() => {
+      setLoading(false)
+      redirect('/')
+    }, 2000)
   }
 
 
   return (
     <>
+      <ToastContainer />
       <BreadCrumbs to={'/'} name={'Home'} absolute={true} />
       <div className="min-h-screen flex items-center justify-center p-6 md:mt-0 mt-8 overflow-x-hidden">
         <form onSubmit={handleForm} className="w-full max-w-md lg:max-w-lg flex flex-col items-center animate-slide-in">
@@ -68,7 +90,7 @@ const page = () => {
 
           </div>
           {/* -------- Next button */}
-          <Button variant='authButton' loading={loading} type="submit">
+          <Button variant='authButton' isLoading={loading} type="submit">
             Next
           </Button>
 

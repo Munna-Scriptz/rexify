@@ -8,12 +8,17 @@ const SecurityTab = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [email, setEmail] = useState('');
 
-  const handleConfirmEmail = (e) => {
+  const handleConfirmEmail = async (e) => {
     e.preventDefault();
-    if (email) {
-      setShowEmailModal(false);
-      setShowSuccessModal(true);
-    }
+
+    // ----------- Send Resent link ----------
+    await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/forgetPassword`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    })
+    setShowEmailModal(false)
+    setShowSuccessModal(true)
   };
 
   return (
@@ -73,6 +78,7 @@ const SecurityTab = () => {
           </div>
         </div>
       </div>
+
       {/* Email Input Modal */}
       {showEmailModal && (
         <div className="absolute w-full h-full inset-0 z-50 flex items-center justify-center bg-[#1F1F1F]/85  animate-fade-in">

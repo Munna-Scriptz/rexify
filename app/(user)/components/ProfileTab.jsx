@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+"use client"
+import { useState } from 'react'
 import { User, Mail, Camera, CheckCircle, AlertCircle, ShieldCheck, Edit3, X, Check } from 'lucide-react';
 
 const ProfileTab = ({ userData, setUser }) => {

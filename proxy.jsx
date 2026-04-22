@@ -6,28 +6,21 @@ const SECRET = new TextEncoder().encode(process.env.NEXT_PUBLIC_JWT_SEC);
 export async function proxy(req) {
     const token = req.cookies.get("X-AS-TOKEN")?.value;
     const { pathname } = req.nextUrl;
-    
+
     // Only protect admin routes
     if (pathname.startsWith("/admin")) {
-        // ❌ No token
         if (!token) {
             return NextResponse.redirect(new URL("/auth/signin", req.url));
         }
 
         try {
-            // ✅ Verify JWT
             const { payload } = await jwtVerify(token, SECRET);
-
-            // ❌ Not admin
             if (payload.role !== "admin") {
-                return NextResponse.redirect(new URL("/", req.url));
+                return NextResponse.redirect(new URL("/auth/unauthorized", req.url));
             }
 
-            // ✅ Allowed
             return NextResponse.next();
-
         } catch (err) {
-            // ❌ Invalid/expired token
             return NextResponse.redirect(new URL("/auth/signin", req.url));
         }
     }

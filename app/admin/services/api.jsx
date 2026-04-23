@@ -6,8 +6,15 @@ export const adminApis = createApi({
         getCategory: build.query({
             query: () => "/category/all",
         }),
+        createCategory: build.mutation({
+            query: (data) => ({
+                url: "/category/create",
+                method: "POST",
+                body: data,
+            }),
+        }),
     }),
 })
 
 
-export const { useGetCategoryQuery } = adminApis
+export const { useGetCategoryQuery, useCreateCategoryMutation } = adminApis

@@ -11,7 +11,6 @@ import { useGetCategoryQuery } from '../services/api';
 
 const page = () => {
   const [isOpen, setIsOpen] = useState(false)
-  const [isEditOpen, setEditIsOpen] = useState(false)
   const [isDeleteOpen, SetisDeleteOpen] = useState(false)
 
   // ------------ Get data from server -------------
@@ -43,18 +42,13 @@ const page = () => {
       {/* ---------- Modals  */}
       <VerifyDelete isOpen={isDeleteOpen} onClose={() => SetisDeleteOpen(false)} onConfirm={""} itemName="Spring Collection 2024" />
       <CreateCategoryModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
-      <EditCategoryModal isEditOpen={isEditOpen} onClose={() => setEditIsOpen(false)} />
 
       {/* ----------------------- Category Grid ----------------------- */}
       <section className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
         {categories?.data?.map((item, i) => (
           <CategoryCard
             key={i}
-            image={item.thumbnail}
-            name={item.name}
-            subtitle={item.description}
-            count={item?.totalProducts}
-            onEdit={() => setEditIsOpen(true)}
+            categories={item}
             onDelete={() => SetisDeleteOpen(true)}
           />
         ))}

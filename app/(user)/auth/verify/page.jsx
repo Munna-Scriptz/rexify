@@ -3,11 +3,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import Button from '../../../components/ui/Buttons';
 import BreadCrumbs from '../../../components/utils/BreadCrumbs';
 import Link from 'next/link';
-import { redirect, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Bounce, toast, ToastContainer } from 'react-toastify';
 
 const page = () => {
     const searchParams = useSearchParams()
+    const router = useRouter();
     const email = searchParams.get('email')
 
     const [otp, setOtp] = useState('');
@@ -97,7 +98,7 @@ const page = () => {
         });
         setTimeout(() => {
             setLoading(false);
-            redirect("/auth/signin")
+            router.push("/auth/signin")
         }, 2000);
     };
 

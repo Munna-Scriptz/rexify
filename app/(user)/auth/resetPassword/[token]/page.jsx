@@ -1,12 +1,13 @@
 "use client"
 import React, { useState } from 'react';
-import { redirect, useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { Lock, CheckCircle2, AlertCircle } from 'lucide-react';
 import Input from '@/app/components/ui/Input';
 import Button from '@/app/components/ui/Buttons';
 
 const ResetPasswordPage = () => {
   const getParams = useParams();
+  const router = useRouter();
 
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -56,7 +57,7 @@ const ResetPasswordPage = () => {
 
   const closeModals = () => {
     if (status === 'success') {
-      redirect("/auth/signin")
+      router.push("/auth/signin")
     }
     setStatus(null);
   };

@@ -9,12 +9,13 @@ import BreadCrumbs from '../../../components/utils/BreadCrumbs';
 import Link from 'next/link';
 import Header from '../../components/Header';
 import { Bounce, toast, ToastContainer } from 'react-toastify';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 const page = () => {
-  const [loading, setLoading] = useState(false)
-  const [rememberMe, setRememberMe] = useState(false);
+  const router = useRouter();
 
+  const [loading, setLoading] = useState(false)
+  const [rememberMe, setRememberMe] = useState(false)
   const [formData, setFormData] = useState({
     email: "",
     emailError: "",
@@ -55,7 +56,7 @@ const page = () => {
 
       setTimeout(() => {
         setLoading(false)
-        redirect('/')
+        router.push("/")
       }, 2000)
 
     } catch (error) {

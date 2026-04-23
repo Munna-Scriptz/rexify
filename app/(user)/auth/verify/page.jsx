@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { redirect, useSearchParams } from 'next/navigation';
 import { Bounce, toast, ToastContainer } from 'react-toastify';
 
-const VerifyOTP = () => {
+const page = () => {
     const searchParams = useSearchParams()
     const email = searchParams.get('email')
 
@@ -202,4 +202,4 @@ const VerifyOTP = () => {
     );
 };
 
-export default VerifyOTP;
+export default page;

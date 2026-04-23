@@ -8,6 +8,7 @@ import SearchField from './SearchField'
 import ProductMenu from './ProductMenu'
 import { Search, ShoppingCart, X, Home, ShoppingBag, LayoutGrid, Info, PhoneCall, Zap, Heart, User } from 'lucide-react'
 import { HiMiniBars3BottomLeft } from 'react-icons/hi2'
+import UserButton from './UserButton'
 
 const Navbar = () => {
     const navbarRef = useRef(null);
@@ -21,7 +22,7 @@ const Navbar = () => {
 
     useEffect(() => {
         if (typeof window === 'undefined') return;
-        
+
         const navbar = navbarRef.current;
         if (!navbar) return;
 
@@ -53,7 +54,7 @@ const Navbar = () => {
     // Lock body scroll when product menu is open
     useEffect(() => {
         if (typeof window === 'undefined') return;
-        
+
         document.body.style.overflow = productMenuOpen ? 'hidden' : '';
         return () => { document.body.style.overflow = ''; };
     }, [productMenuOpen]);
@@ -126,9 +127,7 @@ const Navbar = () => {
                             </Link>
 
                             {/* --------- User  */}
-                            <Link href={'/auth/signin'} className={`w-8 h-8 flex items-center justify-center hover:bg-text-muted/20 duration-300 group-hover:text-text-primary ${isNavbarWhite && 'text-text-primary'} text-xl rounded-full cursor-pointer relative`}>
-                                <PiUser />
-                            </Link>
+                            <UserButton isNavbarWhite={isNavbarWhite}/>
                         </div>
 
                     </div>
@@ -210,7 +209,7 @@ const Navbar = () => {
             {search && <SearchField close={setSearch} />}
 
             {/* -------------- Products Mega Menu ------------ */}
-            <ProductMenu setProductMenuOpen={setProductMenuOpen} productMenuOpen={productMenuOpen}/>
+            <ProductMenu setProductMenuOpen={setProductMenuOpen} productMenuOpen={productMenuOpen} />
 
         </>
     )

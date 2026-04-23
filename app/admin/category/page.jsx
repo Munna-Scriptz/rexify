@@ -1,11 +1,10 @@
 "use client"
-import React, { useState } from 'react';
+import { useState } from 'react';
 import CategoryCard from '../components/cards/CategoryCard';
 import { Layers, CheckCircle, Plus } from 'lucide-react';
 import StatCard from '../components/common/StatCards';
 import CategoryHeader from '../components/category/CategoryHeader';
 import CreateCategoryModal from '../components/category/CreateCategoryModal';
-import EditCategoryModal from '../components/category/EditCategoryModal';
 import VerifyDelete from '../components/common/VerifyDelete';
 import { useGetCategoryQuery } from '../services/api';
 

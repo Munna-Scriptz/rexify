@@ -7,11 +7,19 @@ export const adminApis = createApi({
             query: () => "/category/all",
         }),
         createCategory: build.mutation({
-            query: (data) => ({
-                url: "/category/create",
-                method: "POST",
-                body: data,
-            }),
+            query: (data) => {
+                const formData = new FormData();
+                formData.append("name", data.name);
+                formData.append("slug", data.slug);
+                formData.append("description", data.description);
+                formData.append("thumbnail", data.thumbnail); // 👈 file
+                return {
+                    url: "/category/create",
+                    method: "POST",
+                    body: formData,
+                    credentials: "include",
+                };
+            },
         }),
     }),
 })

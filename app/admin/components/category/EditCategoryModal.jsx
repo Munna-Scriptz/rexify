@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import { X, Upload, Check, Power, LayoutGrid, Type, Hash, FileText } from 'lucide-react';
 import Inputs from '../ui/Inputs';
+import { useCreateCategoryMutation } from '../../services/api';
 
 const EditCategoryModal = ({ categories, isEditOpen, onClose }) => {
     const [formData, setFormData] = useState({
@@ -25,9 +26,16 @@ const EditCategoryModal = ({ categories, isEditOpen, onClose }) => {
     };
 
     // ----------- Handle update -------------
-    const handleUpdate = () => {
-        console.log(categories._id, formData)
-    }
+    const [createCategory, { isLoading }] = useCreateCategoryMutation();
+
+    // const handleUpdate = async () => {
+    //     try {
+    //         const res = await createCategory({ name }).unwrap();
+    //         console.log("Success:", res);
+    //     } catch (err) {
+    //         console.log("Error:", err);
+    //     }
+    // }
 
     if (!isEditOpen) return null;
     return (

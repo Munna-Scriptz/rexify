@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 "use client"
 import React, { useState, useEffect, useRef } from 'react';
 import Button from '../../../components/ui/Buttons';
@@ -9,7 +10,7 @@ import { Bounce, toast, ToastContainer } from 'react-toastify';
 const page = () => {
     const searchParams = useSearchParams()
     const router = useRouter();
-    const email = searchParams.get('email')
+    const email = searchParams?.get('email') || ''
 
     const [otp, setOtp] = useState('');
     const [timer, setTimer] = useState(120);

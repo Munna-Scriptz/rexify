@@ -1,6 +1,6 @@
 "use client"
 export const dynamic = "force-dynamic";
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Button from '../../../components/ui/Buttons';
 import BreadCrumbs from '../../../components/utils/BreadCrumbs';
 import Link from 'next/link';
@@ -8,9 +8,9 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Bounce, toast, ToastContainer } from 'react-toastify';
 
 const page = () => {
-    const searchParams = useSearchParams()
     const router = useRouter();
-    const email = searchParams?.get('email') || ''
+    const searchParams = useSearchParams();
+    const email = typeof window !== "undefined" ? searchParams.get("email") || "" : "";
 
     const [otp, setOtp] = useState('');
     const [timer, setTimer] = useState(120);

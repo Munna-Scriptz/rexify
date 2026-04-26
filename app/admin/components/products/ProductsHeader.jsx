@@ -10,7 +10,7 @@ const ProductsHeader = () => {
                     <h1 className="text-3xl font-bold text-text-primary font-space tracking-tight">Products</h1>
                     <p className="text-text-secondary">Browse and manage your product catalog.</p>
                 </div>
-                <Link href={"/products/create"} className="bg-success cursor-pointer text-white px-6 py-3 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-success/90 transition-all shadow-lg shadow-success/20 active:scale-95">
+                <Link href={"/admin/products/create"} className="bg-success cursor-pointer text-white px-6 py-3 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-success/90 transition-all shadow-lg shadow-success/20 active:scale-95">
                     <FiPlus className="text-xl" />
                     Add Product
                 </Link>

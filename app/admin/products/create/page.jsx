@@ -1,6 +1,6 @@
 "use client"
 import { useState } from 'react';
-import { Upload, Plus, Trash2, Package, Cpu, Battery, Monitor, Camera, Tag as TagIcon, Image as ImageIcon, Smartphone, ShieldCheck, Layers, Network } from 'lucide-react';
+import { Upload, Plus, Trash2, Package, Cpu, Battery, Monitor, Camera, Tag as TagIcon, Image as ImageIcon, Smartphone, ShieldCheck, Layers, Network, Weight } from 'lucide-react';
 import CreateHeader from '../../components/createProduct/CreateHeader';
 import Inputs from '../../components/ui/Inputs';
 

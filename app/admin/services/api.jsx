@@ -6,23 +6,11 @@ export const adminApis = createApi({
         getCategory: build.query({
             query: () => "/category/all",
         }),
-        createCategory: build.mutation({
-            query: (data) => {
-                const formData = new FormData();
-                formData.append("name", data.name);
-                formData.append("slug", data.slug);
-                formData.append("description", data.description);
-                formData.append("thumbnail", data.thumbnail); // 👈 file
-                return {
-                    url: "/category/create",
-                    method: "POST",
-                    body: formData,
-                    credentials: "include",
-                };
-            },
+        getProducts: build.query({
+            query: () => "/product",
         }),
     }),
 })
 
 
-export const { useGetCategoryQuery, useCreateCategoryMutation } = adminApis
+export const { useGetCategoryQuery, useGetProductsQuery } = adminApis

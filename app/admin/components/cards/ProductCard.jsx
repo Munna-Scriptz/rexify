@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react'
 import { FiCalendar, FiTrash2, FiEye, FiEdit } from 'react-icons/fi';
@@ -61,38 +62,35 @@ const ProductCard = ({ view, filteredProducts, handleDelete }) => {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-border/40">
-                                {filteredProducts.map((product) => (
-                                    <tr key={product.id} className="hover:bg-surface/30 transition-colors group">
+                                {filteredProducts.map((product, i) => (
+                                    <tr key={i} className="hover:bg-surface/30 transition-colors group">
                                         <td className="p-6">
                                             <div className="w-6 h-6 border border-[#CFD3D4] rounded-md"></div>
                                         </td>
                                         <td className="py-4">
                                             <div className="flex items-center gap-4">
-                                                <div className="w-14 h-14 rounded-xl duration-300">
-                                                    <img src={`${product.image || "https://www.applegadgetsbd.com/_next/image?url=https%3A%2F%2Fadminapi.applegadgetsbd.com%2Fstorage%2Fmedia%2Flarge%2FiPhone-16-Pro-Maxaaaa-5516.png&w=1920&q=100"}`} alt="Product image" />
-                                                </div>
+                                                <Image width={200} height={200} className='h-14 w-14 rounded-sm' src={`${product.thumbnail || "https://www.applegadgetsbd.com/_next/image?url=https%3A%2F%2Fadminapi.applegadgetsbd.com%2Fstorage%2Fmedia%2Flarge%2FiPhone-16-Pro-Maxaaaa-5516.png&w=1920&q=100"}`} alt="Product image" />
                                                 <div className="space-y-1">
-                                                    <h3 className="text-coil font-semibold text-sm leading-tight group-hover:text-accent transition-colors">{product.name}</h3>
-                                                    <p className="text-text-secondary text-[11px] font-medium leading-relaxed max-w-70 line-clamp-1">{product.description}</p>
+                                                    <h3 className="text-coil font-semibold text-sm leading-tight group-hover:text-accent transition-colors line-clamp-1">{product.title}</h3>
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="py-4 px-4">
-                                            <span className="text-coil font-semibold text-xs bg-surface px-3 py-1.5 rounded-lg border border-border/40 inline-block">{product.category}</span>
+                                            <span className="text-coil font-semibold text-xs bg-surface px-3 py-1.5 rounded-lg border border-border/40 inline-block">{product.category.name}</span>
                                         </td>
                                         <td className="py-4 px-4">
-                                            <span className={`px-4 py-1.5 rounded-full text-[10px] font-black font-space tracking-tight uppercase border inline-block ${getStatusStyle(product.status)}`}>
-                                                {product.status}
+                                            <span className={`px-4 py-1.5 rounded-full text-[10px] font-black font-space tracking-tight uppercase border inline-block ${getStatusStyle(product.isActive || "active")}`}>
+                                                {product.isActive || "active"}
                                             </span>
                                         </td>
                                         <td className="py-4 px-4 text-center">
-                                            <span className="text-coil font-semibold text-sm font-space">{product.stock}</span>
+                                            <span className="text-coil font-semibold text-sm font-space">{product.variants.reduce((sum, v) => sum + v.stock, 0)}</span>
                                         </td>
                                         <td className="py-4 px-4 font-space font-semibold text-sm text-coil">
-                                            {product.price}
+                                            {product.variants[0].price}
                                         </td>
                                         <td className="py-4 px-4 text-text-secondary text-xs whitespace-nowrap">
-                                            {product.created}
+                                            {new Date(product.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}
                                         </td>
                                         <td className="py-4 pr-6">
                                             <div className='flex gap-2'>
@@ -115,13 +113,11 @@ const ProductCard = ({ view, filteredProducts, handleDelete }) => {
                 </div>
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-8">
-                    {filteredProducts.map((product) => (
-                        <div key={product.id} className="bg-white border border-border/60 rounded-[28px] p-6 hover:shadow-[0_20px_50px_rgba(0,0,0,0.06)] hover:border-accent/20 transition-all duration-500 group flex flex-col h-full">
+                    {filteredProducts.map((product, i) => (
+                        <div key={i} className="bg-white border border-border/60 rounded-[28px] p-6 hover:shadow-[0_20px_50px_rgba(0,0,0,0.06)] hover:border-accent/20 transition-all duration-500 group flex flex-col h-full">
                             {/* Card Header*/}
                             <div className="flex justify-between items-start mb-6 w-full">
-                                <div className="w-16 h-16 rounded-xl duration-300">
-                                    <img src={`${product.image || "https://www.applegadgetsbd.com/_next/image?url=https%3A%2F%2Fadminapi.applegadgetsbd.com%2Fstorage%2Fmedia%2Flarge%2FiPhone-16-Pro-Maxaaaa-5516.png&w=1920&q=100"}`} alt="Product image" />
-                                </div>
+                                <Image width={200} height={200} className='h-20 w-20 rounded-sm' src={`${product.thumbnail || "https://www.applegadgetsbd.com/_next/image?url=https%3A%2F%2Fadminapi.applegadgetsbd.com%2Fstorage%2Fmedia%2Flarge%2FiPhone-16-Pro-Maxaaaa-5516.png&w=1920&q=100"}`} alt="Product image" />
                                 <div className='flex gap-2'>
                                     <button className="rounded-xl bg-surface/50 border border-border/60 text-text-muted hover:bg-white hover:text-blue-500 hover:border-blue-400 transition-all active:scale-95 cursor-pointer p-2">
                                         <FiEye className="text-lg" />
@@ -139,13 +135,13 @@ const ProductCard = ({ view, filteredProducts, handleDelete }) => {
                             <div className="grow space-y-3 mb-8">
                                 <div className="space-y-1">
                                     <div className="flex items-center gap-3">
-                                        <span className={`px-3 py-1 rounded-full text-[9px] font-black font-space tracking-tight uppercase border ${getStatusStyle(product.status)}`}>
-                                            {product.status}
+                                        <span className={`px-3 py-1 rounded-full text-[9px] font-black font-space tracking-tight uppercase border ${getStatusStyle(product.isActive || "active")}`}>
+                                            {product.isActive || "active"}
                                         </span>
-                                        <span className="text-text-muted font-semibold text-[10px] bg-surface/50 px-2.5 py-1 rounded-lg uppercase tracking-widest">{product.category}</span>
+                                        <span className="text-text-muted font-semibold text-[10px] bg-surface/50 px-2.5 py-1 rounded-lg uppercase tracking-widest">{product.category.name}</span>
                                     </div>
                                     <h3 className="text-text-primary font-semibold text-lg leading-tight group-hover:text-accent transition-colors pt-1">
-                                        {product.name}
+                                        {product.title}
                                     </h3>
                                 </div>
                                 <p className="text-text-secondary text-xs leading-relaxed line-clamp-2 italic italic-secondary">
@@ -157,11 +153,11 @@ const ProductCard = ({ view, filteredProducts, handleDelete }) => {
                             <div className="grid grid-cols-2 gap-4 pt-6 border-t border-border/40">
                                 <div className="space-y-1.5">
                                     <span className="text-text-muted text-[10px] font-semibold uppercase tracking-widest block">Available Stock</span>
-                                    <span className="text-text-primary font-semibold text-base">{product.stock} units</span>
+                                    <span className="text-text-primary font-semibold text-base">{product.variants.reduce((sum, v) => sum + v.stock, 0)} units</span>
                                 </div>
                                 <div className="space-y-1.5 text-right">
                                     <span className="text-text-muted text-[10px] font-semibold uppercase tracking-widest block">Unit Price</span>
-                                    <span className="text-text-primary font-semibold text-xl font-space">{product.price}</span>
+                                    <span className="text-text-primary font-semibold text-xl font-space">{product.variants[0].price}</span>
                                 </div>
                             </div>
 
@@ -169,7 +165,7 @@ const ProductCard = ({ view, filteredProducts, handleDelete }) => {
                                 <FiCalendar className="text-text-muted" />
                                 <div className="space-y-0.5">
                                     <span className="text-text-muted text-[9px] font-black uppercase tracking-widest block leading-none">Registered Date</span>
-                                    <span className="text-text-primary font-bold text-xs">{product.created}</span>
+                                    <span className="text-text-primary font-bold text-xs">{new Date(product.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}</span>
                                 </div>
                             </div>
                         </div>

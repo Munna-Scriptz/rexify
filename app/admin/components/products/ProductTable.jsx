@@ -1,35 +1,33 @@
 import React, { useState } from 'react';
 import { FiSearch, FiGrid, FiLayout } from 'react-icons/fi';
-import { productData } from '../../DashboardData/DDData';
 import { MdFormatListBulleted } from 'react-icons/md';
 import EmptyProduct from '../emptyState/EmptyProduct';
 import ProductCard from '../cards/ProductCard';
 import Pagination from '../common/Pagination';
 import VerifyDelete from '../common/VerifyDelete';
 
-const ProductTable = () => {
+const ProductTable = ({ products }) => {
     const [view, setView] = useState('list');
     const [activeTab, setActiveTab] = useState('All');
     const [searchQuery, setSearchQuery] = useState('');
-    const [isDeleteOpen, SetisDeleteOpen] = useState(false)
-
+    const [isDeleteOpen, SetIsDeleteOpen] = useState(false)
 
     const tabs = ['All', 'Active', 'Inactive'];
-
-    const filteredProducts = productData.filter(product => {
-        const matchesSearch = product.name.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const filteredProducts = products?.filter(product => {
+        const matchesSearch = product?.title?.toLowerCase()?.includes(searchQuery?.toLowerCase());
         const matchesTab = activeTab === 'All' || product.status === activeTab;
         return matchesSearch && matchesTab;
     });
-
+    
     const resetFilters = () => {
         setSearchQuery('');
         setActiveTab('All');
     };
 
     // -------- Handle delete 
-    const handleDelete = ()=>{
-        SetisDeleteOpen(!isDeleteOpen)
+    const handleDelete = () => {
+        SetIsDeleteOpen(!isDeleteOpen)
     }
 
 
@@ -102,9 +100,9 @@ const ProductTable = () => {
                 </div>
 
                 {/* ------------------ List / Grid / Empty State ------------------ */}
-                {filteredProducts.length > 0 ?
+                {filteredProducts?.length > 0 ?
                     <>
-                        <ProductCard view={view} handleDelete={handleDelete}  filteredProducts={filteredProducts} />
+                        <ProductCard view={view} handleDelete={handleDelete} filteredProducts={filteredProducts} />
 
                         <Pagination />
                     </>
@@ -114,7 +112,7 @@ const ProductTable = () => {
             </section>
 
             {/* -------------- Confirm Delete --------------- */}
-            <VerifyDelete isOpen={isDeleteOpen} onClose={() => SetisDeleteOpen(false)} onConfirm={""} itemName="Spring Collection 2024" />
+            <VerifyDelete isOpen={isDeleteOpen} onClose={() => SetIsDeleteOpen(false)} onConfirm={""} itemName="Spring Collection 2024" />
 
         </>
     );

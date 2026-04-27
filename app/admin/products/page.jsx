@@ -4,8 +4,10 @@ import ProductTable from '../components/products/ProductTable'
 import ProductsHeader from '../components/products/ProductsHeader'
 import { Package, LayoutList, ShoppingBag } from 'lucide-react'
 import StatCard from '../components/common/StatCards'
+import { useGetProductsQuery } from '../services/api'
 
 const Products = () => {
+  const { data: products, error, isLoading } = useGetProductsQuery()
   return (
     <>
       <section className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-10'>
@@ -36,7 +38,7 @@ const Products = () => {
       <ProductsHeader />
 
       {/* ============== Product Table ================ */}
-      <ProductTable />
+      <ProductTable products={products?.data?.products} />
     </>
   )
 }

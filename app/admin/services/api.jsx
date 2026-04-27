@@ -1,7 +1,10 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const adminApis = createApi({
-    baseQuery: fetchBaseQuery({ baseUrl: process.env.NEXT_PUBLIC_SERVER_URL }),
+    baseQuery: fetchBaseQuery({
+        baseUrl: process.env.NEXT_PUBLIC_SERVER_URL,
+        credentials: "include"
+    }),
     endpoints: (build) => ({
         getCategory: build.query({
             query: () => "/category/all",
@@ -9,6 +12,14 @@ export const adminApis = createApi({
         getProducts: build.query({
             query: () => "/product",
         }),
+        createProduct: build.mutation({
+            query: (data) => ({
+                url: "/product/create",
+                method: "POST",
+                headers: { "Content-Type": "multipart/form-data" },
+                body: data
+            })
+        })
     }),
 })
 

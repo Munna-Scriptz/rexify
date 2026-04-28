@@ -216,10 +216,24 @@ const page = () => {
         formDataToSend.append('specifications', JSON.stringify(specs))
         formDataToSend.append('tags', JSON.stringify(tags))
 
-        const res = await createProduct(formDataToSend)
-        console.log(res);
-        if (!res?.error?.data?.status) toast.error(res?.error?.data?.message, { theme: "dark", });
-        if (res?.data?.status) toast.success(res?.data?.message, { theme: "dark", });
+
+        await toast.promise(
+            createProduct(formDataToSend).unwrap(),
+            {
+                pending: "Creating product...",
+                success: {
+                    render({ data }) {
+                        return data.message || "Product created successfully";
+                    }
+                },
+                error: {
+                    render({ data }) {
+                        return data?.data?.message || "Something went wrong";
+                    }
+                }
+            },
+            { theme: "dark" }
+        );
     };
 
     return (

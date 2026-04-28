@@ -21,8 +21,8 @@ const Inputs = ({
     const currentType = isPassword ? (showPassword ? 'text' : 'password') : type;
 
     // 1. Base styles
-    const baseStyles = "w-full transition-all duration-200 outline-none flex items-center";
-    const errorBase = `w-full border border-red-500 rounded-xl py-3.5 pl-12 pr-4 outline-none text-sm animate-shake`;
+    const baseStyles = "w-full transition-all outline-none flex items-center";
+    const errorBase = `w-full border border-red-500 outline-none flex items-center`;
 
 
     // 2. Variants (Synced with your Button colors!)
@@ -71,7 +71,7 @@ const Inputs = ({
                 <input
                     id={id}
                     type={currentType}
-                    className={`${baseStyles} ${error ? errorBase : `${variants[variant]} ${sizes[size]}`} ${leftIcon ? 'pl-11' : ''} ${isPassword ? 'pr-11' : ''} ${className}`}
+                    className={`${baseStyles} ${error ? errorBase : `${variants[variant]}`}  ${sizes[size]} ${leftIcon ? 'pl-11' : ''} ${isPassword ? 'pr-11' : ''} ${className}`}
                     defaultValue={defaultValue}
                     {...props}
                 />

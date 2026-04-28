@@ -28,20 +28,36 @@ const page = () => {
         os: ''
     });
 
-    const [variants, setVariants] = useState([
-        { id: Date.now(), sku: '', color: '', storage: '', ram: '', price: '', stock: '' }
-    ]);
+    const [variants, setVariants] = useState([{
+        id: Date.now(),
+        sku: '',
+        color: '',
+        storage: '',
+        ram: '',
+        price: '',
+        stock: ''
+    }]);
+
     const [tags, setTags] = useState([]);
     const [tagInput, setTagInput] = useState('');
 
-    const [thumbnail, setThumbnail] = useState(null); // { file, preview }
-    const [galleryImages, setGalleryImages] = useState([]); // Array of { id, file, preview }
+    const [thumbnail, setThumbnail] = useState(null);
+    const [Images, setImages] = useState([]);
+    const [errors, setErrors] = useState({});
 
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
         const val = type === 'checkbox' ? checked : (type === 'number' ? Number(value) : value);
 
         setFormData(prev => ({ ...prev, [name]: val }));
+        
+        if (errors[name]) {
+            setErrors(prev => {
+                const next = { ...prev };
+                delete next[name];
+                return next;
+            });
+        }
 
         if (name === 'title') {
             const slug = value.toLowerCase().trim().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-').replace(/^-+|-+$/g, '');
@@ -50,6 +66,15 @@ const page = () => {
     };
 
     const handleSpecChange = (section, field, value) => {
+        const key = field ? `spec_${section}_${field}` : `spec_${section}`;
+        if (errors[key]) {
+            setErrors(prev => {
+                const next = { ...prev };
+                delete next[key];
+                return next;
+            });
+        }
+
         if (field) {
             setSpecs(prev => ({
                 ...prev,
@@ -61,6 +86,16 @@ const page = () => {
     };
 
     const handleVariantChange = (id, field, value, type) => {
+        const index = variants.findIndex(v => v.id === id);
+        const errKey = `variant_${index}_${field}`;
+        if (errors[errKey]) {
+            setErrors(prev => {
+                const next = { ...prev };
+                delete next[errKey];
+                return next;
+            });
+        }
+
         const val = type === 'number' ? Number(value) : value;
         setVariants(variants.map(v => v.id === id ? { ...v, [field]: val } : v));
     };
@@ -92,11 +127,11 @@ const page = () => {
             file,
             preview: URL.createObjectURL(file)
         }));
-        setGalleryImages(prev => [...prev, ...newImages].slice(0, 5)); // Limit to say 5 images
+        setImages(prev => [...prev, ...newImages].slice(0, 4));
     };
 
     const removeGalleryImage = (id) => {
-        setGalleryImages(galleryImages.filter(img => img.id !== id));
+        setImages(Images.filter(img => img.id !== id));
     };
 
     const addTag = (e) => {
@@ -114,39 +149,47 @@ const page = () => {
     };
 
     const validateForm = () => {
-        const required = ['title', 'slug', 'description', 'category', 'brand'];
-        for (let field of required) {
-            if (!formData[field]) {
-                alert(`${field.charAt(0).toUpperCase() + field.slice(1)} is required`);
-                return false;
-            }
-        }
+        const newErrors = {};
 
-        for (let v of variants) {
-            if (!v.sku || !v.color || !v.price || !v.stock) {
-                alert("All variants must have SKU, Color, Price, and Stock");
-                return false;
-            }
-        }
+        // General Info
+        if (!formData.title) newErrors.title = "Title is required";
+        if (!formData.brand) newErrors.brand = "Brand is required";
+        if (!formData.category) newErrors.category = "Category is required";
+        if (!formData.description) newErrors.description = "Description is required";
 
+        // Media
+        if (!thumbnail) newErrors.thumbnail = "Main thumbnail is required";
+        if (Images.length === 0) newErrors.gallery = "Add at least one image";
+
+        // Specifications
         const requiredSpecs = [
             { s: 'display', f: 'size' }, { s: 'display', f: 'type' }, { s: 'display', f: 'resolution' }, { s: 'display', f: 'refreshRate' },
             { s: 'camera', f: 'rear' }, { s: 'camera', f: 'front' },
             { s: 'battery' }, { s: 'processor' }, { s: 'network' }, { s: 'weight' }, { s: 'os' }
         ];
 
-        for (let spec of requiredSpecs) {
-            if (spec.f) {
-                if (!specs[spec.s][spec.f]) {
-                    alert(`Specification ${spec.s} ${spec.f} is required`);
-                    return false;
-                }
-            } else {
-                if (!specs[spec.s]) {
-                    alert(`Specification ${spec.s} is required`);
-                    return false;
-                }
-            }
+        requiredSpecs.forEach(spec => {
+            const val = spec.f ? specs[spec.s][spec.f] : specs[spec.s];
+            const key = spec.f ? `spec_${spec.s}_${spec.f}` : `spec_${spec.s}`;
+            if (!val) newErrors[key] = "Required";
+        });
+
+        // Variants
+        variants.forEach((v, index) => {
+            if (!v.sku) newErrors[`variant_${index}_sku`] = "SKU required";
+            if (!v.color) newErrors[`variant_${index}_color`] = "Color required";
+            if (!v.storage) newErrors[`variant_${index}_storage`] = "Storage";
+            if (!v.ram) newErrors[`variant_${index}_ram`] = "Ram required";
+            if (!v.price || v.price < 1) newErrors[`variant_${index}_price`] = "Min price 1";
+            if (v.stock === '' || v.stock < 0) newErrors[`variant_${index}_stock`] = "Min stock 0";
+        });
+
+        setErrors(newErrors);
+        
+        if (Object.keys(newErrors).length > 0) {
+            const firstErrorField = Object.keys(newErrors)[0];
+            console.log("Validation failed:", firstErrorField);
+            return false;
         }
 
         return true;
@@ -155,7 +198,7 @@ const page = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validateForm()) {
-            console.log("Submitting data:", { ...formData, specifications: specs, variants, tags, thumbnail, galleryImages });
+            console.log("Submitting data:", { ...formData, specifications: specs, variants, tags, thumbnail, Images });
             // Add your submit logic here (e.g., API call)
         }
     };
@@ -171,19 +214,24 @@ const page = () => {
 
                     {/* ----------- Media & Gallery ------------*/}
                     <section className="p-6 bg-white rounded-3xl border border-border shadow-sm">
-                        <h2 className="text-xl font-bold font-space text-brand mb-6 flex items-center gap-3">
-                            <ImageIcon size={22} className="text-accent" /> Media Gallery
-                        </h2>
+                        <div className="flex items-center justify-between mb-6">
+                            <h2 className="text-xl font-bold font-space text-brand flex items-center gap-3">
+                                <ImageIcon size={22} className="text-accent" /> Media Gallery
+                            </h2>
+                            {errors.gallery && <span className="text-xs font-bold text-error animate-pulse">{errors.gallery}</span>}
+                        </div>
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                            <div className="md:col-span-2 md:row-span-2 relative h-95 rounded-2xl border-2 border-dashed border-border bg-surface/50 group hover:border-accent/40 transition-all cursor-pointer flex flex-col items-center justify-center gap-3 overflow-hidden">
+                            <div className={`md:col-span-2 md:row-span-2 relative h-95 rounded-2xl border-2 border-dashed ${errors.thumbnail ? 'border-error bg-error/5' : 'border-border bg-surface/50'} group hover:border-accent/40 transition-all cursor-pointer flex flex-col items-center justify-center gap-3 overflow-hidden`}>
                                 {thumbnail ? (
                                     <img src={thumbnail.preview} alt="Thumbnail" className="w-full h-full object-cover" />
                                 ) : (
                                     <>
-                                        <div className="w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center text-accent group-hover:scale-110 transition-transform z-10">
+                                        <div className={`w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center ${errors.thumbnail ? 'text-error' : 'text-accent'} group-hover:scale-110 transition-transform z-10`}>
                                             <Upload size={20} />
                                         </div>
-                                        <p className="text-[12px] font-semibold font-space text-text-muted uppercase tracking-widest z-10">Main Thumbnail</p>
+                                        <p className={`text-[12px] font-semibold font-space ${errors.thumbnail ? 'text-error/70' : 'text-text-muted'} uppercase tracking-widest z-10`}>
+                                            {errors.thumbnail || "Main Thumbnail"}
+                                        </p>
                                     </>
                                 )}
                                 <input type="file" className="absolute inset-0 opacity-0 cursor-pointer" onChange={handleThumbnailUpload} accept="image/*" />
@@ -192,12 +240,12 @@ const page = () => {
 
                             {/* Gallery Images */}
                             {[0, 1, 2, 3].map((i) => (
-                                <div key={i} className="relative h-45.5 rounded-2xl border-2 border-dashed border-border bg-surface/30 group hover:border-accent/40 transition-all cursor-pointer flex flex-col items-center justify-center gap-2 overflow-hidden text-text-muted">
-                                    {galleryImages[i] ?
+                                <div key={i} className={`relative h-45.5 rounded-2xl border-2 border-dashed ${errors.gallery && Images.length === 0 ? 'border-error/30' : 'border-border'} bg-surface/30 group hover:border-accent/40 transition-all cursor-pointer flex flex-col items-center justify-center gap-2 overflow-hidden text-text-muted`}>
+                                    {Images[i] ?
                                         <>
-                                            <img src={galleryImages[i].preview} alt={`Gallery ${i}`} className="w-full h-full object-cover" />
+                                            <img src={Images[i].preview} alt={`Gallery ${i}`} className="w-full h-full object-cover" />
                                             <button
-                                                onClick={(e) => { e.stopPropagation(); removeGalleryImage(galleryImages[i].id); }}
+                                                onClick={(e) => { e.stopPropagation(); removeGalleryImage(Images[i].id); }}
                                                 className="absolute top-2 right-2 p-1 bg-error text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                                             >
                                                 <Trash2 size={12} />
@@ -205,8 +253,8 @@ const page = () => {
                                         </>
                                         :
                                         <>
-                                            <Upload size={18} />
-                                            <p className="text-[9px] font-semibold font-space uppercase">Img {i + 1}</p>
+                                            <Upload size={18} className={errors.gallery && Images.length === 0 ? 'text-error/50' : ''} />
+                                            <p className={`text-[9px] font-semibold font-space uppercase ${errors.gallery && Images.length === 0 ? 'text-error/50' : ''}`}>Img {i + 1}</p>
                                             <input type="file" className="absolute inset-0 opacity-0 cursor-pointer" onChange={handleGalleryUpload} accept="image/*" />
                                         </>
                                     }
@@ -222,26 +270,31 @@ const page = () => {
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className='md:col-span-2'>
-                                <Inputs variant='adminPrimary' label={"Product Title"} name="title" value={formData.title} onChange={handleInputChange} placeholder={"iPhone 15 Pro Max"} />
+                                <Inputs variant='adminPrimary' label={"Product Title"} name="title" value={formData.title} onChange={handleInputChange} error={errors.title} placeholder={"iPhone 15 Pro Max"} />
+                            </div>
+                            <div className='md:col-span-2'>
+                                <Inputs variant='adminPrimary' label={"Slug"} name="slug" value={formData.slug} onChange={handleInputChange} error={errors.slug} placeholder={"Automatic slug"} />
                             </div>
 
-                            <Inputs variant='adminPrimary' label={"Brand"} name="brand" value={formData.brand} onChange={handleInputChange} placeholder={"Apple"} />
+                            <Inputs variant='adminPrimary' label={"Brand"} name="brand" value={formData.brand} onChange={handleInputChange} error={errors.brand} placeholder={"Apple"} />
 
                             <div className="flex flex-col gap-2">
-                                <label className="text-xs font-bold uppercase tracking-widest text-slate-500">Category</label>
+                                <label className={`text-xs font-bold uppercase tracking-widest duration-300 ${errors.category ? 'text-error animate-pulse' : 'text-slate-500'}`}>
+                                    {errors.category ? <span className="flex items-center gap-1.5"><span className="h-1 w-1 bg-red-500 rounded-full"></span>{errors.category}</span> : "Category"}
+                                </label>
                                 <div className="relative">
                                     <select
                                         name="category"
                                         value={formData.category}
                                         onChange={handleInputChange}
-                                        className="w-full appearance-none text-sm px-5 py-3.5 text-coil bg-surface border border-border rounded-xl font-medium focus:border-accent outline-none cursor-pointer"
+                                        className={`w-full appearance-none text-sm px-5 py-3.5 text-coil bg-surface border ${errors.category ? 'border-error' : 'border-border'} rounded-xl font-medium focus:border-accent outline-none cursor-pointer`}
                                     >
                                         <option value="">Select Category</option>
                                         <option value="65f4d1e2e4b0a1a2b3c4d5e6">Smartphones</option>
                                         <option value="65f4d1e2e4b0a1a2b3c4d5e7">Laptops</option>
                                         <option value="65f4d1e2e4b0a1a2b3c4d5e8">Accessories</option>
                                     </select>
-                                    <Layers className="absolute right-5 top-1/2 -translate-y-1/2 text-text-muted" size={14} />
+                                    <Layers className={`absolute right-5 top-1/2 -translate-y-1/2 ${errors.category ? 'text-error' : 'text-text-muted'}`} size={14} />
                                 </div>
                             </div>
 
@@ -249,14 +302,16 @@ const page = () => {
                             <Inputs variant='adminPrimary' label={"Badge"} name="badge" value={formData.badge} onChange={handleInputChange} placeholder={"New, Sale, Top"} />
 
                             <div className="md:col-span-2 flex flex-col gap-2">
-                                <label className="text-xs font-bold uppercase tracking-widest duration-300 text-slate-500">Full Description</label>
+                                <label className={`text-xs font-bold uppercase tracking-widest duration-300 ${errors.description ? 'text-error animate-pulse' : 'text-slate-500'}`}>
+                                    {errors.description ? <span className="flex items-center gap-1.5"><span className="h-1 w-1 bg-red-500 rounded-full"></span>{errors.description}</span> : "Full Description"}
+                                </label>
                                 <textarea
                                     name="description"
                                     value={formData.description}
                                     onChange={handleInputChange}
                                     rows="5"
                                     placeholder="Highlight technical features..."
-                                    className="w-full px-6 py-4 bg-surface border border-border rounded-2xl font-medium text-brand focus:border-accent outline-none resize-none"
+                                    className={`w-full px-6 py-4 bg-surface border ${errors.description ? 'border-error' : 'border-border'} rounded-2xl font-medium text-brand focus:border-accent outline-none resize-none`}
                                 />
                             </div>
                         </div>
@@ -272,24 +327,24 @@ const page = () => {
                             <div className="flex flex-col gap-4">
                                 <span className="text-xs font-bold uppercase tracking-widest duration-300 text-slate-500 bg-accent/10 px-3 py-1.5 rounded-full w-fit">1. Screen Configuration</span>
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                    <Inputs variant='adminPrimary' size='sm' placeholder={`Size (6.7)`} value={specs.display.size} onChange={(e) => handleSpecChange('display', 'size', e.target.value)} />
-                                    <Inputs variant='adminPrimary' size='sm' placeholder={`OLED, LCD`} value={specs.display.type} onChange={(e) => handleSpecChange('display', 'type', e.target.value)} />
-                                    <Inputs variant='adminPrimary' size='sm' placeholder={`Resolution`} value={specs.display.resolution} onChange={(e) => handleSpecChange('display', 'resolution', e.target.value)} />
-                                    <Inputs variant='adminPrimary' size='sm' placeholder={`Rate (Hz)`} value={specs.display.refreshRate} onChange={(e) => handleSpecChange('display', 'refreshRate', e.target.value)} />
+                                    <Inputs variant='adminPrimary' size='sm' placeholder={`Size (6.7)`} value={specs.display.size} onChange={(e) => handleSpecChange('display', 'size', e.target.value)} error={errors.spec_display_size} />
+                                    <Inputs variant='adminPrimary' size='sm' placeholder={`OLED, LCD`} value={specs.display.type} onChange={(e) => handleSpecChange('display', 'type', e.target.value)} error={errors.spec_display_type} />
+                                    <Inputs variant='adminPrimary' size='sm' placeholder={`Resolution`} value={specs.display.resolution} onChange={(e) => handleSpecChange('display', 'resolution', e.target.value)} error={errors.spec_display_resolution} />
+                                    <Inputs variant='adminPrimary' size='sm' placeholder={`Rate (Hz)`} value={specs.display.refreshRate} onChange={(e) => handleSpecChange('display', 'refreshRate', e.target.value)} error={errors.spec_display_refreshRate} />
                                 </div>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <Inputs variant='adminPrimary' className='py-3' size='sm' labelIcon={<Camera size={16} />} label={"Rear Camera"} placeholder={`48MP + 12MP + 12MP`} value={specs.camera.rear} onChange={(e) => handleSpecChange('camera', 'rear', e.target.value)} />
-                                <Inputs variant='adminPrimary' className='py-3' size='sm' labelIcon={<Camera size={16} />} label={"Front Lens"} placeholder={`12MP True Depth`} value={specs.camera.front} onChange={(e) => handleSpecChange('camera', 'front', e.target.value)} />
+                                <Inputs variant='adminPrimary' className='py-3' size='sm' labelIcon={<Camera size={16} />} label={"Rear Camera"} placeholder={`48MP + 12MP + 12MP`} value={specs.camera.rear} onChange={(e) => handleSpecChange('camera', 'rear', e.target.value)} error={errors.spec_camera_rear} />
+                                <Inputs variant='adminPrimary' className='py-3' size='sm' labelIcon={<Camera size={16} />} label={"Front Lens"} placeholder={`12MP True Depth`} value={specs.camera.front} onChange={(e) => handleSpecChange('camera', 'front', e.target.value)} error={errors.spec_camera_front} />
                             </div>
 
                             <div className="grid grid-cols-2 lg:grid-cols-3 gap-5">
-                                <Inputs variant='adminPrimary' className='py-2.5' size='sm' labelIcon={<Battery size={16} />} label={"Battery"} placeholder={`5000 mAh`} value={specs.battery} onChange={(e) => handleSpecChange('battery', null, e.target.value)} />
-                                <Inputs variant='adminPrimary' className='py-2.5' size='sm' labelIcon={<Cpu size={16} />} label={"Processor"} placeholder={`elite gen 5`} value={specs.processor} onChange={(e) => handleSpecChange('processor', null, e.target.value)} />
-                                <Inputs variant='adminPrimary' className='py-2.5' size='sm' labelIcon={<Monitor size={16} />} label={"OS"} placeholder={`iOS 17`} value={specs.os} onChange={(e) => handleSpecChange('os', null, e.target.value)} />
-                                <Inputs variant='adminPrimary' className='py-2.5' size='sm' labelIcon={<Network size={16} />} label={"Network"} placeholder={`5G`} value={specs.network} onChange={(e) => handleSpecChange('network', null, e.target.value)} />
-                                <Inputs variant='adminPrimary' className='py-2.5' size='sm' labelIcon={<Weight size={16} />} label={"Weight"} placeholder={`221g`} value={specs.weight} onChange={(e) => handleSpecChange('weight', null, e.target.value)} />
+                                <Inputs variant='adminPrimary' className='py-2.5' size='sm' labelIcon={<Battery size={16} />} label={"Battery"} placeholder={`5000 mAh`} value={specs.battery} onChange={(e) => handleSpecChange('battery', null, e.target.value)} error={errors.spec_battery} />
+                                <Inputs variant='adminPrimary' className='py-2.5' size='sm' labelIcon={<Cpu size={16} />} label={"Processor"} placeholder={`elite gen 5`} value={specs.processor} onChange={(e) => handleSpecChange('processor', null, e.target.value)} error={errors.spec_processor} />
+                                <Inputs variant='adminPrimary' className='py-2.5' size='sm' labelIcon={<Monitor size={16} />} label={"OS"} placeholder={`iOS 17`} value={specs.os} onChange={(e) => handleSpecChange('os', null, e.target.value)} error={errors.spec_os} />
+                                <Inputs variant='adminPrimary' className='py-2.5' size='sm' labelIcon={<Network size={16} />} label={"Network"} placeholder={`5G`} value={specs.network} onChange={(e) => handleSpecChange('network', null, e.target.value)} error={errors.spec_network} />
+                                <Inputs variant='adminPrimary' className='py-2.5' size='sm' labelIcon={<Weight size={16} />} label={"Weight"} placeholder={`221g`} value={specs.weight} onChange={(e) => handleSpecChange('weight', null, e.target.value)} error={errors.spec_weight} />
                             </div>
                         </div>
                     </section>
@@ -372,16 +427,16 @@ const page = () => {
                                     </div>
 
                                     <div className="grid grid-cols-2 gap-x-6 gap-y-4">
-                                        <Inputs variant='adminPrimary' size='medium' className='border-white/10 text-white bg-white/5' labelClassName={"text-slate-300 text-xs"} label={"SKU"} placeholder={"IPH-15-256"} value={variant.sku} onChange={(e) => handleVariantChange(variant.id, 'sku', e.target.value)} />
-                                        <Inputs variant='adminPrimary' size='medium' className='border-white/10 text-white bg-white/5' labelClassName={"text-slate-300 text-xs"} label={"COLOR"} placeholder={"Space Gray"} value={variant.color} onChange={(e) => handleVariantChange(variant.id, 'color', e.target.value)} />
-                                        <Inputs variant='adminPrimary' size='medium' className='border-white/10 text-white bg-white/5' labelClassName={"text-slate-300 text-xs"} type='number' label={"RAM (GB)"} placeholder={"8"} value={variant.ram} onChange={(e) => handleVariantChange(variant.id, 'ram', e.target.value, 'number')} />
-                                        <Inputs variant='adminPrimary' size='medium' className='border-white/10 text-white bg-white/5' labelClassName={"text-slate-300 text-xs"} type='number' label={"Storage (GB)"} placeholder={"256"} value={variant.storage} onChange={(e) => handleVariantChange(variant.id, 'storage', e.target.value, 'number')} />
+                                        <Inputs variant='adminPrimary' size='medium' className='border-white/10 text-white bg-white/5' labelClassName={"text-slate-300 text-xs"} label={"SKU"} placeholder={"IPH-15-256"} value={variant.sku} onChange={(e) => handleVariantChange(variant.id, 'sku', e.target.value)} error={errors[`variant_${index}_sku`]} />
+                                        <Inputs variant='adminPrimary' size='medium' className='border-white/10 text-white bg-white/5' labelClassName={"text-slate-300 text-xs"} label={"COLOR"} placeholder={"Space Gray"} value={variant.color} onChange={(e) => handleVariantChange(variant.id, 'color', e.target.value)} error={errors[`variant_${index}_color`]} />
+                                        <Inputs variant='adminPrimary' size='medium' className='border-white/10 text-white bg-white/5' labelClassName={"text-slate-300 text-xs"} type='number' label={"RAM (GB)"} placeholder={"8"} value={variant.ram} onChange={(e) => handleVariantChange(variant.id, 'ram', e.target.value, 'number')} error={errors[`variant_${index}_ram`]} />
+                                        <Inputs variant='adminPrimary' size='medium' className='border-white/10 text-white bg-white/5' labelClassName={"text-slate-300 text-xs"} type='number' label={"Storage (GB)"} placeholder={"256"} value={variant.storage} onChange={(e) => handleVariantChange(variant.id, 'storage', e.target.value, 'number')} error={errors[`variant_${index}_storage`]} />
 
                                         <div className='border-t border-white/5 pt-3'>
-                                            <Inputs variant='adminPrimary' size='medium' className='border-white/10 text-white bg-accent/20' labelClassName={"text-accent/80 text-xs"} type='number' label={"Price"} placeholder={"99.00"} value={variant.price} onChange={(e) => handleVariantChange(variant.id, 'price', e.target.value, 'number')} />
+                                            <Inputs variant='adminPrimary' size='medium' className='border-white/10 text-white bg-accent/20' labelClassName={"text-accent/80 text-xs"} type='number' label={"Price"} placeholder={"99.00"} value={variant.price} onChange={(e) => handleVariantChange(variant.id, 'price', e.target.value, 'number')} error={errors[`variant_${index}_price`]} />
                                         </div>
                                         <div className='border-t border-white/5 pt-3'>
-                                            <Inputs variant='adminPrimary' size='medium' className='border border-success/30 text-white bg-success/10' labelClassName={"text-success/80 text-xs"} type='number' label={"Stock"} placeholder={"50"} value={variant.stock} onChange={(e) => handleVariantChange(variant.id, 'stock', e.target.value, 'number')} />
+                                            <Inputs variant='adminPrimary' size='medium' className='border border-success/30 text-white bg-success/10' labelClassName={"text-success/80 text-xs"} type='number' label={"Stock"} placeholder={"50"} value={variant.stock} onChange={(e) => handleVariantChange(variant.id, 'stock', e.target.value, 'number')} error={errors[`variant_${index}_stock`]} />
                                         </div>
                                     </div>
                                 </div>

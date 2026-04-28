@@ -9,7 +9,9 @@ import { toast, ToastContainer } from 'react-toastify';
 const page = () => {
     // ------------ Get categories from server -------------
     const { data: categories, error, isLoading } = useGetCategoryQuery()
-
+    
+    const [thumbnail, setThumbnail] = useState(null);
+    const [images, setImages] = useState([]);
     const [formData, setFormData] = useState({
         title: '',
         slug: '',
@@ -46,8 +48,7 @@ const page = () => {
 
     const [tags, setTags] = useState([]);
     const [tagInput, setTagInput] = useState('');
-    const [thumbnail, setThumbnail] = useState(null);
-    const [Images, setImages] = useState([]);
+
     const [errors, setErrors] = useState({});
 
     // ----------- handle all input chances 
@@ -120,31 +121,16 @@ const page = () => {
         }
     };
 
-    // ----------- handle thumbnail upload 
-    const handleThumbnailUpload = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setThumbnail({
-                file,
-                preview: URL.createObjectURL(file)
-            });
-        }
-    };
-
     // ----------- handle images upload 
-    const handleGalleryUpload = (e) => {
-        const files = Array.from(e.target.files);
-        const newImages = files.map(file => ({
-            id: Math.random().toString(36).substr(2, 9),
-            file,
-            preview: URL.createObjectURL(file)
-        }));
-        setImages(prev => [...prev, ...newImages].slice(0, 4));
+    const handleImages = (e) => {
+        let imgs = [...images]
+        imgs.push(e.target.files[0])
+        setImages(imgs)
     };
 
     // ----------- handle remove images 
-    const removeGalleryImage = (id) => {
-        setImages(Images.filter(img => img.id !== id));
+    const removeImages = (i) => {
+        setImages(images.filter((img, idx) => idx !== i));
     };
 
     // ----------- handle add tags 
@@ -264,7 +250,7 @@ const page = () => {
                             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                                 <div className={`md:col-span-2 md:row-span-2 relative h-95 rounded-2xl border-2 border-dashed ${errors.thumbnail ? 'border-error bg-error/5' : 'border-border bg-surface/50'} group hover:border-accent/40 transition-all cursor-pointer flex flex-col items-center justify-center gap-3 overflow-hidden`}>
                                     {thumbnail ? (
-                                        <img src={thumbnail.preview} alt="Thumbnail" className="w-full h-full object-cover" />
+                                        <img src={URL.createObjectURL(thumbnail)} alt="Thumbnail" className="w-full h-full object-cover" />
                                     ) : (
                                         <>
                                             <div className={`w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center ${errors.thumbnail ? 'text-error' : 'text-accent'} group-hover:scale-110 transition-transform z-10`}>
@@ -275,18 +261,18 @@ const page = () => {
                                             </p>
                                         </>
                                     )}
-                                    <input type="file" className="absolute inset-0 opacity-0 cursor-pointer" onChange={handleThumbnailUpload} accept="image/*" />
+                                    <input type="file" className="absolute inset-0 opacity-0 cursor-pointer" onChange={(e) => setThumbnail(e.target.files[0])} accept="image/*" />
                                     <span className="absolute top-4 left-4 px-3 py-1 bg-brand text-white text-[9px] font-semibold rounded-full uppercase z-10 tracking-tighter">Cover</span>
                                 </div>
 
                                 {/* Gallery Images */}
                                 {[0, 1, 2, 3].map((i) => (
-                                    <div key={i} className={`relative h-45.5 rounded-2xl border-2 border-dashed ${errors.gallery && Images.length === 0 ? 'border-error/30' : 'border-border'} bg-surface/30 group hover:border-accent/40 transition-all cursor-pointer flex flex-col items-center justify-center gap-2 overflow-hidden text-text-muted`}>
-                                        {Images[i] ?
+                                    <div key={i} className={`relative h-45.5 rounded-2xl border-2 border-dashed ${errors.gallery && images.length === 0 ? 'border-error/30' : 'border-border'} bg-surface/30 group hover:border-accent/40 transition-all cursor-pointer flex flex-col items-center justify-center gap-2 overflow-hidden text-text-muted`}>
+                                        {images[i] ?
                                             <>
-                                                <img src={Images[i].preview} alt={`Gallery ${i}`} className="w-full h-full object-cover" />
+                                                <img src={URL.createObjectURL(images[i])} alt={`Gallery ${i}`} className="w-full h-full object-cover" />
                                                 <button
-                                                    onClick={(e) => { e.stopPropagation(); removeGalleryImage(Images[i].id); }}
+                                                    onClick={() => removeImages(i)}
                                                     className="absolute top-2 right-2 p-1 bg-error text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                                                 >
                                                     <Trash2 size={12} />
@@ -294,9 +280,9 @@ const page = () => {
                                             </>
                                             :
                                             <>
-                                                <Upload size={18} className={errors.gallery && Images.length === 0 ? 'text-error/50' : ''} />
-                                                <p className={`text-[9px] font-semibold font-space uppercase ${errors.gallery && Images.length === 0 ? 'text-error/50' : ''}`}>Img {i + 1}</p>
-                                                <input type="file" className="absolute inset-0 opacity-0 cursor-pointer" onChange={handleGalleryUpload} accept="image/*" />
+                                                <Upload size={18} className={errors.gallery && images.length === 0 ? 'text-error/50' : ''} />
+                                                <p className={`text-[9px] font-semibold font-space uppercase ${errors.gallery && images.length === 0 ? 'text-error/50' : ''}`}>Img {i + 1}</p>
+                                                <input type="file" className="absolute inset-0 opacity-0 cursor-pointer" onChange={handleImages} accept="image/*" />
                                             </>
                                         }
                                     </div>

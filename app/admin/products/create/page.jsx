@@ -9,7 +9,7 @@ import { toast, ToastContainer } from 'react-toastify';
 const page = () => {
     // ------------ Get categories from server -------------
     const { data: categories, error, isLoading } = useGetCategoryQuery()
-    
+
     const [thumbnail, setThumbnail] = useState(null);
     const [images, setImages] = useState([]);
     const [formData, setFormData] = useState({
@@ -162,7 +162,7 @@ const page = () => {
 
         // Media
         if (!thumbnail) newErrors.thumbnail = "Main thumbnail is required";
-        if (Images.length === 0) newErrors.gallery = "Add at least one image";
+        if (images.length === 0) newErrors.gallery = "Add at least one image";
 
         // Specifications
         const requiredSpecs = [
@@ -203,29 +203,23 @@ const page = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (validateForm()) {
-            const res = await createProduct({
-                thumbnail: thumbnail.file,
 
-                title: formData.title,
-                slug: formData.slug,
-                description: formData.description,
-                category: formData.category,
-                price: formData.price,
-                variants: variants,
-                specifications: specs,
-                brand: formData.brand,
-                badge: formData.badge,
-                shipping: formData.shipping,
-                warranty: formData.warranty,
-                tags,
-                isActive: formData.isActive,
-            })
-
-            console.log(res)
-            if (!res.error.data.success) return toast.error(res.error.data.message, { theme: "dark" });
-            if (res.error.data.success) return toast.error(res.error.data.message, { theme: "dark" });
+        if (!validateForm()) return;
+        const formDataToSend = new FormData()
+        formDataToSend.append('thumbnail', thumbnail)
+        images.forEach((item) => formDataToSend.append('images', item))
+        for (let key in formData) {
+            formDataToSend.append(key, formData[key]);
         }
+
+        formDataToSend.append('variants', JSON.stringify(variants))
+        formDataToSend.append('specifications', JSON.stringify(specs))
+        formDataToSend.append('tags', JSON.stringify(tags))
+
+        const res = await createProduct(formDataToSend)
+        console.log(res);
+        if (!res?.error?.data?.status) toast.error(res?.error?.data?.message, { theme: "dark", });
+        if (res?.data?.status) toast.success(res?.data?.message, { theme: "dark", });
     };
 
     return (

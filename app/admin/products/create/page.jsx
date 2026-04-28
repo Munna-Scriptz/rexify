@@ -5,11 +5,65 @@ import CreateHeader from '../../components/createProduct/CreateHeader';
 import Inputs from '../../components/ui/Inputs';
 
 const page = () => {
+    const [formData, setFormData] = useState({
+        title: '',
+        slug: '',
+        description: '',
+        category: '',
+        discountPercentage: 0,
+        brand: '',
+        badge: '',
+        warranty: 'No warranty',
+        shipping: 'Ships in 3-5 business days',
+        isActive: true
+    });
+
+    const [specs, setSpecs] = useState({
+        display: { size: '', type: '', resolution: '', refreshRate: '' },
+        camera: { rear: '', front: '' },
+        battery: '',
+        processor: '',
+        network: '',
+        weight: '',
+        os: ''
+    });
+
     const [variants, setVariants] = useState([
         { id: Date.now(), sku: '', color: '', storage: '', ram: '', price: '', stock: '' }
     ]);
     const [tags, setTags] = useState([]);
     const [tagInput, setTagInput] = useState('');
+
+    const [thumbnail, setThumbnail] = useState(null); // { file, preview }
+    const [galleryImages, setGalleryImages] = useState([]); // Array of { id, file, preview }
+
+    const handleInputChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        const val = type === 'checkbox' ? checked : (type === 'number' ? Number(value) : value);
+
+        setFormData(prev => ({ ...prev, [name]: val }));
+
+        if (name === 'title') {
+            const slug = value.toLowerCase().trim().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-').replace(/^-+|-+$/g, '');
+            setFormData(prev => ({ ...prev, title: value, slug }));
+        }
+    };
+
+    const handleSpecChange = (section, field, value) => {
+        if (field) {
+            setSpecs(prev => ({
+                ...prev,
+                [section]: { ...prev[section], [field]: value }
+            }));
+        } else {
+            setSpecs(prev => ({ ...prev, [section]: value }));
+        }
+    };
+
+    const handleVariantChange = (id, field, value, type) => {
+        const val = type === 'number' ? Number(value) : value;
+        setVariants(variants.map(v => v.id === id ? { ...v, [field]: val } : v));
+    };
 
     const addVariant = () => {
         setVariants([...variants, { id: Date.now(), sku: '', color: '', storage: '', ram: '', price: '', stock: '' }]);
@@ -21,9 +75,35 @@ const page = () => {
         }
     };
 
+    const handleThumbnailUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setThumbnail({
+                file,
+                preview: URL.createObjectURL(file)
+            });
+        }
+    };
+
+    const handleGalleryUpload = (e) => {
+        const files = Array.from(e.target.files);
+        const newImages = files.map(file => ({
+            id: Math.random().toString(36).substr(2, 9),
+            file,
+            preview: URL.createObjectURL(file)
+        }));
+        setGalleryImages(prev => [...prev, ...newImages].slice(0, 5)); // Limit to say 5 images
+    };
+
+    const removeGalleryImage = (id) => {
+        setGalleryImages(galleryImages.filter(img => img.id !== id));
+    };
+
     const addTag = (e) => {
         if (e.key === 'Enter' && tagInput.trim()) {
-            setTags([...tags, tagInput.trim()]);
+            if (!tags.includes(tagInput.trim())) {
+                setTags([...tags, tagInput.trim()]);
+            }
             setTagInput('');
             e.preventDefault();
         }
@@ -33,43 +113,105 @@ const page = () => {
         setTags(tags.filter((_, i) => i !== index));
     };
 
+    const validateForm = () => {
+        const required = ['title', 'slug', 'description', 'category', 'brand'];
+        for (let field of required) {
+            if (!formData[field]) {
+                alert(`${field.charAt(0).toUpperCase() + field.slice(1)} is required`);
+                return false;
+            }
+        }
+
+        for (let v of variants) {
+            if (!v.sku || !v.color || !v.price || !v.stock) {
+                alert("All variants must have SKU, Color, Price, and Stock");
+                return false;
+            }
+        }
+
+        const requiredSpecs = [
+            { s: 'display', f: 'size' }, { s: 'display', f: 'type' }, { s: 'display', f: 'resolution' }, { s: 'display', f: 'refreshRate' },
+            { s: 'camera', f: 'rear' }, { s: 'camera', f: 'front' },
+            { s: 'battery' }, { s: 'processor' }, { s: 'network' }, { s: 'weight' }, { s: 'os' }
+        ];
+
+        for (let spec of requiredSpecs) {
+            if (spec.f) {
+                if (!specs[spec.s][spec.f]) {
+                    alert(`Specification ${spec.s} ${spec.f} is required`);
+                    return false;
+                }
+            } else {
+                if (!specs[spec.s]) {
+                    alert(`Specification ${spec.s} is required`);
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (validateForm()) {
+            console.log("Submitting data:", { ...formData, specifications: specs, variants, tags, thumbnail, galleryImages });
+            // Add your submit logic here (e.g., API call)
+        }
+    };
+
     return (
         <div className="flex flex-col gap-6 pb-20 animate-fade-in">
             {/* ---------------- Header ---------------- */}
-            <CreateHeader />
+            <CreateHeader onPublish={handleSubmit} />
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 {/* ================= LEFT COLUMN ================= */}
                 <div className="lg:col-span-7 flex flex-col gap-6">
 
-                    {/* Media & Gallery (The "Rare Beauty" Style) */}
+                    {/* ----------- Media & Gallery ------------*/}
                     <section className="p-6 bg-white rounded-3xl border border-border shadow-sm">
                         <h2 className="text-xl font-bold font-space text-brand mb-6 flex items-center gap-3">
                             <ImageIcon size={22} className="text-accent" /> Media Gallery
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                             <div className="md:col-span-2 md:row-span-2 relative h-95 rounded-2xl border-2 border-dashed border-border bg-surface/50 group hover:border-accent/40 transition-all cursor-pointer flex flex-col items-center justify-center gap-3 overflow-hidden">
-                                <div className="w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center text-accent group-hover:scale-110 transition-transform z-10">
-                                    <Upload size={20} />
-                                </div>
-                                <p className="text-[12px] font-semibold font-space text-text-muted uppercase tracking-widest z-10">Main Thumbnail</p>
+                                {thumbnail ? (
+                                    <img src={thumbnail.preview} alt="Thumbnail" className="w-full h-full object-cover" />
+                                ) : (
+                                    <>
+                                        <div className="w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center text-accent group-hover:scale-110 transition-transform z-10">
+                                            <Upload size={20} />
+                                        </div>
+                                        <p className="text-[12px] font-semibold font-space text-text-muted uppercase tracking-widest z-10">Main Thumbnail</p>
+                                    </>
+                                )}
+                                <input type="file" className="absolute inset-0 opacity-0 cursor-pointer" onChange={handleThumbnailUpload} accept="image/*" />
                                 <span className="absolute top-4 left-4 px-3 py-1 bg-brand text-white text-[9px] font-semibold rounded-full uppercase z-10 tracking-tighter">Cover</span>
                             </div>
-                            <div className="relative h-45.5 rounded-2xl border-2 border-dashed border-border bg-surface/30 group hover:border-accent/40 transition-all cursor-pointer flex flex-col items-center justify-center gap-2 overflow-hidden text-text-muted">
-                                <Upload size={18} />
-                                <p className="text-[9px] font-semibold font-space uppercase">Img 1</p>
-                            </div>
-                            <div className="relative h-45.5 rounded-2xl border-2 border-dashed border-border bg-surface/30 group hover:border-accent/40 transition-all cursor-pointer flex flex-col items-center justify-center gap-2 overflow-hidden text-text-muted">
-                                <Upload size={18} />
-                                <p className="text-[9px] font-semibold font-space uppercase">Img 2</p>
-                            </div>
-                            <div className="relative h-45.5 rounded-2xl border-2 border-dashed border-border bg-surface/30 group hover:border-accent/40 transition-all cursor-pointer flex flex-col items-center justify-center gap-2 overflow-hidden text-text-muted">
-                                <Upload size={18} />
-                                <p className="text-[9px] font-semibold font-space uppercase">Img 3</p>
-                            </div>
-                            <div className="relative h-45.5 rounded-2xl border-2 border-dashed border-border bg-white flex flex-col items-center justify-center transition-all cursor-pointer shadow-sm">
-                                <Plus size={22} className="text-accent" />
-                            </div>
+
+                            {/* Gallery Images */}
+                            {[0, 1, 2, 3].map((i) => (
+                                <div key={i} className="relative h-45.5 rounded-2xl border-2 border-dashed border-border bg-surface/30 group hover:border-accent/40 transition-all cursor-pointer flex flex-col items-center justify-center gap-2 overflow-hidden text-text-muted">
+                                    {galleryImages[i] ?
+                                        <>
+                                            <img src={galleryImages[i].preview} alt={`Gallery ${i}`} className="w-full h-full object-cover" />
+                                            <button
+                                                onClick={(e) => { e.stopPropagation(); removeGalleryImage(galleryImages[i].id); }}
+                                                className="absolute top-2 right-2 p-1 bg-error text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                                            >
+                                                <Trash2 size={12} />
+                                            </button>
+                                        </>
+                                        :
+                                        <>
+                                            <Upload size={18} />
+                                            <p className="text-[9px] font-semibold font-space uppercase">Img {i + 1}</p>
+                                            <input type="file" className="absolute inset-0 opacity-0 cursor-pointer" onChange={handleGalleryUpload} accept="image/*" />
+                                        </>
+                                    }
+                                </div>
+                            ))}
                         </div>
                     </section>
 
@@ -80,29 +222,42 @@ const page = () => {
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className='md:col-span-2'>
-                                <Inputs variant='adminPrimary' label={"Product Title"} placeholder={"iPhone 15 Pro Max"} />
+                                <Inputs variant='adminPrimary' label={"Product Title"} name="title" value={formData.title} onChange={handleInputChange} placeholder={"iPhone 15 Pro Max"} />
                             </div>
 
-                            <Inputs variant='adminPrimary' label={"Brand"} placeholder={"Apple"} />
+                            <Inputs variant='adminPrimary' label={"Brand"} name="brand" value={formData.brand} onChange={handleInputChange} placeholder={"Apple"} />
 
                             <div className="flex flex-col gap-2">
                                 <label className="text-xs font-bold uppercase tracking-widest text-slate-500">Category</label>
                                 <div className="relative">
-                                    <select className="w-full appearance-none text-sm px-5 py-3.5 text-coil bg-surface border border-border rounded-xl font-medium focus:border-accent outline-none cursor-pointer">
-                                        <option>Apple</option>
-                                        <option>Samsung</option>
-                                        <option>Hawai</option>
+                                    <select
+                                        name="category"
+                                        value={formData.category}
+                                        onChange={handleInputChange}
+                                        className="w-full appearance-none text-sm px-5 py-3.5 text-coil bg-surface border border-border rounded-xl font-medium focus:border-accent outline-none cursor-pointer"
+                                    >
+                                        <option value="">Select Category</option>
+                                        <option value="65f4d1e2e4b0a1a2b3c4d5e6">Smartphones</option>
+                                        <option value="65f4d1e2e4b0a1a2b3c4d5e7">Laptops</option>
+                                        <option value="65f4d1e2e4b0a1a2b3c4d5e8">Accessories</option>
                                     </select>
                                     <Layers className="absolute right-5 top-1/2 -translate-y-1/2 text-text-muted" size={14} />
                                 </div>
                             </div>
 
-                            <Inputs variant='adminPrimary' label={"% Discount"} type='number' placeholder={"0"} />
-                            <Inputs variant='adminPrimary' label={"Badge"} placeholder={"New, Sale, Top"} />
+                            <Inputs variant='adminPrimary' label={"% Discount"} name="discountPercentage" type='number' value={formData.discountPercentage} onChange={handleInputChange} placeholder={"0"} />
+                            <Inputs variant='adminPrimary' label={"Badge"} name="badge" value={formData.badge} onChange={handleInputChange} placeholder={"New, Sale, Top"} />
 
                             <div className="md:col-span-2 flex flex-col gap-2">
                                 <label className="text-xs font-bold uppercase tracking-widest duration-300 text-slate-500">Full Description</label>
-                                <textarea rows="5" placeholder="Highlight technical features..." className="w-full px-6 py-4 bg-surface border border-border rounded-2xl font-medium text-brand focus:border-accent outline-none resize-none" />
+                                <textarea
+                                    name="description"
+                                    value={formData.description}
+                                    onChange={handleInputChange}
+                                    rows="5"
+                                    placeholder="Highlight technical features..."
+                                    className="w-full px-6 py-4 bg-surface border border-border rounded-2xl font-medium text-brand focus:border-accent outline-none resize-none"
+                                />
                             </div>
                         </div>
                     </section>
@@ -117,24 +272,24 @@ const page = () => {
                             <div className="flex flex-col gap-4">
                                 <span className="text-xs font-bold uppercase tracking-widest duration-300 text-slate-500 bg-accent/10 px-3 py-1.5 rounded-full w-fit">1. Screen Configuration</span>
                                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                    <Inputs variant='adminPrimary' size='sm' placeholder={`Size (6.7)`} />
-                                    <Inputs variant='adminPrimary' size='sm' placeholder={`OLED, LCD`} />
-                                    <Inputs variant='adminPrimary' size='sm' placeholder={`Resolution`} />
-                                    <Inputs variant='adminPrimary' size='sm' placeholder={`Rate (Hz)`} />
+                                    <Inputs variant='adminPrimary' size='sm' placeholder={`Size (6.7)`} value={specs.display.size} onChange={(e) => handleSpecChange('display', 'size', e.target.value)} />
+                                    <Inputs variant='adminPrimary' size='sm' placeholder={`OLED, LCD`} value={specs.display.type} onChange={(e) => handleSpecChange('display', 'type', e.target.value)} />
+                                    <Inputs variant='adminPrimary' size='sm' placeholder={`Resolution`} value={specs.display.resolution} onChange={(e) => handleSpecChange('display', 'resolution', e.target.value)} />
+                                    <Inputs variant='adminPrimary' size='sm' placeholder={`Rate (Hz)`} value={specs.display.refreshRate} onChange={(e) => handleSpecChange('display', 'refreshRate', e.target.value)} />
                                 </div>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <Inputs variant='adminPrimary' className='py-3' size='sm' labelIcon={<Camera size={16} />} label={"Rear Camera"} placeholder={`48MP + 12MP + 12MP`} />
-                                <Inputs variant='adminPrimary' className='py-3' size='sm' labelIcon={<Camera size={16} />} label={"Front Lens"} placeholder={`12MP True Depth`} />
+                                <Inputs variant='adminPrimary' className='py-3' size='sm' labelIcon={<Camera size={16} />} label={"Rear Camera"} placeholder={`48MP + 12MP + 12MP`} value={specs.camera.rear} onChange={(e) => handleSpecChange('camera', 'rear', e.target.value)} />
+                                <Inputs variant='adminPrimary' className='py-3' size='sm' labelIcon={<Camera size={16} />} label={"Front Lens"} placeholder={`12MP True Depth`} value={specs.camera.front} onChange={(e) => handleSpecChange('camera', 'front', e.target.value)} />
                             </div>
 
                             <div className="grid grid-cols-2 lg:grid-cols-3 gap-5">
-                                <Inputs variant='adminPrimary' className='py-2.5' size='sm' labelIcon={<Battery size={16} />} label={"Battery"} placeholder={`5000 mAh`} />
-                                <Inputs variant='adminPrimary' className='py-2.5' size='sm' labelIcon={<Cpu size={16} />} label={"Processor"} placeholder={`elite gen 5`} />
-                                <Inputs variant='adminPrimary' className='py-2.5' size='sm' labelIcon={<Monitor size={16} />} label={"OS"} placeholder={`iOS 17`} />
-                                <Inputs variant='adminPrimary' className='py-2.5' size='sm' labelIcon={<Network size={16} />} label={"Network"} placeholder={`5G`} />
-                                <Inputs variant='adminPrimary' className='py-2.5' size='sm' labelIcon={<Weight size={16} />} label={"Weight"} placeholder={`221g`} />
+                                <Inputs variant='adminPrimary' className='py-2.5' size='sm' labelIcon={<Battery size={16} />} label={"Battery"} placeholder={`5000 mAh`} value={specs.battery} onChange={(e) => handleSpecChange('battery', null, e.target.value)} />
+                                <Inputs variant='adminPrimary' className='py-2.5' size='sm' labelIcon={<Cpu size={16} />} label={"Processor"} placeholder={`elite gen 5`} value={specs.processor} onChange={(e) => handleSpecChange('processor', null, e.target.value)} />
+                                <Inputs variant='adminPrimary' className='py-2.5' size='sm' labelIcon={<Monitor size={16} />} label={"OS"} placeholder={`iOS 17`} value={specs.os} onChange={(e) => handleSpecChange('os', null, e.target.value)} />
+                                <Inputs variant='adminPrimary' className='py-2.5' size='sm' labelIcon={<Network size={16} />} label={"Network"} placeholder={`5G`} value={specs.network} onChange={(e) => handleSpecChange('network', null, e.target.value)} />
+                                <Inputs variant='adminPrimary' className='py-2.5' size='sm' labelIcon={<Weight size={16} />} label={"Weight"} placeholder={`221g`} value={specs.weight} onChange={(e) => handleSpecChange('weight', null, e.target.value)} />
                             </div>
                         </div>
                     </section>
@@ -146,15 +301,24 @@ const page = () => {
                                 <ShieldCheck size={20} className="text-accent" /> Logistics
                             </h2>
                             <div className="flex flex-col gap-4">
-                                <Inputs variant='adminPrimary' label={"Warranty"} defaultValue="No warranty" placeholder={"Apple"} />
-                                <Inputs variant='adminPrimary' label={"Shipping"} defaultValue="Ships in 3-5 days" placeholder={"Apple"} />
+                                <Inputs variant='adminPrimary' label={"Warranty"} name="warranty" value={formData.warranty} onChange={handleInputChange} placeholder={"No warranty"} />
+                                <Inputs variant='adminPrimary' label={"Shipping"} name="shipping" value={formData.shipping} onChange={handleInputChange} placeholder={"Ships in 3-5 days"} />
                             </div>
                         </section>
 
                         <section className="p-6 bg-white rounded-3xl border border-border shadow-sm">
-                            <h2 className="text-xl font-bold font-space text-brand mb-5 flex items-center gap-2">
-                                <TagIcon size={20} className="text-accent" /> Metadata
-                            </h2>
+                            <div className="flex items-center justify-between mb-5">
+                                <h2 className="text-xl font-bold font-space text-brand flex items-center gap-2">
+                                    <TagIcon size={20} className="text-accent" /> Metadata
+                                </h2>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[10px] font-bold uppercase text-slate-400">Active</span>
+                                    <label className="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" name="isActive" checked={formData.isActive} onChange={handleInputChange} className="sr-only peer" />
+                                        <div className="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-success"></div>
+                                    </label>
+                                </div>
+                            </div>
                             <div className="flex flex-wrap gap-1.5 mb-4 max-h-24 overflow-y-auto">
                                 {tags.map((tag, i) => (
                                     <span key={i} className="px-3 py-1 bg-brand text-white rounded-lg text-[12px] font-bold font-space flex items-center gap-1.5">
@@ -195,7 +359,7 @@ const page = () => {
                             </button>
                         </div>
 
-                        <div className="flex flex-col gap-6 max-h-[80vh] overflow-y-auto pr-3 custom-scrollbar">
+                        <div className="flex flex-col gap-6 max-h-[80vh] overflow-y-auto pr-3" style={{ msOverflowStyle: 'none', scrollbarWidth: 'none', WebkitScrollbar: { display: 'none' } }} >
                             {variants.map((variant, index) => (
                                 <div key={variant.id} className="relative p-5 rounded-2xl border border-white/10 bg-white/5 flex flex-col gap-6 group hover:bg-white/10 transition-all">
                                     <div className="flex items-center justify-between">
@@ -208,16 +372,16 @@ const page = () => {
                                     </div>
 
                                     <div className="grid grid-cols-2 gap-x-6 gap-y-4">
-                                        <Inputs variant='adminPrimary' size='medium' className='border-white/10 text-white bg-white/5' labelClassName={"text-slate-300 text-xs"} label={"SKU"} placeholder={"IPH-15-256"} />
-                                        <Inputs variant='adminPrimary' size='medium' className='border-white/10 text-white bg-white/5' labelClassName={"text-slate-300 text-xs"} label={"COLOR"} placeholder={"Space Gray"} />
-                                        <Inputs variant='adminPrimary' size='medium' className='border-white/10 text-white bg-white/5' labelClassName={"text-slate-300 text-xs"} type='number' label={"RAM (GB)"} placeholder={"8"} />
-                                        <Inputs variant='adminPrimary' size='medium' className='border-white/10 text-white bg-white/5' labelClassName={"text-slate-300 text-xs"} type='number' label={"Storage (GB)"} placeholder={"256"} />
+                                        <Inputs variant='adminPrimary' size='medium' className='border-white/10 text-white bg-white/5' labelClassName={"text-slate-300 text-xs"} label={"SKU"} placeholder={"IPH-15-256"} value={variant.sku} onChange={(e) => handleVariantChange(variant.id, 'sku', e.target.value)} />
+                                        <Inputs variant='adminPrimary' size='medium' className='border-white/10 text-white bg-white/5' labelClassName={"text-slate-300 text-xs"} label={"COLOR"} placeholder={"Space Gray"} value={variant.color} onChange={(e) => handleVariantChange(variant.id, 'color', e.target.value)} />
+                                        <Inputs variant='adminPrimary' size='medium' className='border-white/10 text-white bg-white/5' labelClassName={"text-slate-300 text-xs"} type='number' label={"RAM (GB)"} placeholder={"8"} value={variant.ram} onChange={(e) => handleVariantChange(variant.id, 'ram', e.target.value, 'number')} />
+                                        <Inputs variant='adminPrimary' size='medium' className='border-white/10 text-white bg-white/5' labelClassName={"text-slate-300 text-xs"} type='number' label={"Storage (GB)"} placeholder={"256"} value={variant.storage} onChange={(e) => handleVariantChange(variant.id, 'storage', e.target.value, 'number')} />
 
                                         <div className='border-t border-white/5 pt-3'>
-                                            <Inputs variant='adminPrimary' size='medium' className='border-white/10 text-white bg-accent/20' labelClassName={"text-accent/80 text-xs"} type='number' label={"Price"} placeholder={"99.00"} />
+                                            <Inputs variant='adminPrimary' size='medium' className='border-white/10 text-white bg-accent/20' labelClassName={"text-accent/80 text-xs"} type='number' label={"Price"} placeholder={"99.00"} value={variant.price} onChange={(e) => handleVariantChange(variant.id, 'price', e.target.value, 'number')} />
                                         </div>
                                         <div className='border-t border-white/5 pt-3'>
-                                            <Inputs variant='adminPrimary' size='medium' className='border border-success/30 text-white bg-success/10' labelClassName={"text-success/80 text-xs"} type='number' label={"Stock"} placeholder={"50"} />
+                                            <Inputs variant='adminPrimary' size='medium' className='border border-success/30 text-white bg-success/10' labelClassName={"text-success/80 text-xs"} type='number' label={"Stock"} placeholder={"50"} value={variant.stock} onChange={(e) => handleVariantChange(variant.id, 'stock', e.target.value, 'number')} />
                                         </div>
                                     </div>
                                 </div>

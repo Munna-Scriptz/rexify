@@ -16,7 +16,6 @@ export const adminApis = createApi({
             query: (data) => ({
                 url: "/product/create",
                 method: "POST",
-                headers: { "Content-Type": "multipart/form-data" },
                 body: data
             })
         })
@@ -24,4 +23,4 @@ export const adminApis = createApi({
 })
 
 
-export const { useGetCategoryQuery, useGetProductsQuery } = adminApis
+export const { useGetCategoryQuery, useGetProductsQuery, useCreateProductMutation } = adminApis

@@ -1,7 +1,6 @@
 import { useRef, useState } from 'react';
 import { X, Upload, Check, Power, LayoutGrid, Type, Hash, FileText } from 'lucide-react';
 import Inputs from '../ui/Inputs';
-import { useCreateCategoryMutation } from '../../services/api';
 
 const CreateCategoryModal = ({ isOpen, onClose }) => {
     const [formData, setFormData] = useState({
@@ -24,7 +23,6 @@ const CreateCategoryModal = ({ isOpen, onClose }) => {
         }
     };
     // ------------ Handle create --------------
-    const [createCategory, { isLoading }] = useCreateCategoryMutation();
 
     const handleCreate = async () => {
         try {

@@ -20,7 +20,10 @@ const baseQueryWithReauth = async (args, api, options) => {
             result = await baseQuery(args, api, options)
 
         } else {
-            // clearCOokies 
+            await baseQuery({
+                url: "/auth/signout",
+                method: "POST",
+            }, api, options)
         }
     }
 

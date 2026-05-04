@@ -4,7 +4,7 @@ import { jwtVerify } from "jose";
 const SECRET = new TextEncoder().encode(process.env.NEXT_PUBLIC_JWT_SEC);
 
 export async function proxy(req) {
-    const token = req.cookies.get("X-RF-TOKEN")?.value;
+    const token = req.cookies.get("X-AS-TOKEN")?.value;
     const { pathname } = req.nextUrl;
 
     // Only protect admin routes
@@ -21,6 +21,10 @@ export async function proxy(req) {
 
             return NextResponse.next();
         } catch (err) {
+            await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/signout`, {
+                method: 'POST',
+                credentials: 'include',
+            })
             return NextResponse.redirect(new URL("/auth/signin", req.url));
         }
     }

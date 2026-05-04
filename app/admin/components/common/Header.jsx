@@ -2,10 +2,12 @@ import React, { useState } from 'react'
 import { FiArrowUpCircle, FiBell, FiLogOut, FiChevronDown } from 'react-icons/fi';
 import { HiOutlineSwitchHorizontal } from 'react-icons/hi';
 import { AiOutlineSwap } from 'react-icons/ai';
+import { Bounce, toast, ToastContainer } from 'react-toastify';
 
 const Header = ({ pageName }) => {
   const [profileModalOpen, setProfileModalOpen] = useState(false);
   const [notificationModalOpen, setNotificationModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false)
 
   // Sample notifications data
   const notifications = [
@@ -15,8 +17,40 @@ const Header = ({ pageName }) => {
     { id: 4, message: 'Payment verified', time: '1 day ago' },
   ];
 
+  const handleSignout = async () => {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/signout`, {
+        method: 'POST',
+        credentials: 'include'
+      })
+
+      const data = await res.json();
+      if (!res.ok) {
+        setLoading(false)
+        toast.error(data.message, { theme: "dark", transition: Bounce, });
+        return
+      }
+      setLoading(false)
+      toast.success(data.message, {
+        theme: "dark",
+        transition: Bounce,
+      });
+
+      setTimeout(() => {
+        setLoading(false)
+      }, 1500)
+
+    } catch (error) {
+      setLoading(false)
+      toast.error("Somethind went wrong!", { theme: "light", transition: Bounce, });
+    }
+  }
+
+
+
   return (
     <>
+      <ToastContainer />
       <header id='header' className='bg-white w-full py-4 duration-300 z-20 border-b border-border'>
         <div className='flex items-center justify-between px-[22px]'>
           {/* ----------- Location ----------- */}
@@ -94,7 +128,7 @@ const Header = ({ pageName }) => {
               {/* Logout */}
               <button
                 onClick={() => {
-                  console.log('Logout');
+                  handleSignout()
                   setProfileModalOpen(false);
                 }}
                 className='w-full px-4 py-3 cursor-pointer flex items-center gap-3 hover:bg-error/10 transition-all text-error font-medium text-sm border-t border-border'

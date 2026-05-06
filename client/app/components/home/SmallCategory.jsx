@@ -1,7 +1,8 @@
 import React from 'react';
 import CategorySlider from '../sliders/CategorySlider';
+import { apiClient } from '@/app/lib/apiClient';
 
-const SmallCategory = () => {
+const SmallCategory = async () => {
     const products = [
         { name: "Mac", image: "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/store-card-13-mac-nav-202510?wid=400&hei=260&fmt=png-alpha&.v=M1Q3OGxnb1lBaHhqNjZ2OVRXZmx4YkVwOVNLbHRldEZZYkpvZ0VDM1ZJYisrUlZaSVRoWVYzU0Qra0FoTmUwNng2bitObzZwQzk4cEorV1dZdzhIazlhTkRKemhDN0NEc1VzN1ZjMGR5dUk" },
         { name: "iPhone", image: "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/store-card-13-iphone-nav-202509?wid=1200&hei=780&fmt=png-alpha&.v=dW5XbHI1eDVpd01qWUU4bFRtWGZXM1doT212VzJoWjBSKzRpbmNETHN1QnRHU3BERzdnOWdiQkwvWTZGajY2b1M0TjRWdzF2UjRGVEY0c3dBQVZ6VFN0TmdKaCs3NTJMbFVuOGp2LzI5RGc" },
@@ -13,6 +14,16 @@ const SmallCategory = () => {
         { name: "Apple TV 4K", image: "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/store-card-13-appletv-nav-202210?wid=400&hei=260&fmt=png-alpha&.v=T0wvM1N3YUcxQ09qK0VNRkl1RU1BZFM5WnN0RmVZRmVXQ0FCUWJjbnJDald1aTN5QlRYNG5PRjJxc2d1RklXbVM0TjRWdzF2UjRGVEY0c3dBQVZ6VFZ3YmJrVi9SakQxWUcrYWQwVXc5VTA" },
         { name: "HomePod", image: "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/store-card-13-homepod-nav-202301?wid=400&hei=260&fmt=png-alpha&.v=WVcvamRucHVMMWs5SXZ3bVJ3Q2hpZGR0czFXNWdCUW14eTN2U29pLzNMcld1aTN5QlRYNG5PRjJxc2d1RklXbVM0TjRWdzF2UjRGVEY0c3dBQVZ6VFJmbWU0TjJLamxsdTltNkZVZ1RhbDA" },
     ];
+
+    // -------- From server ---------
+    let categories = { data: [] };
+    try {
+        categories = await apiClient.get("/category/all", {
+            cache: "no-store",
+        });
+    } catch (error) {
+        console.log(error)
+    }
 
     return (
         <section className="md:mt-28 mt-20 overflow-x-hidden">
@@ -32,7 +43,7 @@ const SmallCategory = () => {
 
 
                 {/* ------------- SLider content -------------- */}
-                <CategorySlider products={products} />
+                <CategorySlider category={categories?.data} />
             </div>
         </section >
     );

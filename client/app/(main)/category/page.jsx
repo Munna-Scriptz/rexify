@@ -1,13 +1,17 @@
-import React from 'react';
 import { PageHeader } from '../../components/common/PageHeader';
 import CategoryCard from '../../components/cards/CategoryCard';
 import { apiClient } from '@/app/lib/apiClient';
 
 const page = async () => {
     // -------- From server ---------
-    const categories = await apiClient.get("/category/all", {
-        revalidate: 300,
-    });
+    let categories = { data: [] };
+    try {
+        categories = await apiClient.get("/category/all", {
+            revalidate: 300,
+        });
+    } catch (error) {
+        console.log(error)
+    }
 
     return (
         <>

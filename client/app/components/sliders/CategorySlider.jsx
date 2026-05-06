@@ -1,8 +1,8 @@
 "use client"
-import React from 'react';
 import useEmblaCarousel from "embla-carousel-react";
+import CategoryCard from '../cards/CategoryCard';
 
-const CategorySlider = ({ products }) => {
+const CategorySlider = ({ category }) => {
     const [emblaRef] = useEmblaCarousel({
         dragFree: true,
         align: "start",
@@ -10,24 +10,12 @@ const CategorySlider = ({ products }) => {
     });
 
     return (
-        <div className="relative group">
+        <div className="relative">
             <div ref={emblaRef}>
                 <div className="flex md:gap-10 gap-6 pb-4">
-                    {products.map((item, index) => (
-                        <div key={index} className="shrink-0 basis-22 md:basis-35.5">
-                            <div className='select-none cursor-pointer flex flex-col items-center gap-3 md:gap-4 justify-center pt-2'>
-                                <div className="duration-300 hover:-translate-y-2">
-                                    <img
-                                        src={item.image}
-                                        alt={item.name}
-                                        className="w-full object-contain"
-                                    />
-                                </div>
-
-                                <p className="text-sm md:text-base font-medium text-[#1D1D1F] hover:underline underline-offset-2">
-                                    {item.name}
-                                </p>
-                            </div>
+                    {category.map((item, index) => (
+                        <div key={index} className="shrink-0 basis-[90%] md:basis-[20%] select-none">
+                            <CategoryCard item={item} compact={true} />
                         </div>
                     ))}
                 </div>

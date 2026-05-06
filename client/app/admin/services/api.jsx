@@ -37,16 +37,21 @@ export const adminApis = createApi({
         getCategory: build.query({
             query: () => "/category/all",
         }),
+        CreateCategory: build.query({
+            query: () => "/category/Create",
+        }),
+
         getProducts: build.query({
             query: () => "/product",
         }),
+        
         createProduct: build.mutation({
             query: (data) => ({
                 url: "/product/create",
                 method: "POST",
                 body: data
             })
-        })
+        }),
     }),
 
 })

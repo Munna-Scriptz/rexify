@@ -1,71 +1,19 @@
 import React from 'react'
 import ProductSlider from '../sliders/ProductSlider';
+import { apiClient } from '@/app/lib/apiClient';
 
-const BestSeller = () => {
+const BestSeller = async () => {
 
-    const products = [
-        {
-            id: 1,
-            title: "Xiaomi Redmi Watch 4",
-            variant: "Rein Milanese",
-            price: 99,
-            rating: 4.23,
-            reviews: 749,
-            badge: "New",
-            image: "https://www.startech.com.bd/image/cache/catalog/smart-watch/xiaomi/watch-s3/xiaomi-watch-s3-228x228.webp",
-        },
-        {
-            id: 2,
-            title: "Apple Watch Series 9",
-            variant: "Sport Band",
-            price: 429,
-            rating: 4.78,
-            reviews: 1284,
-            badge: "Popular",
-            image: "https://www.startech.com.bd/image/cache/catalog/watch/apple/watch-series-9/watch-series-9-midnight-01-228x228.webp",
-        },
-        {
-            id: 3,
-            title: "Samsung Galaxy Watch 6",
-            variant: "Bluetooth 44mm",
-            price: 299,
-            rating: 4.51,
-            reviews: 962,
-            badge: "Trending",
-            image: "https://www.startech.com.bd/image/cache/catalog/smart-watch/samsung/galaxy-watch-7-40mm/galaxy-watch-7-40mm-228x228.webp",
-        },
-        {
-            id: 4,
-            title: "Nothing Ear (2)",
-            variant: "Wireless Earbuds",
-            price: 149,
-            rating: 4.36,
-            reviews: 684,
-            badge: "New",
-            image: "https://www.startech.com.bd/image/cache/catalog/earbuds/hifuture/smartpods-2/smartpods-02-228x228.webp",
-        },
-        {
-            id: 5,
-            title: "Sony WH-1000XM5",
-            variant: "Noise Cancelling",
-            price: 399,
-            rating: 4.82,
-            reviews: 2147,
-            badge: "Best Seller",
-            image: "https://www.startech.com.bd/image/cache/catalog/headphone/sony/wh-1000xm5/wh-1000xm5-offical-228x228.webp",
-        },
-        {
-            id: 6,
-            title: "Logitech MX Master 3S",
-            variant: "Wireless Mouse",
-            price: 129,
-            rating: 4.67,
-            reviews: 1732,
-            badge: "Top Rated",
-            image: "https://www.startech.com.bd/image/cache/catalog/mouse/logitech/mx-master-3s/logitech-mx-master-3s-01-228x228.jpg",
-        },
-    ];
+    // -------- From server --------
+    let products = { data: [] };
 
+    try {
+        products = await apiClient.get("/product", {
+            revalidate: 60 * 20,
+        });
+    } catch (error) {
+        console.log(error)
+    }
 
     return (
         <>
@@ -73,7 +21,7 @@ const BestSeller = () => {
                 <div className="container">
                     <div id="Header-Row" className="mb-6 md:mb-10 flex items-center md:items-end justify-between">
                         <h2 className="text-2xl md:text-4xl font-semibold text-text-primary">
-                            Best Seller.
+                            All Collection.
                         </h2>
 
                         <button className="text-sm md:text-base font-medium text-text-secondary hover:text-neutral-900 flex items-center gap-1 transition cursor-pointer " >
@@ -84,7 +32,7 @@ const BestSeller = () => {
 
 
                     {/* ----------- Slider Content ----------- */}
-                    <ProductSlider products={products} />
+                    <ProductSlider products={products?.data?.products} />
                 </div>
             </section>
         </>

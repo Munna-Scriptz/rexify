@@ -1,14 +1,15 @@
+import Link from 'next/link';
 import { FiHeart, FiShoppingBag } from 'react-icons/fi'
 
-const SellerCard = ({ img, badge, name, variant, price, rating, reviews }) => {
+const SellerCard = ({ img, badge, slug, title, variant, price, rating, reviews }) => {
     return (
-        <div className="md:w-77.5 w-70 mx-auto rounded-2xl border border-border overflow-hidden group relative select-none">
+        <Link href={`/product/${slug}`} className="md:w-77.5 w-70 mx-auto rounded-2xl border border-border overflow-hidden group relative select-none">
 
             {/* Image Section */}
             <div className="relative h-65 flex items-center justify-center">
                 <img
                     src={img}
-                    alt={name}
+                    alt={title}
                     className="h-50 object-contain transition-transform duration-500 group-hover:scale-105"
                 />
 
@@ -37,7 +38,7 @@ const SellerCard = ({ img, badge, name, variant, price, rating, reviews }) => {
             {/* Content */}
             <div className="px-5 py-4">
                 <h3 className="text-[15px] font-medium text-neutral-900 leading-snug">
-                    {name} <br />
+                    {title} <br />
                     <span className="text-neutral-500 font-normal">
                         {variant}
                     </span>
@@ -58,7 +59,7 @@ const SellerCard = ({ img, badge, name, variant, price, rating, reviews }) => {
 
             {/* Bottom Accent Line */}
             <div className="h-0.5 w-full bg-linear-to-r from-transparent via-neutral-300 to-transparent opacity-0 group-hover:opacity-100 transition" />
-        </div>
+        </Link>
     );
 };
 

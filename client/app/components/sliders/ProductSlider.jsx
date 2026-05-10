@@ -19,7 +19,8 @@ const ProductSlider = ({ products }) => {
                             <SellerCard
                                 img={item.thumbnail || item.image}
                                 badge={item.badge}
-                                name={item.title}
+                                slug={item.slug}
+                                title={item.title}
                                 variant={item.brand}
                                 price={item.price}
                                 rating={item.rating || 4.89}

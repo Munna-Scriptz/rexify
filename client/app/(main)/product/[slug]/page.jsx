@@ -16,9 +16,7 @@ const page = async ({ params }) => {
     } catch (error) {
         console.log(error)
     }
-
-    console.log(product)
-
+    
     return (
         <section id='Product-details' className="text-text-primary pb-20 mt-8">
             <div id='Product-details-row'>
@@ -37,7 +35,7 @@ const page = async ({ params }) => {
                     <Specifications specifications={product?.data?.product?.specifications} />
 
                     {/* ================= Specs & Description ================= */}
-                    <ProductReview reviews={product?.data?.reviews}/>
+                    <ProductReview reviews={product?.data?.reviews} productId={product?.data?.product?._id} />
 
                     {/* ================= Related Products ================= */}
                     {/* <RelatedProduct product={product} /> */}

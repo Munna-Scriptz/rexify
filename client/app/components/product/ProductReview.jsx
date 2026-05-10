@@ -1,16 +1,7 @@
-import { Star, X, Send, User } from 'lucide-react';
+import { Star, User } from 'lucide-react';
+import AddReviewAction from './AddReviewAction';
 
-const ProductReview = ({ reviews }) => {
-    // const reviews = [
-    //     { id: 1, name: 'Alice Johnson', rating: 5, comment: 'Absolutely love this product! The quality is top-notch.', avatar: 'https://i.pravatar.cc/150?u=alice' },
-    //     { id: 2, name: 'Bob Smith', rating: 4, comment: 'Great value for money. Highly recommended.', avatar: 'https://i.pravatar.cc/150?u=bob' },
-    //     { id: 3, name: 'Charlie Davis', rating: 5, comment: 'Fast delivery and excellent customer service.', avatar: 'https://i.pravatar.cc/150?u=charlie' },
-    // ]
-
-    const handlePostReview = () => {
-
-    };
-
+const ProductReview = ({ reviews, productId }) => {
     return (
         <section className="mt-20">
             <div className="flex flex-col sm:flex-row items-center justify-between mb-10 gap-4">
@@ -25,32 +16,15 @@ const ProductReview = ({ reviews }) => {
                 </div>
             </div>
 
-            {/* YouTube Style Add Review Section */}
-            <div className="mb-12">
-                <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-muted flex items-center justify-center shrink-0 border border-border">
-                        <User size={24} className="text-text-muted" />
-                    </div>
-                    <div className="flex-1 group">
-                        <button
-                            className="w-full text-left pb-2 border-b-2 border-border text-text-muted font-medium hover:border-accent transition-colors pt-2 sm:pt-3"
-                        >
-                            Add a review...
-                        </button>
-                        <div className="mt-3 flex justify-end gap-3 opacity-0 group-focus-within:opacity-100 transition-opacity">
-                            <button className="px-4 py-2 text-sm font-bold text-text-secondary hover:bg-muted rounded-full transition-all">Cancel</button>
-                            <button className="px-4 py-2 text-sm font-bold bg-accent text-white rounded-full shadow-lg shadow-accent/10">Review</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {/* Add review Action (Client Side) */}
+            <AddReviewAction productId={productId} />
 
             {/* Review List */}
             <div className="space-y-8">
-                {reviews.map((rev, i) => (
+                {reviews?.map((rev, i) => (
                     <div key={i} className="flex gap-4">
                         <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-muted overflow-hidden flex items-center justify-center shrink-0 border border-border">
-                            {rev.user.avatar ? (
+                            {rev.user?.avatar ? (
                                 <img src={rev.user.avatar} alt={rev.user.fullname} className="w-full h-full object-cover" />
                             ) : (
                                 <User size={24} className="text-text-muted" />
@@ -58,7 +32,7 @@ const ProductReview = ({ reviews }) => {
                         </div>
                         <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 mb-1">
-                                <h4 className="font-bold text-sm text-text-primary">{rev.user.fullname}</h4>
+                                <h4 className="font-bold text-sm text-text-primary">{rev.user?.fullname}</h4>
                                 <span className="text-[10px] text-text-muted font-medium">
                                     {(() => {
                                         const diff = Math.floor((Date.now() - new Date(rev.createdAt)) / 86400000)
@@ -89,96 +63,22 @@ const ProductReview = ({ reviews }) => {
                         </div>
                     </div>
                 ))}
+                
+                {(!reviews || reviews.length === 0) && (
+                    <div className="text-center py-12 bg-surface rounded-[40px] border-2 border-dashed border-border">
+                        <p className="text-text-secondary font-medium">No reviews yet. Be the first to share your thoughts!</p>
+                    </div>
+                )}
             </div>
 
             {/* Simplified Load More */}
-            <div className="mt-12 flex justify-center border-t border-border pt-8">
-                <button className="text-sm font-black text-accent hover:text-blue-700 transition-colors uppercase tracking-widest px-6 py-2 border-2 border-accent/20 rounded-full hover:bg-accent/5">
-                    Show More Reviews
-                </button>
-            </div>
-
-            {/* Review Modal */}
-            {/* {isModalOpen && (
-                <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
-                    <div
-                        className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-fade-in"
-                        onClick={() => setIsModalOpen(false)}
-                    />
-
-                    <div className="relative bg-white w-full max-w-lg rounded-[40px] shadow-2xl overflow-hidden animate-bounce-in">
-                        <div className="p-8 pb-0 flex justify-between items-center">
-                            <h3 className="text-2xl font-black text-text-primary">Post a Review</h3>
-                            <button
-                                onClick={() => setIsModalOpen(false)}
-                                className="p-2 hover:bg-muted rounded-full transition-colors"
-                            >
-                                <X size={24} />
-                            </button>
-                        </div>
-
-                        <div className="p-8">
-                             User Profile 
-                            <div className="flex items-center gap-4 mb-8">
-                                <div className="w-14 h-14 rounded-full bg-muted flex items-center justify-center border-2 border-border overflow-hidden">
-                                    <User size={28} className="text-text-muted" />
-                                </div>
-                                <div>
-                                    <h4 className="font-bold text-text-primary text-lg">Current User</h4>
-                                    <p className="text-xs text-text-muted font-bold uppercase tracking-widest">Posting publicly</p>
-                                </div>
-                            </div>
-
-                             Star Selection 
-                            <div className="flex items-center gap-2 mb-8 justify-center sm:justify-start">
-                                {[1, 2, 3, 4, 5].map((star) => (
-                                    <button
-                                        key={star}
-                                        onMouseEnter={() => setHoverRating(star)}
-                                        onMouseLeave={() => setHoverRating(0)}
-                                        onClick={() => setNewRating(star)}
-                                        className="p-1 transition-transform hover:scale-125"
-                                    >
-                                        <Star
-                                            size={40}
-                                            className={(hoverRating || newRating) >= star ? "text-yellow-400 fill-yellow-400" : "text-border"}
-                                            strokeWidth={1.5}
-                                        />
-                                    </button>
-                                ))}
-                            </div>
-
-                             Review Box *
-                            <div className="relative">
-                                <textarea
-                                    className="w-full bg-surface border-2 border-border rounded-3xl p-6 text-text-primary placeholder:text-text-muted focus:border-accent outline-none transition-colors min-h-40 font-medium resize-none"
-                                    placeholder="Share details of your own experience at this place..."
-                                    value={newComment}
-                                    onChange={(e) => setNewComment(e.target.value)}
-                                />
-                            </div>
-
-                             Footer Buttons *
-                            <div className="flex gap-4 mt-10">
-                                <button
-                                    onClick={() => setIsModalOpen(false)}
-                                    className="flex-1 py-4 text-text-secondary font-bold hover:bg-muted rounded-2xl transition-all"
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    onClick={handlePostReview}
-                                    disabled={!newRating || !newComment.trim()}
-                                    className="flex-1 py-4 bg-accent text-white font-bold rounded-2xl shadow-xl shadow-accent/20 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 disabled:scale-100 disabled:shadow-none flex items-center justify-center gap-2"
-                                >
-                                    <Send size={18} />
-                                    Post Review
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+            {reviews?.length > 5 && (
+                <div className="mt-12 flex justify-center border-t border-border pt-8">
+                    <button className="text-sm font-black text-accent hover:text-blue-700 transition-colors uppercase tracking-widest px-6 py-2 border-2 border-accent/20 rounded-full hover:bg-accent/5">
+                        Show More Reviews
+                    </button>
                 </div>
-            )} */}
+            )}
         </section>
     );
 };

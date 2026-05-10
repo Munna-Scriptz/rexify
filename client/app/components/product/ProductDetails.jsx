@@ -4,7 +4,7 @@ import { Star, Minus, Plus, ShoppingCart, Zap, Truck, ShieldCheck } from 'lucide
 
 const ProductDetails = ({ product }) => {
     const [selectedColor, setSelectedColor] = useState(product?.variants[0]?.color)
-    const [selectedStorage, setSelectedStorage] = useState(product?.variants[0]?.storage)
+    const [selectedStorage, setSelectedStorage] = useState(product?.variants[0]?.ram)
     const [selectedRam, setSelectedRam] = useState(product?.variants[0]?.ram)
     const [quantity, setQuantity] = useState(1)
 
@@ -45,46 +45,35 @@ const ProductDetails = ({ product }) => {
                 <div>
                     <h3 className="font-bold mb-3">Color: <span className="text-text-secondary font-normal">{selectedColor}</span></h3>
                     <div className="flex md:gap-3 gap-2">
-                        {product?.variants?.colors?.map((color, i) => (
-                            <div
+                        {product?.variants?.map((item, i) => (
+                            <button
                                 key={i}
-                                onClick={() => setSelectedColor(color)}
-                                className={`md:w-10 w-8 h-8 md:h-10 rounded-full cursor-pointer flex items-center justify-center border-2 transition-all ${selectedColor === color ? 'border-accent' : 'border-transparent'}`}
+                                onClick={() => setSelectedColor(item.color)}
+                                className={`flex items-center gap-3 px-4 md:text-base text-sm py-2 cursor-pointer rounded-lg border font-medium transition-all ${selectedColor === item.color ? 'border-accent bg-accent/5 text-accent' : 'border-border text-text-secondary hover:border-gray-400'}`}
                             >
-                                <div className="md:w-8 md:h-8 w-6 h-6 rounded-full border border-black/10" style={{ backgroundColor: color.code }}></div>
-                            </div>
+                                <div
+                                    className={`md:w-6 w-6 h-6 md:h-6 rounded-full cursor-pointer flex items-center justify-center border-2 transition-all ${selectedColor === item.color ? 'border-accent' : 'border-transparent'}`}
+                                >
+                                    <div className="md:w-6 md:h-6 w-6 h-6 rounded-full border border-black/10" style={{ backgroundColor: item.colorCode }}></div>
+                                </div>
+
+                                <p>{item.color}</p>
+                            </button>
                         ))}
                     </div>
                 </div>
 
                 {/* Storage */}
                 <div>
-                    <h3 className="font-bold mb-3">Storage</h3>
+                    <h3 className="font-bold mb-3">RAM/Storage</h3>
                     <div className="flex flex-wrap gap-3">
-                        {product?.variants?.map((size, i) => (
-                            console.log(size),
+                        {product?.variants?.map((item, i) => (
                             <button
                                 key={i}
-                                onClick={() => setSelectedStorage(size.storage)}
-                                className={`px-4 md:text-base text-sm py-2 rounded-lg border font-medium transition-all ${selectedStorage === size.storage ? 'border-accent bg-accent/5 text-accent' : 'border-border text-text-secondary hover:border-gray-400'}`}
+                                onClick={() => { setSelectedStorage(item.storage), setSelectedRam(item.ram) }}
+                                className={`px-4 md:text-base text-sm py-2 cursor-pointer rounded-lg border font-medium transition-all ${selectedStorage === item.storage ? 'border-accent bg-accent/5 text-accent' : 'border-border text-text-secondary hover:border-gray-400'}`}
                             >
-                                {size.storage}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-
-                {/* RAM */}
-                <div>
-                    <h3 className="font-bold mb-3">Memory (RAM)</h3>
-                    <div className="flex flex-wrap gap-3">
-                        {product?.variants?.ram?.map(size => (
-                            <button
-                                key={size}
-                                onClick={() => setSelectedRam(size)}
-                                className={`px-4 md:text-base text-sm py-2 rounded-lg border font-medium transition-all ${selectedRam === size ? 'border-accent bg-accent/5 text-accent' : 'border-border text-text-secondary hover:border-gray-400'}`}
-                            >
-                                {size}
+                                {item.ram}/{item.storage}
                             </button>
                         ))}
                     </div>

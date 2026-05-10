@@ -3,9 +3,9 @@ import React, { useState } from 'react'
 import { Star, Minus, Plus, ShoppingCart, Zap, Truck, ShieldCheck } from 'lucide-react'
 
 const ProductDetails = ({ product }) => {
-    const [selectedColor, setSelectedColor] = useState(product.colors[0])
-    const [selectedStorage, setSelectedStorage] = useState(product.storage[0])
-    const [selectedRam, setSelectedRam] = useState(product.ram[0])
+    const [selectedColor, setSelectedColor] = useState(product?.variants[0]?.color)
+    const [selectedStorage, setSelectedStorage] = useState(product?.variants[0]?.storage)
+    const [selectedRam, setSelectedRam] = useState(product?.variants[0]?.ram)
     const [quantity, setQuantity] = useState(1)
 
     return (
@@ -15,7 +15,7 @@ const ProductDetails = ({ product }) => {
                 <span className="text-sm text-green-600 font-medium flex items-center gap-1"><ShieldCheck size={14} /> In Stock</span>
             </div>
 
-            <h1 className="text-3xl lg:text-5xl font-bold font-space mb-4">{product.name}</h1>
+            <h1 className="text-3xl lg:text-5xl font-bold font-space mb-4">{product?.title}</h1>
 
             <div className="flex items-center md:gap-4 gap-2 md:mb-6 mb-4">
                 <div className="flex items-center gap-1 text-yellow-400">
@@ -25,15 +25,15 @@ const ProductDetails = ({ product }) => {
                     <Star className='w-3 md:w-4.5' fill="currentColor" />
                     <Star className='w-3 md:w-4.5' fill="currentColor" />
                 </div>
-                <span className="md:text-sm text-xs text-text-secondary">({product.reviews} Reviews)</span>
+                <span className="md:text-sm text-xs text-text-secondary">({product?.reviews} Reviews)</span>
                 <span className="text-text-border">|</span>
-                <span className="md:text-sm text-xs text-text-secondary">SKU: {product.sku}</span>
+                <span className="md:text-sm text-xs text-text-secondary">SKU: {product?.sku}</span>
             </div>
 
-            <div className="text-3xl font-bold font-space md:mb-8 mb-6">${product.price.toLocaleString()}</div>
+            <div className="text-3xl font-bold font-space md:mb-8 mb-6">${product?.price.toLocaleString()}</div>
 
-            <p className="text-text-secondary leading-relaxed md:mb-8 mb-6 md:text-lg text-base">
-                {product.shortDescription}
+            <p className="text-text-secondary leading-relaxed md:mb-8 mb-6 md:text-lg text-base line-clamp-2">
+                {product?.description}
             </p>
 
             <div className="h-px bg-border my-8"></div>
@@ -43,13 +43,13 @@ const ProductDetails = ({ product }) => {
 
                 {/* Color */}
                 <div>
-                    <h3 className="font-bold mb-3">Color: <span className="text-text-secondary font-normal">{selectedColor.name}</span></h3>
+                    <h3 className="font-bold mb-3">Color: <span className="text-text-secondary font-normal">{selectedColor}</span></h3>
                     <div className="flex md:gap-3 gap-2">
-                        {product.colors.map(color => (
+                        {product?.variants?.colors?.map((color, i) => (
                             <div
-                                key={color.name}
+                                key={i}
                                 onClick={() => setSelectedColor(color)}
-                                className={`md:w-10 w-8 h-8 md:h-10 rounded-full cursor-pointer flex items-center justify-center border-2 transition-all ${selectedColor.name === color.name ? 'border-accent' : 'border-transparent'}`}
+                                className={`md:w-10 w-8 h-8 md:h-10 rounded-full cursor-pointer flex items-center justify-center border-2 transition-all ${selectedColor === color ? 'border-accent' : 'border-transparent'}`}
                             >
                                 <div className="md:w-8 md:h-8 w-6 h-6 rounded-full border border-black/10" style={{ backgroundColor: color.code }}></div>
                             </div>
@@ -61,13 +61,14 @@ const ProductDetails = ({ product }) => {
                 <div>
                     <h3 className="font-bold mb-3">Storage</h3>
                     <div className="flex flex-wrap gap-3">
-                        {product.storage.map(size => (
+                        {product?.variants?.map((size, i) => (
+                            console.log(size),
                             <button
-                                key={size}
-                                onClick={() => setSelectedStorage(size)}
-                                className={`px-4 md:text-base text-sm py-2 rounded-lg border font-medium transition-all ${selectedStorage === size ? 'border-accent bg-accent/5 text-accent' : 'border-border text-text-secondary hover:border-gray-400'}`}
+                                key={i}
+                                onClick={() => setSelectedStorage(size.storage)}
+                                className={`px-4 md:text-base text-sm py-2 rounded-lg border font-medium transition-all ${selectedStorage === size.storage ? 'border-accent bg-accent/5 text-accent' : 'border-border text-text-secondary hover:border-gray-400'}`}
                             >
-                                {size}
+                                {size.storage}
                             </button>
                         ))}
                     </div>
@@ -77,7 +78,7 @@ const ProductDetails = ({ product }) => {
                 <div>
                     <h3 className="font-bold mb-3">Memory (RAM)</h3>
                     <div className="flex flex-wrap gap-3">
-                        {product.ram.map(size => (
+                        {product?.variants?.ram?.map(size => (
                             <button
                                 key={size}
                                 onClick={() => setSelectedRam(size)}

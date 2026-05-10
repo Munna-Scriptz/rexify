@@ -3,7 +3,7 @@ import { FiHeart, FiShoppingBag } from 'react-icons/fi'
 
 const SellerCard = ({ img, badge, slug, title, variant, price, rating, reviews }) => {
     return (
-        <Link href={`/product/${slug}`} className="md:w-77.5 w-70 mx-auto rounded-2xl border border-border overflow-hidden group relative select-none">
+        <Link href={`/product/${slug}`} className="md:w-77.5 w-70 mx-auto inline-block rounded-2xl border border-border overflow-hidden group relative select-none">
 
             {/* Image Section */}
             <div className="relative h-65 flex items-center justify-center">
@@ -23,13 +23,23 @@ const SellerCard = ({ img, badge, slug, title, variant, price, rating, reviews }
                     {/* Add to Cart */}
                     <button
                         className="h-11 w-11 rounded-full cursor-pointer border border-neutral-300 bg-white flex items-center justify-center text-text-primary hover:border-neutral-900 hover:text-neutral-900 transition"
-                        aria-label="Add to cart">
+                        aria-label="Add to cart"
+                        onClick={(e) => {
+                            e.preventDefault()
+                            e.stopPropagation()
+                        }}
+                    >
                         <FiShoppingBag size={18} />
                     </button>
 
                     {/* Wishlist */}
                     <button className="h-11 w-11 rounded-full cursor-pointer border border-neutral-300 bg-white flex items-center justify-center text-text-primary hover:border-neutral-900 hover:text-neutral-900 transition"
-                        aria-label="Add to wishlist" >
+                        aria-label="Add to wishlist"
+                        onClick={(e) => {
+                            e.preventDefault()
+                            e.stopPropagation()
+                        }}
+                    >
                         <FiHeart size={18} />
                     </button>
                 </div>

@@ -1,14 +1,5 @@
 import React from 'react';
-import { 
-  Battery, 
-  Camera, 
-  Cpu, 
-  Wifi, 
-  Monitor, 
-  Smartphone, 
-  Weight, 
-  Layers 
-} from 'lucide-react';
+import { Battery, Camera, Cpu, Wifi, Monitor, Smartphone } from 'lucide-react';
 
 const Specifications = ({ specifications }) => {
     if (!specifications) return null;
@@ -18,47 +9,47 @@ const Specifications = ({ specifications }) => {
             title: 'Display & Visuals',
             icon: <Monitor size={20} />,
             items: [
-                { label: 'Size', value: specifications.display?.size },
-                { label: 'Type', value: specifications.display?.type },
-                { label: 'Resolution', value: specifications.display?.resolution },
-                { label: 'Refresh Rate', value: specifications.display?.refreshRate },
+                { label: 'Size', value: specifications?.display?.size },
+                { label: 'Type', value: specifications?.display?.type },
+                { label: 'Resolution', value: specifications?.display?.resolution },
+                { label: 'Refresh Rate', value: specifications?.display?.refreshRate },
             ]
         },
         {
             title: 'Performance & OS',
             icon: <Cpu size={20} />,
             items: [
-                { label: 'Processor', value: specifications.processor },
-                { label: 'Operating System', value: specifications.os },
+                { label: 'Processor', value: specifications?.processor },
+                { label: 'Operating System', value: specifications?.os },
             ]
         },
         {
             title: 'Camera System',
             icon: <Camera size={20} />,
             items: [
-                { label: 'Rear Camera', value: specifications.camera?.rear },
-                { label: 'Front Camera', value: specifications.camera?.front },
+                { label: 'Rear Camera', value: specifications?.camera?.rear },
+                { label: 'Front Camera', value: specifications?.camera?.front },
             ]
         },
         {
             title: 'Power & Battery',
             icon: <Battery size={20} />,
             items: [
-                { label: 'Specifications', value: specifications.battery },
+                { label: 'Specifications', value: specifications?.battery },
             ]
         },
         {
             title: 'Connectivity',
             icon: <Wifi size={20} />,
             items: [
-                { label: 'Network & Wireless', value: specifications.network },
+                { label: 'Network & Wireless', value: specifications?.network },
             ]
         },
         {
             title: 'Design & Build',
             icon: <Smartphone size={20} />,
             items: [
-                { label: 'Weight', value: specifications.weight },
+                { label: 'Weight', value: specifications?.weight },
             ]
         },
     ];
@@ -72,8 +63,8 @@ const Specifications = ({ specifications }) => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {specGroups.map((group, index) => (
-                    <div 
-                        key={index} 
+                    <div
+                        key={index}
                         className="group relative bg-white rounded-3xl p-6 border border-border shadow-md shadow-black/3 hover:border-accent hover:shadow-lg transition-all duration-300"
                     >
                         <div className="flex items-center gap-4 mb-5">

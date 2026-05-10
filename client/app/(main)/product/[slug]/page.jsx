@@ -4,6 +4,7 @@ import ProductDetails from '../../../components/product/ProductDetails'
 import Specifications from '../../../components/product/Specifications'
 import RelatedProduct from '../../../components/common/RelatedProduct'
 import { apiClient } from '@/app/lib/apiClient'
+import ProductReview from '@/app/components/product/ProductReview'
 
 const page = async ({ params }) => {
     const { slug } = await params;
@@ -32,6 +33,9 @@ const page = async ({ params }) => {
 
                     {/* ================= Specs & Description ================= */}
                     <Specifications specifications={product?.data?.product?.specifications} />
+
+                    {/* ================= Specs & Description ================= */}
+                    <ProductReview  />
 
                     {/* ================= Related Products ================= */}
                     {/* <RelatedProduct product={product} /> */}

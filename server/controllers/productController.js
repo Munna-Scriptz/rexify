@@ -162,7 +162,7 @@ const getSingle = async (req, res) => {
         // ------- Reviews from db
         const reviews = await reviewSchema
             .find({ product: product._id })
-            .populate("user", "fullname avatar -_id")
+            .populate("user", "fullname avatar")
             .select("-__v -product -updatedAt ")
         // --------- Success 
         resHandler.success(res, 200, "", { product, reviews })

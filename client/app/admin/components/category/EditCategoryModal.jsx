@@ -26,14 +26,14 @@ const EditCategoryModal = ({ categories, isEditOpen, onClose }) => {
 
     // ----------- Handle update -------------
 
-    // const handleUpdate = async () => {
-    //     try {
-    //         const res = await createCategory({ name }).unwrap();
-    //         console.log("Success:", res);
-    //     } catch (err) {
-    //         console.log("Error:", err);
-    //     }
-    // }
+    const handleUpdate = async (name) => {
+        try {
+            const res = await createCategory({ name }).unwrap();
+            console.log("Success:", res);
+        } catch (err) {
+            console.log("Error:", err);
+        }
+    }
 
     if (!isEditOpen) return null;
     return (

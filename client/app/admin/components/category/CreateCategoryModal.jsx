@@ -1,14 +1,22 @@
 import { useRef, useState } from 'react';
 import { X, Upload, Check, Power, LayoutGrid, Type, Hash, FileText } from 'lucide-react';
 import Inputs from '../ui/Inputs';
+import { useCreateCategoryMutation } from '../../services/api';
+import { toast } from 'react-toastify';
+import Button from '@/app/components/ui/Buttons';
 
 const CreateCategoryModal = ({ isOpen, onClose }) => {
+    const [createCategory, { isLoading }] = useCreateCategoryMutation()
+
     const [formData, setFormData] = useState({
         name: '',
+        nameErr: '',
         slug: '',
+        slugErr: '',
         description: '',
         isActive: true,
-        thumbnail: null
+        thumbnail: null,
+        thumbnailErr: ''
     });
     const fileInputRef = useRef(null);
 
@@ -25,9 +33,37 @@ const CreateCategoryModal = ({ isOpen, onClose }) => {
     // ------------ Handle create --------------
 
     const handleCreate = async () => {
+        if (!formData.thumbnail) return setFormData((prev) => ({ ...prev, thumbnailErr: "Thumbnail is required" }))
+        if (!formData.name) return setFormData((prev) => ({ ...prev, nameErr: "Name is required" }))
+        if (!formData.slug) return setFormData((prev) => ({ ...prev, slugErr: "Slug is required" }))
+
+        const provided = new FormData()
+        provided.append('thumbnail', formData.imageFile)
+        provided.append('name', formData.name)
+        provided.append('slug', formData.slug)
+        provided.append('description', formData.description)
+
+
         try {
-            const res = await createCategory({ thumbnail: formData.thumbnail, name: formData.name, slug: formData.slug, description: formData.description }).unwrap();
-            console.log("Success:", res);
+            await toast.promise(
+                createCategory(provided).unwrap(),
+                {
+                    pending: "Creating category...",
+                    success: {
+                        render({ data }) {
+                            return data.message || "Category created successfully";
+                        }
+                    },
+                    error: {
+                        render({ data }) {
+                            return data?.data?.message || "Something went wrong";
+                        }
+                    }
+                },
+                { theme: "dark" }
+            );
+            onClose()
+            setFormData({ name: '', slug: '', description: '', isActive: true, thumbnail: null })
         } catch (err) {
             console.log("Error:", err);
         }
@@ -73,8 +109,8 @@ const CreateCategoryModal = ({ isOpen, onClose }) => {
                                 accept="image/*"
                             />
                             <div
-                                onClick={() => fileInputRef.current.click()}
-                                className="h-66 rounded-4xl border-2 border-dashed border-border bg-surface/50 group hover:border-accent/40 transition-all cursor-pointer flex flex-col items-center justify-center gap-4 relative overflow-hidden"
+                                onClick={() => { fileInputRef.current.click(), setFormData((prev) => ({ thumbnailErr: '' })) }}
+                                className={`h-66 rounded-4xl border-2 border-dashed ${formData.thumbnailErr ? "border-error bg-error/10" : "border-border bg-surface/50"}  group hover:border-accent/40 transition-all cursor-pointer flex flex-col items-center justify-center gap-4 relative overflow-hidden`}
                             >
                                 {formData.thumbnail ? (
                                     <>
@@ -87,11 +123,11 @@ const CreateCategoryModal = ({ isOpen, onClose }) => {
                                     </>
                                 ) : (
                                     <>
-                                        <div className="w-14 h-14 rounded-full bg-white shadow-xl flex items-center justify-center text-accent group-hover:scale-110 transition-transform">
+                                        <div className={`w-14 h-14 rounded-full ${formData.thumbnailErr ? "bg-error/20" : "bg-white"} shadow-xl flex items-center justify-center text-accent group-hover:scale-110`}>
                                             <Upload size={24} />
                                         </div>
                                         <div className="text-center">
-                                            <p className="text-xs font-bold font-space text-brand mb-1">Upload High-Res Cover</p>
+                                            <p className="text-xs font-bold font-space text-brand mb-1">{formData.thumbnailErr ? "Thumbnail is required" : "Upload High-Res Cover"}</p>
                                             <p className="text-[10px] text-text-muted font-medium">Recommended: 1200 x 800px</p>
                                         </div>
                                     </>
@@ -104,21 +140,23 @@ const CreateCategoryModal = ({ isOpen, onClose }) => {
                             <Inputs
                                 labelIcon={<Type size={12} />}
                                 label={"Category Name"}
+                                error={formData.nameErr}
                                 labelClassName={"text-[11px] font-semibold font-space text-coil uppercase tracking-widest pl-2 flex items-center gap-2"}
                                 variant='adminPrimary'
                                 value={formData.name}
                                 placeholder="Premium Smartphones"
-                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                onChange={(e) => setFormData({ ...formData, name: e.target.value, nameErr: '' })}
                             />
 
                             <Inputs
                                 labelIcon={<Hash size={12} />}
                                 label={"Category slug"}
+                                error={formData.slugErr}
                                 labelClassName={"text-[11px] font-semibold font-space text-coil uppercase tracking-widest pl-2 flex items-center gap-2"}
                                 variant='adminPrimary'
                                 value={formData.slug}
                                 placeholder="Product slug"
-                                onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                                onChange={(e) => setFormData({ ...formData, slug: e.target.value, slugErr: '' })}
                             />
 
                             {/* Status Toggle */}
@@ -158,16 +196,16 @@ const CreateCategoryModal = ({ isOpen, onClose }) => {
 
                 {/* Footer Actions */}
                 <div className="px-8 py-6 bg-surface border-t border-border flex items-center justify-end gap-4">
-                    <button
+                    <Button variant='ghost' size='lg' isLoading={isLoading}
                         onClick={onClose}
-                        className="px-8 py-3 rounded-2xl border-2 border-border text-brand font-bold font-space text-sm hover:bg-white transition-all cursor-pointer"
                     >
                         Discard
-                    </button>
-                    <button onClick={handleCreate} className="w-full justify-center py-3 rounded-2xl bg-accent text-white font-semibold text-sm hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center gap-2">
-                        <Check size={18} />
+                    </Button>
+                    <Button variant='adminPrimary' size='lg' isLoading={isLoading} type="submit" leftIcon={<Check size={18} />}
+                        onClick={handleCreate}
+                    >
                         Create Category
-                    </button>
+                    </Button>
                 </div>
             </div>
         </div >

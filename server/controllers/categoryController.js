@@ -13,7 +13,6 @@ const createCategory = async (req, res) => {
         if (existingSlug) return resHandler.error(res, 400, "Slug with this name already exists")
         if (!slug) return resHandler.error(res, 400, "Category slug is required")
         if (!name) return resHandler.error(res, 400, "Category name is required")
-        if (!description) return resHandler.error(res, 400, "Category description is required")
         if (!thumbnail) return resHandler.error(res, 400, "Category thumbnail is required")
 
         // ---------- Upload image to cloudinary

@@ -19,18 +19,19 @@ const Button = ({
     // 2. Color variants (The "Vibe")
     const variants = {
         primary: "bg-indigo-600 text-white hover:bg-indigo-700 focus:ring-indigo-500 shadow-sm",
+        adminPrimary: "w-full justify-center bg-accent text-white font-semibold text-sm hover:scale-105 active:scale-95 flex items-center gap-2",
         secondary: "bg-emerald-500 text-white hover:bg-emerald-600 focus:ring-emerald-400",
         signUp: "bg-transparent text-white",
         sinInAndSignUp: "w-full py-4 bg-linear-to-r from-brand to-Secondary font-bold text-sm hover:brightness-110 active:scale-[0.98] transition-all shadow-lg shadow-violet-500/20 flex items-center justify-center gap-2",
         sinInAndSignUpWhite: "w-full py-4 bg-white text-slate-950 rounded-xl font-black text-sm hover:bg-brand hover:text-white active:scale-[0.96] transition-all duration-300 flex items-center justify-center gap-2 group",
-        ghost: "bg-transparent text-slate-300 hover:text-white",
+        ghost: "border-2 border-border text-brand font-bold text-sm hover:bg-white",
         danger: "bg-rose-500 text-white hover:bg-rose-600 focus:ring-rose-400",
         success: "bg-green-500/20 text-green-400",
-        produtButtons: "h-9 w-9 md:h-11 md:w-11 rounded-full bg-white border cursor-pointer border-neutral-300 flex items-center justify-center hover:border-neutral-900",
+        produtButtons: "h-9 w-9 md:h-11 md:w-11 rounded-full bg-white border border-neutral-300 flex items-center justify-center hover:border-neutral-900",
         
         authButton: `w-full bg-coil/80 text-white font-semibold py-3.5 rounded-full mb-10 hover:bg-text-primary duration-300 cursor-pointer`,
         authMethodButton: `
-        flex-1 flex items-center cursor-pointer justify-center gap-3 border border-gray-400 hover:bg-gray-200 rounded-full py-3 duration-300 
+        flex-1 flex items-center justify-center gap-3 border border-gray-400 hover:bg-gray-200 rounded-full py-3 duration-300 
         text-coil text-sm font-medium`,
         explore: ` px-7 py-3 group bg-text-primary text-white rounded-full font-medium tracking-wide shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:bg-black hover:shadow-[0_20px_40px_rgba(0,0,0,0.35)] transition-all duration-300 ease-out`,
     };

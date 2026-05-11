@@ -66,6 +66,15 @@ export const adminApis = createApi({
             invalidatesTags: ['category'],
         }),
 
+        deleteCategory: build.mutation({
+            query: (data) => ({
+                url: "/category/delete",
+                method: "DELETE",
+                body: data
+            }),
+            invalidatesTags: ['category'],
+        }),
+
 
     }),
 
@@ -78,5 +87,6 @@ export const {
 
     useGetCategoryQuery,
     useCreateCategoryMutation,
+    useDeleteCategoryMutation
     
 } = adminApis

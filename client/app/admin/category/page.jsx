@@ -6,18 +6,41 @@ import StatCard from '../components/common/StatCards';
 import CategoryHeader from '../components/category/CategoryHeader';
 import CreateCategoryModal from '../components/category/CreateCategoryModal';
 import VerifyDelete from '../components/common/VerifyDelete';
-import { useGetCategoryQuery } from '../services/api';
+import { useDeleteCategoryMutation, useGetCategoryQuery } from '../services/api';
+import { toast } from 'react-toastify';
 
 const page = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [isDeleteOpen, SetisDeleteOpen] = useState(false)
   const [categoryId, SetCategoryId] = useState("")
   // ------------ Get data from server -------------
-  const { data: categories, error, isLoading } = useGetCategoryQuery()
+  const { data: categories, isLoading } = useGetCategoryQuery()
+  const [deleteCategory, { isLoading: isDeleteLoading }] = useDeleteCategoryMutation()
 
   // ------------ Handle delete -------------
-  const handleDelete = () => {
-    
+  const handleDelete = async () => {
+    try {
+      await toast.promise(
+        deleteCategory({ categoryId }).unwrap(),
+        {
+          pending: "Deleting category...",
+          success: {
+            render({ data }) {
+              SetisDeleteOpen(false)
+              return data.message || "Category Deleted successfully";
+            }
+          },
+          error: {
+            render({ data }) {
+              return data?.data?.message || "Something went wrong";
+            }
+          }
+        },
+        { theme: "dark" }
+      );
+    } catch (err) {
+      console.log("Error:", err);
+    }
   }
 
   return (
@@ -44,7 +67,7 @@ const page = () => {
       <CategoryHeader setIsOpen={setIsOpen} />
 
       {/* ---------- Modals  */}
-      <VerifyDelete isOpen={isDeleteOpen} onClose={() => SetisDeleteOpen(false)} onConfirm={handleDelete} itemName="Spring Collection 2024" />
+      <VerifyDelete isOpen={isDeleteOpen} onClose={() => SetisDeleteOpen(false)} onConfirm={handleDelete} loading={isDeleteLoading} itemName="Spring Collection 2024" />
       <CreateCategoryModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
 
       {/* ----------------------- Category Grid ----------------------- */}

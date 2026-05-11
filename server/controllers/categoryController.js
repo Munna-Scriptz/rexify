@@ -1,6 +1,7 @@
 const categorySchema = require("../models/categorySchema")
-const { cloudUpload } = require("../services/cloudUpload")
+const { cloudUpload, cloudDelete } = require("../services/cloudUpload")
 const resHandler = require("../utils/resHandler")
+const { ObjectId } = require('mongodb');
 
 // ================= Create Category =====================
 const createCategory = async (req, res) => {
@@ -38,7 +39,7 @@ const createCategory = async (req, res) => {
 // ================= Delete Category =====================
 const deleteCategory = async (req, res) => {
     try {
-        const { categoryId } = req.body
+        const { categoryId } = req.body 
 
         // ---------- Validation ----------
         if (!categoryId) return resHandler.error(res, 400, 'Category ID is required')
@@ -58,6 +59,7 @@ const deleteCategory = async (req, res) => {
         // --------- Success 
         resHandler.success(res, 200, "Category deleted successfully")
     } catch (error) {
+        console.log(error)
         resHandler.error(res, 500, 'Internal Server Error')
     }
 }

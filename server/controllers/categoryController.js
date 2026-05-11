@@ -39,7 +39,7 @@ const createCategory = async (req, res) => {
 // ================= Delete Category =====================
 const deleteCategory = async (req, res) => {
     try {
-        const { categoryId } = req.body 
+        const { categoryId } = req.body
 
         // ---------- Validation ----------
         if (!categoryId) return resHandler.error(res, 400, 'Category ID is required')
@@ -63,6 +63,38 @@ const deleteCategory = async (req, res) => {
         resHandler.error(res, 500, 'Internal Server Error')
     }
 }
+
+// ================= Update Category =====================
+const updateCategory = async (req, res) => {
+    try {
+        const thumbnail = req.file
+        const { categoryId, name, description } = req.body
+
+        // ------- Find from DB
+        const existingCategory = await categorySchema.findOne({ _id: categoryId })
+        if (!existingCategory) return resHandler.error(res, 404, "Couldn't found any category")
+
+        // ------- Changes
+        if (name) existingCategory.name = name
+        if (description) existingCategory.description = description
+
+        // ------------ Thumbnail -------------
+        if (thumbnail) {
+            cloudDelete({ folder: "category", file: existingCategory.thumbnail }) // --- Delete previous thumbnail
+            const cloudRes = await cloudUpload({ file: thumbnail, folderPath: "rexify/categories", folder: "category"})
+            existingCategory.thumbnail = cloudRes.secure_url
+        }
+
+        // ---- Save
+        existingCategory.save()
+
+        // --------- Success 
+        resHandler.success(res, 200, "Category updated successfully")
+    } catch (error) {
+        resHandler.error(res, 500, 'Internal Server Error')
+    }
+}
+
 // ================= Get All Category =====================
 const getCategories = async (req, res) => {
     try {
@@ -86,4 +118,4 @@ const getCategories = async (req, res) => {
     }
 };
 
-module.exports = { createCategory, deleteCategory, getCategories }
+module.exports = { createCategory, deleteCategory, updateCategory, getCategories }

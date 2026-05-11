@@ -1,8 +1,12 @@
 import { useState, useRef } from 'react';
-import { X, Upload, Check, Power, LayoutGrid, Type, Hash, FileText } from 'lucide-react';
+import { X, Upload, Check, Power, LayoutGrid, Type, FileText, Loader2 } from 'lucide-react';
 import Inputs from '../ui/Inputs';
+import { useUpdateCategoryMutation } from '../../services/api';
+import { toast } from 'react-toastify';
 
 const EditCategoryModal = ({ categories, isEditOpen, onClose }) => {
+    const [updateCategory, { isLoading }] = useUpdateCategoryMutation()
+
     const [formData, setFormData] = useState({
         name: categories.name || '',
         slug: categories.slug || '',
@@ -26,10 +30,48 @@ const EditCategoryModal = ({ categories, isEditOpen, onClose }) => {
 
     // ----------- Handle update -------------
 
-    const handleUpdate = async (name) => {
+    const handleUpdate = async () => {
+        const provided = new FormData()
+        provided.append('categoryId', categories._id)
+
+        let hasChanges = false;
+
+        if (formData.name !== categories.name) {
+            provided.append('name', formData.name);
+            hasChanges = true;
+        }
+        if (formData.description !== categories.description) {
+            provided.append('description', formData.description);
+            hasChanges = true;
+        }
+        if (formData.imageFile) {
+            provided.append('thumbnail', formData.imageFile);
+            hasChanges = true;
+        }
+
+        if (!hasChanges) {
+            return toast.info("No changes detected", { theme: "dark" });
+        }
+
         try {
-            const res = await createCategory({ name }).unwrap();
-            console.log("Success:", res);
+            await toast.promise(
+                updateCategory(provided).unwrap(),
+                {
+                    pending: "Updating category...",
+                    success: {
+                        render({ data }) {
+                            return data.message || "Category Updated successfully";
+                        }
+                    },
+                    error: {
+                        render({ data }) {
+                            return data?.data?.message || "Something went wrong";
+                        }
+                    }
+                },
+                { theme: "dark" }
+            );
+            onClose()
         } catch (err) {
             console.log("Error:", err);
         }
@@ -98,16 +140,6 @@ const EditCategoryModal = ({ categories, isEditOpen, onClose }) => {
                                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                             />
 
-                            <Inputs
-                                labelIcon={<Hash size={12} />}
-                                label={"Category slug"}
-                                labelClassName={"text-[11px] font-semibold font-space text-coil uppercase tracking-widest pl-2 flex items-center gap-2"}
-                                variant='adminPrimary'
-                                value={formData.slug}
-                                placeholder="Product slug"
-                                onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                            />
-
                             {/* Status Toggle */}
                             <div className="flex flex-col gap-2 w-full">
                                 <label className="text-[11px] font-semibold font-space text-coil uppercase tracking-widest pl-2 flex items-center gap-2">
@@ -151,9 +183,17 @@ const EditCategoryModal = ({ categories, isEditOpen, onClose }) => {
                     >
                         Discard
                     </button>
-                    <button onClick={handleUpdate} className="w-full justify-center py-3 rounded-2xl bg-accent text-white font-semibold text-sm hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center gap-2">
-                        <Check size={18} />
-                        Update Category
+                    <button
+                        onClick={handleUpdate}
+                        disabled={isLoading}
+                        className="w-full justify-center py-3 rounded-2xl bg-accent text-white font-semibold text-sm hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed disabled:scale-100"
+                    >
+                        {isLoading ? (
+                            <Loader2 size={18} className="animate-spin" />
+                        ) : (
+                            <Check size={18} />
+                        )}
+                        {isLoading ? "Updating..." : "Update Category"}
                     </button>
                 </div>
             </div>

@@ -34,7 +34,7 @@ const page = async ({ params }) => {
                     <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 mb-20">
 
                         {/* --- Left: Image Gallery --- */}
-                        <ImageGallery images={product?.data?.product?.images} />
+                        <ImageGallery thumbnail={product?.data?.product?.thumbnail} images={product?.data?.product?.images} />
 
                         {/* --- Right: Product Details --- */}
                         <ProductDetails product={product?.data?.product} />

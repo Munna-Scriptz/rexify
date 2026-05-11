@@ -4,7 +4,7 @@ import { Star, Minus, Plus, ShoppingCart, Zap, Truck, ShieldCheck } from 'lucide
 
 const ProductDetails = ({ product }) => {
     const [selectedColor, setSelectedColor] = useState(product?.variants[0]?.color)
-    const [selectedStorage, setSelectedStorage] = useState(product?.variants[0]?.ram)
+    const [selectedStorage, setSelectedStorage] = useState(product?.variants[0]?.storage)
     const [selectedRam, setSelectedRam] = useState(product?.variants[0]?.ram)
     const [quantity, setQuantity] = useState(1)
 

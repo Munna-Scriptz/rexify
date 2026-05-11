@@ -4,11 +4,14 @@ import React, { useCallback, useEffect, useState } from "react"
 import useEmblaCarousel from "embla-carousel-react"
 import { Share2, Heart, ChevronLeft, ChevronRight } from "lucide-react"
 
-const ImageGallery = ({ images = [] }) => {
+const ImageGallery = ({ thumbnail, images = [] }) => {
     const [selectedIndex, setSelectedIndex] = useState(0)
     const [zoomStyle, setZoomStyle] = useState({})
     const [isZoomed, setIsZoomed] = useState(false)
 
+    useEffect(()=>{
+        images.unshift(thumbnail)
+    }, [])
     // Main slider
     const [emblaRef, emblaApi] = useEmblaCarousel({
         loop: false,

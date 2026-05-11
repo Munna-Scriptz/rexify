@@ -35,7 +35,7 @@ const CategoryCard = ({ categories, onDelete }) => {
               <Pencil size={18} />
             </button>
             <button
-              onClick={onDelete}
+              onClick={() => onDelete(categories._id)}
               className="w-10 h-10 cursor-pointer flex items-center justify-center rounded-full bg-black/40 backdrop-blur-md text-white border border-white/20 hover:bg-error hover:border-error transition-all duration-300"
             >
               <Trash2 size={18} />

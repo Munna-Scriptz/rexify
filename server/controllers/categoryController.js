@@ -35,6 +35,32 @@ const createCategory = async (req, res) => {
     }
 }
 
+// ================= Delete Category =====================
+const deleteCategory = async (req, res) => {
+    try {
+        const { categoryId } = req.body
+
+        // ---------- Validation ----------
+        if (!categoryId) return resHandler.error(res, 400, 'Category ID is required')
+        if (!ObjectId.isValid(categoryId)) return resHandler.error(res, 400, 'invalid object id')
+
+
+        // ------- Find from DB
+        const existingCategory = await categorySchema.findById(categoryId)
+        if (!existingCategory) return resHandler.error(res, 404, "Coudn't found any Category")
+
+
+        // ------------ Thumbnail -------------
+        cloudDelete({ folder: "category", file: existingCategory.thumbnail }) // --- Delete thumbnail
+
+        await categorySchema.findByIdAndDelete(categoryId)
+
+        // --------- Success 
+        resHandler.success(res, 200, "Category deleted successfully")
+    } catch (error) {
+        resHandler.error(res, 500, 'Internal Server Error')
+    }
+}
 // ================= Get All Category =====================
 const getCategories = async (req, res) => {
     try {
@@ -58,4 +84,4 @@ const getCategories = async (req, res) => {
     }
 };
 
-module.exports = { createCategory, getCategories }
+module.exports = { createCategory, deleteCategory, getCategories }

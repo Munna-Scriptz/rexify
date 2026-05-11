@@ -11,9 +11,14 @@ import { useGetCategoryQuery } from '../services/api';
 const page = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [isDeleteOpen, SetisDeleteOpen] = useState(false)
-
+  const [categoryId, SetCategoryId] = useState("")
   // ------------ Get data from server -------------
   const { data: categories, error, isLoading } = useGetCategoryQuery()
+
+  // ------------ Handle delete -------------
+  const handleDelete = () => {
+    
+  }
 
   return (
     <>
@@ -39,7 +44,7 @@ const page = () => {
       <CategoryHeader setIsOpen={setIsOpen} />
 
       {/* ---------- Modals  */}
-      <VerifyDelete isOpen={isDeleteOpen} onClose={() => SetisDeleteOpen(false)} onConfirm={""} itemName="Spring Collection 2024" />
+      <VerifyDelete isOpen={isDeleteOpen} onClose={() => SetisDeleteOpen(false)} onConfirm={handleDelete} itemName="Spring Collection 2024" />
       <CreateCategoryModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
 
       {/* ----------------------- Category Grid ----------------------- */}
@@ -48,7 +53,7 @@ const page = () => {
           <CategoryCard
             key={i}
             categories={item}
-            onDelete={() => SetisDeleteOpen(true)}
+            onDelete={(e) => { SetisDeleteOpen(true), SetCategoryId(e) }}
           />
         ))}
 

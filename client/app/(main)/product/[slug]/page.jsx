@@ -1,7 +1,5 @@
-import { Cpu, Camera, Battery, Smartphone, Maximize, HardDrive } from 'lucide-react'
 import { cookies } from 'next/headers'
-import ImageGallery from '../../../components/product/ImageGallery'
-import ProductDetails from '../../../components/product/ProductDetails'
+import ProductContainer from '../../../components/product/ProductContainer'
 import Specifications from '../../../components/product/Specifications'
 import RelatedProduct from '../../../components/common/RelatedProduct'
 import { apiClient } from '@/app/lib/apiClient'
@@ -30,20 +28,16 @@ const page = async ({ params }) => {
         <section id='Product-details' className="text-text-primary pb-20 mt-8">
             <div id='Product-details-row'>
                 <div className="container pt-12">
-                    {/* ================= Product Top Section ================= */}
-                    <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 mb-20">
-
-                        {/* --- Left: Image Gallery --- */}
-                        <ImageGallery thumbnail={product?.data?.product?.thumbnail} images={product?.data?.product?.images} />
-
-                        {/* --- Right: Product Details --- */}
-                        <ProductDetails product={product?.data?.product} />
-                    </div>
+                    {/* ================= Product Top Section (Image Gallery & Details wrapper) ================= */}
+                    <ProductContainer 
+                        product={product?.data?.product} 
+                        currentUser={currentUser} 
+                    />
 
                     {/* ================= Specs & Description ================= */}
                     <Specifications specifications={product?.data?.product?.specifications} />
 
-                    {/* ================= Specs & Description ================= */}
+                    {/* ================= Product Reviews ================= */}
                     <ProductReview 
                         reviews={product?.data?.reviews} 
                         productId={product?.data?.product?._id} 

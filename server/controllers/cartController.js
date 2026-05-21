@@ -23,11 +23,8 @@ const createCart = async (req, res) => {
         if (!existingProduct) return resHandler.error(res, 404, "couldn't found product")
 
         // --------- discount and subtotal
-        const discountPercentage = existingProduct.discountPercentage
+        const discountPercentage = existingProduct.variants.find(item => item.sku === sku)?.discountPercentage;
         const price = existingProduct.variants.find(item => item.sku === sku)?.price;
-        const color = existingProduct.variants.find(item => item.sku === sku)?.color;
-        const ram = existingProduct.variants.find(item => item.sku === sku)?.ram;
-        const storage = existingProduct.variants.find(item => item.sku === sku)?.storage;
         if (!price) return resHandler.error(res, 404, "Wrong product sku")
         const subTotal = price * quantity * (1 - discountPercentage / 100);
 
@@ -41,9 +38,6 @@ const createCart = async (req, res) => {
             existingCart.items.push({
                 product,
                 sku,
-                color,
-                ram,
-                storage,
                 quantity,
                 discountPercentage,
                 price,

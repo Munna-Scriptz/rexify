@@ -3,9 +3,8 @@ import Link from 'next/link';
 
 const OrderSummary = ({ cartItems, buttonText, to}) => {
     const subtotal = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-    const tax = subtotal * 0.08;
-    const shipping = subtotal > 1000 ? 0 : 25;
-    const total = subtotal + tax + shipping;
+    const shipping = 9
+    const total = subtotal + shipping;
 
     return (
         <div className="lg:col-span-1">
@@ -20,14 +19,8 @@ const OrderSummary = ({ cartItems, buttonText, to}) => {
                             <span className="text-text-primary font-medium">${subtotal.toLocaleString()}</span>
                         </div>
                         <div className="flex justify-between text-text-secondary">
-                            <span>Tax estimate (8%)</span>
-                            <span className="text-text-primary font-medium">${tax.toFixed(2)}</span>
-                        </div>
-                        <div className="flex justify-between text-text-secondary">
-                            <span>Shipping</span>
-                            <span className={`font-medium ${shipping === 0 ? 'text-green-600' : 'text-text-primary'}`}>
-                                {shipping === 0 ? 'Free' : `$${shipping}`}
-                            </span>
+                            <span>Delivery Charge</span>
+                            <span className="text-text-primary font-medium">${shipping}</span>
                         </div>
 
                         <div className="h-px bg-border my-4"></div>

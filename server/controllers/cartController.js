@@ -113,8 +113,8 @@ const updateCart = async (req, res) => {
 const deleteCart = async (req, res) => {
     try {
         const user = req.user._id
-        const { product, sku } = req.body
-
+        const { product, sku } = req.body 
+        
         // ------------ Validation 
         if (!product) return resHandler.error(res, 400, "product is required")
         if (!ObjectId.isValid(product)) return resHandler.error(res, 400, "Invalid product id")
@@ -146,7 +146,7 @@ const getCart = async (req, res) => {
         if (!user) return resHandler.error(res, 400, "invalid cart request")
 
         // ---------- Find from DB 
-        const existingCart = await cartSchema.findOne({ user }).populate("items.product", "thumbnail title").select("-user -createdAt -updatedAt -__v")
+        const existingCart = await cartSchema.findOne({ user }).populate("items.product", "title variants").select("-user -createdAt -updatedAt -__v")
 
         // ----------- Success 
         resHandler.success(res, 200, "Your cart", existingCart)

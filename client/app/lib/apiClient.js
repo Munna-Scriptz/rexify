@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation";
+
 const BASE_URL = process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:8000";
 
 async function request(endpoint, options = {}) {
@@ -50,7 +52,9 @@ async function request(endpoint, options = {}) {
 
     try {
         const res = await fetch(`${BASE_URL}${endpoint}`, fetchOptions);
-
+        if(res.status == 401) {
+            redirect("/auth/signin")
+        }
         if (!res.ok) {
             const errorData = await res.json().catch(() => ({}));
             throw new Error(errorData.message || `Request failed: ${res.status}`);

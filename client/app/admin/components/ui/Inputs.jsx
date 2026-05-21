@@ -30,6 +30,7 @@ const Inputs = ({
         adminPrimary: "border border-border rounded-2xl font-medium text-brand focus:border-accent outline-none",
         secondary: "bg-emerald-500/5 border-emerald-500/20 text-emerald-900 focus:border-emerald-600 focus:bg-white",
         signUp: "w-full bg-black/20 border border-white/5 rounded-xl py-3.5 pl-12 pr-4 outline-none focus:border-brand/50 text-sm",
+        productVar: "w-full bg-black/20 border border-white/5 rounded-xl py-3.5 pr-4 outline-none focus:border-brand/50 text-sm",
         ghost: "bg-transparent border-transparent border-b-slate-700 text-slate-300 focus:text-white focus:border-b-white",
         danger: "bg-rose-500/5 border-rose-500/20 text-rose-900 focus:border-rose-600 focus:bg-white",
         success: "bg-green-500/10 border-green-500/20 text-green-400 focus:border-green-500",

@@ -11,8 +11,7 @@ const createProduct = async (req, res) => {
         const variants = JSON.parse(req.body.variants);
         const specifications = JSON.parse(req.body.specifications);
         const tags = JSON.parse(req.body.tags);
-        const thumbnail = req.files?.thumbnail?.[0]
-        const images = req.files?.images
+        const files = req.files || [];
 
         // ---------- Validation ----------
         if (!title) return resHandler.error(res, 400, 'Title is required')
@@ -57,17 +56,60 @@ const createProduct = async (req, res) => {
 
 
         // ---------- Upload images ----------
-        if (!thumbnail) return resHandler.error(res, 400, 'Product thumbnail is required')
-        const thumbRes = await cloudUpload({ file: thumbnail, folderPath: "rexify/products", folder: "product" })
-
-        const imageUrls = []
-        if (images) {
-            for (const img of images) {
-                const uploadRes = await cloudUpload({ file: img, folderPath: "rexify/products", folder: "product" })
-                imageUrls.push(uploadRes.secure_url)
-            }
+        // Check if there is a main thumbnail OR variant thumbnails
+        const thumbnailFile = files.find(f => f.fieldname === 'thumbnail');
+        const hasVariantThumbnail = files.some(f => f.fieldname.endsWith('_thumbnail'));
+        if (!thumbnailFile && !hasVariantThumbnail) {
+            return resHandler.error(res, 400, 'Product thumbnail is required')
         }
 
+        // Upload variant files first
+        for (let i = 0; i < variants.length; i++) {
+            const variant = variants[i];
+
+            const varThumbFile = files.find(f => f.fieldname === `variant_${i}_thumbnail`);
+            if (varThumbFile) {
+                const uploadRes = await cloudUpload({ file: varThumbFile, folderPath: "rexify/products", folder: "product" });
+                variant.thumbnail = uploadRes?.secure_url || "";
+            } else {
+                variant.thumbnail = variant.thumbnail || "";
+            }
+
+            const variantImages = [];
+            const varImg0 = files.find(f => f.fieldname === `variant_${i}_image_0`);
+            const varImg1 = files.find(f => f.fieldname === `variant_${i}_image_1`);
+
+            if (varImg0) {
+                const uploadRes = await cloudUpload({ file: varImg0, folderPath: "rexify/products", folder: "product" });
+                if (uploadRes?.secure_url) variantImages.push(uploadRes.secure_url);
+            }
+            if (varImg1) {
+                const uploadRes = await cloudUpload({ file: varImg1, folderPath: "rexify/products", folder: "product" });
+                if (uploadRes?.secure_url) variantImages.push(uploadRes.secure_url);
+            }
+
+            variant.images = variantImages;
+        }
+
+        // Upload top-level thumbnail & images for backward compatibility
+        let mainThumbnailUrl = "";
+        if (thumbnailFile) {
+            const thumbRes = await cloudUpload({ file: thumbnailFile, folderPath: "rexify/products", folder: "product" });
+            mainThumbnailUrl = thumbRes?.secure_url || "";
+        } else if (variants.length > 0) {
+            mainThumbnailUrl = variants[0].thumbnail;
+        }
+
+        const mainImageUrls = [];
+        const topLevelImages = files.filter(f => f.fieldname === 'images');
+        if (topLevelImages.length > 0) {
+            for (const img of topLevelImages) {
+                const uploadRes = await cloudUpload({ file: img, folderPath: "rexify/products", folder: "product" });
+                if (uploadRes?.secure_url) mainImageUrls.push(uploadRes.secure_url);
+            }
+        } else if (variants.length > 0) {
+            mainImageUrls.push(...(variants[0].images || []));
+        }
 
         // ---------- Save to DB ----------
         const product = productSchema({
@@ -79,8 +121,8 @@ const createProduct = async (req, res) => {
             discountPercentage,
             variants,
             specifications,
-            images: imageUrls,
-            thumbnail: thumbRes.secure_url,
+            images: mainImageUrls,
+            thumbnail: mainThumbnailUrl,
             brand,
             badge,
             warranty,

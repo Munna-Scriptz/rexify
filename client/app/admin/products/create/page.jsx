@@ -1,24 +1,21 @@
 "use client"
 import { useState } from 'react';
-import { Upload, Plus, Trash2, Package, Cpu, Battery, Monitor, Camera, Tag as TagIcon, Image as ImageIcon, Smartphone, ShieldCheck, Layers, Network, Weight } from 'lucide-react';
+import { Plus, Trash2, Package, Cpu, Battery, Monitor, Camera, Tag as TagIcon, Smartphone, ShieldCheck, Layers, Network, Weight, Sparkles, CheckCircle2 } from 'lucide-react';
 import CreateHeader from '../../components/createProduct/CreateHeader';
+import VariantManager from '../../components/createProduct/VariantManager';
 import Inputs from '../../components/ui/Inputs';
 import { useCreateProductMutation, useGetCategoryQuery } from '../../services/api';
 import { toast, ToastContainer } from 'react-toastify';
 
-const page = () => {
+const Page = () => {
     // ------------ Get categories from server -------------
-    const { data: categories, error, isLoading } = useGetCategoryQuery()
+    const { data: categories, error: categoryError, isLoading } = useGetCategoryQuery();
 
-    const [thumbnail, setThumbnail] = useState(null);
-    const [images, setImages] = useState([]);
     const [formData, setFormData] = useState({
         title: '',
         slug: '',
         description: '',
         category: '',
-        price: 0,
-        discountPercentage: 0,
         brand: '',
         badge: '',
         warranty: 'No warranty',
@@ -39,19 +36,23 @@ const page = () => {
     const [variants, setVariants] = useState([{
         id: Date.now(),
         sku: '',
-        color: '',
+        colorName: '',
+        colorCode: '#111111',
         storage: '',
         ram: '',
         price: '',
-        stock: ''
+        discountPercentage: 0,
+        stock: '',
+        isDefault: true,
+        thumbnailFile: null,
+        imageFiles: [null, null]
     }]);
 
     const [tags, setTags] = useState([]);
     const [tagInput, setTagInput] = useState('');
-
     const [errors, setErrors] = useState({});
 
-    // ----------- handle all input chances 
+    // ----------- handle all input changes -----------
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
         const val = type === 'checkbox' ? checked : (type === 'number' ? Number(value) : value);
@@ -72,7 +73,7 @@ const page = () => {
         }
     };
 
-    // ----------- handle all specifications chances 
+    // ----------- handle all specifications changes -----------
     const handleSpecChange = (section, field, value) => {
         const key = field ? `spec_${section}_${field}` : `spec_${section}`;
         if (errors[key]) {
@@ -93,47 +94,7 @@ const page = () => {
         }
     };
 
-    // ----------- handle all variants chances 
-    const handleVariantChange = (id, field, value, type) => {
-        const index = variants.findIndex(v => v.id === id);
-        const errKey = `variant_${index}_${field}`;
-        if (errors[errKey]) {
-            setErrors(prev => {
-                const next = { ...prev };
-                delete next[errKey];
-                return next;
-            });
-        }
-
-        const val = type === 'number' ? Number(value) : value;
-        setVariants(variants.map(v => v.id === id ? { ...v, [field]: val } : v));
-    };
-
-    // ----------- handle add variants 
-    const addVariant = () => {
-        setVariants([...variants, { id: Date.now(), sku: '', color: '', storage: '', ram: '', price: '', stock: '' }]);
-    };
-
-    // ----------- handle remove variants 
-    const removeVariant = (id) => {
-        if (variants.length > 1) {
-            setVariants(variants.filter(v => v.id !== id));
-        }
-    };
-
-    // ----------- handle images upload 
-    const handleImages = (e) => {
-        let imgs = [...images]
-        imgs.push(e.target.files[0])
-        setImages(imgs)
-    };
-
-    // ----------- handle remove images 
-    const removeImages = (i) => {
-        setImages(images.filter((img, idx) => idx !== i));
-    };
-
-    // ----------- handle add tags 
+    // ----------- handle add tags -----------
     const addTag = (e) => {
         if (e.key === 'Enter' && tagInput.trim()) {
             if (!tags.includes(tagInput.trim())) {
@@ -144,12 +105,12 @@ const page = () => {
         }
     };
 
-    // ----------- handle remove tags 
+    // ----------- handle remove tags -----------
     const removeTag = (index) => {
         setTags(tags.filter((_, i) => i !== index));
     };
 
-    // ----------- handle all input validations 
+    // ----------- handle all input validations -----------
     const validateForm = () => {
         const newErrors = {};
 
@@ -158,11 +119,6 @@ const page = () => {
         if (!formData.brand) newErrors.brand = "Brand is required";
         if (!formData.category) newErrors.category = "Category is required";
         if (!formData.description) newErrors.description = "Description is required";
-        if (!formData.price) newErrors.price = "Price is required";
-
-        // Media
-        if (!thumbnail) newErrors.thumbnail = "Main thumbnail is required";
-        if (images.length === 0) newErrors.gallery = "Add at least one image";
 
         // Specifications
         const requiredSpecs = [
@@ -180,18 +136,21 @@ const page = () => {
         // Variants
         variants.forEach((v, index) => {
             if (!v.sku) newErrors[`variant_${index}_sku`] = "SKU required";
-            if (!v.color) newErrors[`variant_${index}_color`] = "Color required";
-            if (!v.storage) newErrors[`variant_${index}_storage`] = "Storage";
-            if (!v.ram) newErrors[`variant_${index}_ram`] = "Ram required";
+            if (!v.colorName) newErrors[`variant_${index}_colorName`] = "Color name";
+            if (!v.colorCode) newErrors[`variant_${index}_colorCode`] = "Color code";
+            if (!v.storage) newErrors[`variant_${index}_storage`] = "Storage required";
+            if (!v.ram) newErrors[`variant_${index}_ram`] = "RAM required";
             if (!v.price || v.price < 1) newErrors[`variant_${index}_price`] = "Min price 1";
             if (v.stock === '' || v.stock < 0) newErrors[`variant_${index}_stock`] = "Min stock 0";
+            if (!v.thumbnailFile) newErrors[`variant_${index}_thumbnail`] = "Cover image required";
+            if (!v.imageFiles[0] || !v.imageFiles[1]) newErrors[`variant_${index}_gallery`] = "Both gallery slots required";
         });
 
         setErrors(newErrors);
 
         if (Object.keys(newErrors).length > 0) {
             const firstErrorField = Object.keys(newErrors)[0];
-            toast.error(`Please enter ${firstErrorField}`);
+            toast.error(`Please fix form errors (check variant and specification sections)`);
             return false;
         }
 
@@ -199,41 +158,79 @@ const page = () => {
     };
 
     // --------------- Handle submit ----------------
-    const [createProduct] = useCreateProductMutation()
+    const [createProduct] = useCreateProductMutation();
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        if (e) e.preventDefault();
 
         if (!validateForm()) return;
-        const formDataToSend = new FormData()
-        formDataToSend.append('thumbnail', thumbnail)
-        images.forEach((item) => formDataToSend.append('images', item))
+        const formDataToSend = new FormData();
+
+        // 1. General details
         for (let key in formData) {
             formDataToSend.append(key, formData[key]);
         }
 
-        formDataToSend.append('variants', JSON.stringify(variants))
-        formDataToSend.append('specifications', JSON.stringify(specs))
-        formDataToSend.append('tags', JSON.stringify(tags))
+        // 2. Set base price and discount from default variant (for backend controller compatibility)
+        const defaultVariant = variants.find(v => v.isDefault) || variants[0];
+        formDataToSend.append('price', Number(defaultVariant.price));
+        formDataToSend.append('discountPercentage', Number(defaultVariant.discountPercentage || 0));
 
+        // 3. Serialize specifications & tags
+        formDataToSend.append('specifications', JSON.stringify(specs));
+        formDataToSend.append('tags', JSON.stringify(tags));
+
+        // 4. Serialize variants array (without File binaries to avoid serialization error)
+        const cleanVariants = variants.map(v => ({
+            sku: v.sku,
+            color: {
+                name: v.colorName,
+                code: v.colorCode
+            },
+            ram: Number(v.ram),
+            storage: Number(v.storage),
+            price: Number(v.price),
+            discountPercentage: Number(v.discountPercentage || 0),
+            stock: Number(v.stock),
+            isDefault: v.isDefault
+        }));
+        formDataToSend.append('variants', JSON.stringify(cleanVariants));
+
+        // 5. Append individual binary files per variant with dynamic keys
+        variants.forEach((v, index) => {
+            if (v.thumbnailFile) {
+                formDataToSend.append(`variant_${index}_thumbnail`, v.thumbnailFile);
+            }
+            if (v.imageFiles[0]) {
+                formDataToSend.append(`variant_${index}_image_0`, v.imageFiles[0]);
+            }
+            if (v.imageFiles[1]) {
+                formDataToSend.append(`variant_${index}_image_1`, v.imageFiles[1]);
+            }
+        });
 
         await toast.promise(
             createProduct(formDataToSend).unwrap(),
             {
-                pending: "Creating product...",
+                pending: "Uploading media and creating product...",
                 success: {
                     render({ data }) {
-                        return data.message || "Product created successfully";
+                        return data.message || "Product created successfully!";
                     }
                 },
                 error: {
                     render({ data }) {
-                        return data?.data?.message || "Something went wrong";
+                        return data?.data?.message || "Failed to create product.";
                     }
                 }
             }
         );
     };
+
+    // ----------- Dynamic Preview Data -----------
+    const defaultVar = variants.find(v => v.isDefault) || variants[0];
+    const previewThumbnailUrl = defaultVar?.thumbnailFile ? URL.createObjectURL(defaultVar.thumbnailFile) : null;
+    const categoryName = categories?.data?.find(c => c._id === formData.category)?.name || "Technology";
 
     return (
         <>
@@ -242,250 +239,152 @@ const page = () => {
                 {/* ---------------- Header ---------------- */}
                 <CreateHeader onPublish={handleSubmit} />
 
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                    {/* ================= LEFT COLUMN ================= */}
-                    <div className="lg:col-span-7 flex flex-col gap-6">
+                {/* ================= LEFT COLUMN ================= */}
+                <div className="flex flex-col gap-6">
 
-                        {/* ----------- Media & Gallery ------------*/}
-                        <section className="p-6 bg-white rounded-3xl border border-border shadow-sm">
-                            <div className="flex items-center justify-between mb-6">
-                                <h2 className="text-xl font-bold font-space text-brand flex items-center gap-3">
-                                    <ImageIcon size={22} className="text-accent" /> Media Gallery
-                                </h2>
-                                {errors.gallery && <span className="text-xs font-bold text-error animate-pulse">{errors.gallery}</span>}
+                    {/* General Information */}
+                    <section className="p-6 bg-white rounded-3xl border border-border shadow-sm">
+                        <h2 className="text-xl font-bold font-space text-brand mb-6 flex items-center gap-3">
+                            <Package size={22} className="text-accent" /> Product Details
+                        </h2>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className='md:col-span-2'>
+                                <Inputs variant='adminPrimary' label={"Product Title"} name="title" value={formData.title} onChange={handleInputChange} error={errors.title} placeholder={"iPhone 15 Pro Max"} />
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                                <div className={`md:col-span-2 md:row-span-2 relative h-95 rounded-2xl border-2 border-dashed ${errors.thumbnail ? 'border-error bg-error/5' : 'border-border bg-surface/50'} group hover:border-accent/40 transition-all cursor-pointer flex flex-col items-center justify-center gap-3 overflow-hidden`}>
-                                    {thumbnail ? (
-                                        <img src={URL.createObjectURL(thumbnail)} alt="Thumbnail" className="w-full h-full object-cover" />
-                                    ) : (
-                                        <>
-                                            <div className={`w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center ${errors.thumbnail ? 'text-error' : 'text-accent'} group-hover:scale-110 transition-transform z-10`}>
-                                                <Upload size={20} />
-                                            </div>
-                                            <p className={`text-[12px] font-semibold font-space ${errors.thumbnail ? 'text-error/70' : 'text-text-muted'} uppercase tracking-widest z-10`}>
-                                                {errors.thumbnail || "Main Thumbnail"}
-                                            </p>
-                                        </>
-                                    )}
-                                    <input type="file" className="absolute inset-0 opacity-0 cursor-pointer" onChange={(e) => setThumbnail(e.target.files[0])} accept="image/*" />
-                                    <span className="absolute top-4 left-4 px-3 py-1 bg-brand text-white text-[9px] font-semibold rounded-full uppercase z-10 tracking-tighter">Cover</span>
-                                </div>
-
-                                {/* Gallery Images */}
-                                {[0, 1, 2, 3].map((i) => (
-                                    <div key={i} className={`relative h-45.5 rounded-2xl border-2 border-dashed ${errors.gallery && images.length === 0 ? 'border-error/30' : 'border-border'} bg-surface/30 group hover:border-accent/40 transition-all cursor-pointer flex flex-col items-center justify-center gap-2 overflow-hidden text-text-muted`}>
-                                        {images[i] ?
-                                            <>
-                                                <img src={URL.createObjectURL(images[i])} alt={`Gallery ${i}`} className="w-full h-full object-cover" />
-                                                <button
-                                                    onClick={() => removeImages(i)}
-                                                    className="absolute top-2 right-2 p-1 bg-error text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                                                >
-                                                    <Trash2 size={12} />
-                                                </button>
-                                            </>
-                                            :
-                                            <>
-                                                <Upload size={18} className={errors.gallery && images.length === 0 ? 'text-error/50' : ''} />
-                                                <p className={`text-[9px] font-semibold font-space uppercase ${errors.gallery && images.length === 0 ? 'text-error/50' : ''}`}>Img {i + 1}</p>
-                                                <input type="file" className="absolute inset-0 opacity-0 cursor-pointer" onChange={handleImages} accept="image/*" />
-                                            </>
-                                        }
-                                    </div>
-                                ))}
+                            <div className='md:col-span-2'>
+                                <Inputs variant='adminPrimary' label={"Slug"} name="slug" value={formData.slug} onChange={handleInputChange} error={errors.slug} placeholder={"Automatic slug"} />
                             </div>
-                        </section>
 
-                        {/* General Information */}
-                        <section className="p-6 bg-white rounded-3xl border border-border shadow-sm">
-                            <h2 className="text-xl font-semibold font-space text-brand mb-6 flex items-center gap-3">
-                                <Package size={22} className="text-accent" /> Product Details
-                            </h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className='md:col-span-2'>
-                                    <Inputs variant='adminPrimary' label={"Product Title"} name="title" value={formData.title} onChange={handleInputChange} error={errors.title} placeholder={"iPhone 15 Pro Max"} />
-                                </div>
-                                <div className='md:col-span-2'>
-                                    <Inputs variant='adminPrimary' label={"Slug"} name="slug" value={formData.slug} onChange={handleInputChange} error={errors.slug} placeholder={"Automatic slug"} />
-                                </div>
+                            <Inputs variant='adminPrimary' label={"Brand"} name="brand" value={formData.brand} onChange={handleInputChange} error={errors.brand} placeholder={"Apple"} />
 
-                                <Inputs variant='adminPrimary' label={"Brand"} name="brand" value={formData.brand} onChange={handleInputChange} error={errors.brand} placeholder={"Apple"} />
-
-                                <div className="flex flex-col gap-2">
-                                    <label className={`text-xs font-bold uppercase tracking-widest duration-300 ${errors.category ? 'text-error animate-pulse' : 'text-slate-500'}`}>
-                                        {errors.category ? <span className="flex items-center gap-1.5"><span className="h-1 w-1 bg-red-500 rounded-full"></span>{errors.category}</span> : "Category"}
-                                    </label>
-                                    <div className="relative">
-                                        <select
-                                            name="category"
-                                            value={formData.category}
-                                            onChange={handleInputChange}
-                                            className={`w-full appearance-none text-sm px-5 py-3.5 text-coil bg-surface border ${errors.category ? 'border-error' : 'border-border'} rounded-xl font-medium focus:border-accent outline-none cursor-pointer`}
-                                        >
-                                            <option value="">Select Category</option>
-                                            {
-                                                categories?.data?.map((item, i) => (
-                                                    <option key={i} value={item._id}>{item.name}</option>
-                                                ))
-                                            }
-                                        </select>
-                                        <Layers className={`absolute right-5 top-1/2 -translate-y-1/2 ${errors.category ? 'text-error' : 'text-text-muted'}`} size={14} />
-                                    </div>
-                                </div>
-
-                                <Inputs variant='adminPrimary' label={"Price"} name="price" type='number' value={formData.price} error={errors.price} onChange={handleInputChange} placeholder={"0"} min={1} />
-                                <Inputs variant='adminPrimary' label={"% Discount"} name="discountPercentage" type='number' value={formData.discountPercentage} onChange={handleInputChange} placeholder={"0"} min={1} />
-                                <Inputs variant='adminPrimary' label={"Badge"} name="badge" value={formData.badge} onChange={handleInputChange} placeholder={"New, Sale, Top"} />
-
-                                <div className="md:col-span-2 flex flex-col gap-2">
-                                    <label className={`text-xs font-bold uppercase tracking-widest duration-300 ${errors.description ? 'text-error animate-pulse' : 'text-slate-500'}`}>
-                                        {errors.description ? <span className="flex items-center gap-1.5"><span className="h-1 w-1 bg-red-500 rounded-full"></span>{errors.description}</span> : "Full Description"}
-                                    </label>
-                                    <textarea
-                                        name="description"
-                                        value={formData.description}
-                                        onChange={handleInputChange}
-                                        rows="5"
-                                        placeholder="Highlight technical features..."
-                                        className={`w-full px-6 py-4 bg-surface border ${errors.description ? 'border-error' : 'border-border'} rounded-2xl font-medium text-brand focus:border-accent outline-none resize-none`}
-                                    />
-                                </div>
-                            </div>
-                        </section>
-
-                        {/* Specifications */}
-                        <section className="p-6 bg-white rounded-3xl border border-border shadow-sm">
-                            <h2 className="text-xl font-bold font-space text-brand mb-6 flex items-center gap-3">
-                                <Smartphone size={22} className="text-accent" /> High-Level Specs
-                            </h2>
-
-                            <div className="flex flex-col gap-8">
-                                <div className="flex flex-col gap-4">
-                                    <span className="text-xs font-bold uppercase tracking-widest duration-300 text-slate-500 bg-accent/10 px-3 py-1.5 rounded-full w-fit">1. Screen Configuration</span>
-                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                        <Inputs variant='adminPrimary' size='sm' placeholder={`Size (6.7)`} value={specs.display.size} onChange={(e) => handleSpecChange('display', 'size', e.target.value)} error={errors.spec_display_size} />
-                                        <Inputs variant='adminPrimary' size='sm' placeholder={`OLED, LCD`} value={specs.display.type} onChange={(e) => handleSpecChange('display', 'type', e.target.value)} error={errors.spec_display_type} />
-                                        <Inputs variant='adminPrimary' size='sm' placeholder={`Resolution`} value={specs.display.resolution} onChange={(e) => handleSpecChange('display', 'resolution', e.target.value)} error={errors.spec_display_resolution} />
-                                        <Inputs variant='adminPrimary' size='sm' placeholder={`Rate (Hz)`} value={specs.display.refreshRate} onChange={(e) => handleSpecChange('display', 'refreshRate', e.target.value)} error={errors.spec_display_refreshRate} />
-                                    </div>
-                                </div>
-
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <Inputs variant='adminPrimary' className='py-3' size='sm' labelIcon={<Camera size={16} />} label={"Rear Camera"} placeholder={`48MP + 12MP + 12MP`} value={specs.camera.rear} onChange={(e) => handleSpecChange('camera', 'rear', e.target.value)} error={errors.spec_camera_rear} />
-                                    <Inputs variant='adminPrimary' className='py-3' size='sm' labelIcon={<Camera size={16} />} label={"Front Lens"} placeholder={`12MP True Depth`} value={specs.camera.front} onChange={(e) => handleSpecChange('camera', 'front', e.target.value)} error={errors.spec_camera_front} />
-                                </div>
-
-                                <div className="grid grid-cols-2 lg:grid-cols-3 gap-5">
-                                    <Inputs variant='adminPrimary' className='py-2.5' size='sm' labelIcon={<Battery size={16} />} label={"Battery"} placeholder={`5000 mAh`} value={specs.battery} onChange={(e) => handleSpecChange('battery', null, e.target.value)} error={errors.spec_battery} />
-                                    <Inputs variant='adminPrimary' className='py-2.5' size='sm' labelIcon={<Cpu size={16} />} label={"Processor"} placeholder={`elite gen 5`} value={specs.processor} onChange={(e) => handleSpecChange('processor', null, e.target.value)} error={errors.spec_processor} />
-                                    <Inputs variant='adminPrimary' className='py-2.5' size='sm' labelIcon={<Monitor size={16} />} label={"OS"} placeholder={`iOS 17`} value={specs.os} onChange={(e) => handleSpecChange('os', null, e.target.value)} error={errors.spec_os} />
-                                    <Inputs variant='adminPrimary' className='py-2.5' size='sm' labelIcon={<Network size={16} />} label={"Network"} placeholder={`5G`} value={specs.network} onChange={(e) => handleSpecChange('network', null, e.target.value)} error={errors.spec_network} />
-                                    <Inputs variant='adminPrimary' className='py-2.5' size='sm' labelIcon={<Weight size={16} />} label={"Weight"} placeholder={`221g`} value={specs.weight} onChange={(e) => handleSpecChange('weight', null, e.target.value)} error={errors.spec_weight} />
-                                </div>
-                            </div>
-                        </section>
-
-                        {/* Logistics & Tags (BOTTOM LEFT) */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6">
-                            <section className="p-6 bg-white rounded-3xl border border-border shadow-sm">
-                                <h2 className="text-xl font-bold font-space text-brand mb-5 flex items-center gap-2">
-                                    <ShieldCheck size={20} className="text-accent" /> Logistics
-                                </h2>
-                                <div className="flex flex-col gap-4">
-                                    <Inputs variant='adminPrimary' label={"Warranty"} name="warranty" value={formData.warranty} onChange={handleInputChange} placeholder={"No warranty"} />
-                                    <Inputs variant='adminPrimary' label={"Shipping"} name="shipping" value={formData.shipping} onChange={handleInputChange} placeholder={"Ships in 3-5 days"} />
-                                </div>
-                            </section>
-
-                            <section className="p-6 bg-white rounded-3xl border border-border shadow-sm">
-                                <div className="flex items-center justify-between mb-5">
-                                    <h2 className="text-xl font-bold font-space text-brand flex items-center gap-2">
-                                        <TagIcon size={20} className="text-accent" /> Metadata
-                                    </h2>
-                                    <div className="flex items-center gap-2">
-                                        <span className="text-[10px] font-bold uppercase text-slate-400">Active</span>
-                                        <label className="relative inline-flex items-center cursor-pointer">
-                                            <input type="checkbox" name="isActive" checked={formData.isActive} onChange={handleInputChange} className="sr-only peer" />
-                                            <div className="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-success"></div>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div className="flex flex-wrap gap-1.5 mb-4 max-h-24 overflow-y-auto">
-                                    {tags.map((tag, i) => (
-                                        <span key={i} className="px-3 py-1 bg-brand text-white rounded-lg text-[12px] font-bold font-space flex items-center gap-1.5">
-                                            {tag}
-                                            <button onClick={() => removeTag(i)} className="cursor-pointer opacity-70 hover:opacity-100">x</button>
-                                        </span>
-                                    ))}
-                                </div>
+                            <div className="flex flex-col gap-2">
+                                <label className={`text-xs font-bold uppercase tracking-widest duration-300 ${errors.category ? 'text-error animate-pulse' : 'text-slate-500'}`}>
+                                    {errors.category ? <span className="flex items-center gap-1.5"><span className="h-1 w-1 bg-red-500 rounded-full"></span>{errors.category}</span> : "Category"}
+                                </label>
                                 <div className="relative">
-                                    <input
-                                        type="text"
-                                        value={tagInput}
-                                        onChange={(e) => setTagInput(e.target.value)}
-                                        onKeyDown={addTag}
-                                        placeholder="Add search tags..."
-                                        className="w-full pl-10 pr-4 py-3 bg-surface border border-border rounded-xl focus:border-accent outline-none text-xs font-bold text-brand shadow-sm"
-                                    />
-                                    <Plus className="absolute left-3.5 top-1/2 -translate-y-1/2 text-accent" size={14} />
+                                    <select
+                                        name="category"
+                                        value={formData.category}
+                                        onChange={handleInputChange}
+                                        className={`w-full appearance-none text-sm px-5 py-3.5 text-coil bg-surface border ${errors.category ? 'border-error' : 'border-border'} rounded-xl font-medium focus:border-accent outline-none cursor-pointer`}
+                                    >
+                                        <option value="">Select Category</option>
+                                        {
+                                            categories?.data?.map((item, i) => (
+                                                <option key={i} value={item._id}>{item.name}</option>
+                                            ))
+                                        }
+                                    </select>
+                                    <Layers className={`absolute right-5 top-1/2 -translate-y-1/2 ${errors.category ? 'text-error' : 'text-text-muted'}`} size={14} />
                                 </div>
-                            </section>
+                            </div>
+
+                            <div className="md:col-span-2 flex flex-col gap-2">
+                                <label className={`text-xs font-bold uppercase tracking-widest duration-300 ${errors.description ? 'text-error animate-pulse' : 'text-slate-500'}`}>
+                                    {errors.description ? <span className="flex items-center gap-1.5"><span className="h-1 w-1 bg-red-500 rounded-full"></span>{errors.description}</span> : "Full Description"}
+                                </label>
+                                <textarea
+                                    name="description"
+                                    value={formData.description}
+                                    onChange={handleInputChange}
+                                    rows="4"
+                                    placeholder="Highlight technical features, camera capabilities, screen tech, etc..."
+                                    className={`w-full px-6 py-4 bg-surface border ${errors.description ? 'border-error' : 'border-border'} rounded-2xl font-medium text-brand focus:border-accent outline-none resize-none`}
+                                />
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Specifications */}
+                    <section className="p-6 bg-white rounded-3xl border border-border shadow-sm">
+                        <h2 className="text-xl font-bold font-space text-brand mb-6 flex items-center gap-3">
+                            <Smartphone size={22} className="text-accent" /> High-Level Specs
+                        </h2>
+
+                        <div className="flex flex-col gap-8">
+                            <div className="flex flex-col gap-4">
+                                <span className="text-xs font-bold uppercase tracking-widest duration-300 text-slate-500 bg-accent/10 px-3 py-1.5 rounded-full w-fit">1. Screen Configuration</span>
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    <Inputs variant='adminPrimary' size='sm' placeholder={`Size (6.7)`} value={specs.display.size} onChange={(e) => handleSpecChange('display', 'size', e.target.value)} error={errors.spec_display_size} />
+                                    <Inputs variant='adminPrimary' size='sm' placeholder={`OLED, LCD`} value={specs.display.type} onChange={(e) => handleSpecChange('display', 'type', e.target.value)} error={errors.spec_display_type} />
+                                    <Inputs variant='adminPrimary' size='sm' placeholder={`Resolution`} value={specs.display.resolution} onChange={(e) => handleSpecChange('display', 'resolution', e.target.value)} error={errors.spec_display_resolution} />
+                                    <Inputs variant='adminPrimary' size='sm' placeholder={`Rate (Hz)`} value={specs.display.refreshRate} onChange={(e) => handleSpecChange('display', 'refreshRate', e.target.value)} error={errors.spec_display_refreshRate} />
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <Inputs variant='adminPrimary' className='py-3' size='sm' labelIcon={<Camera size={16} />} label={"Rear Camera"} placeholder={`48MP + 12MP + 12MP`} value={specs.camera.rear} onChange={(e) => handleSpecChange('camera', 'rear', e.target.value)} error={errors.spec_camera_rear} />
+                                <Inputs variant='adminPrimary' className='py-3' size='sm' labelIcon={<Camera size={16} />} label={"Front Lens"} placeholder={`12MP True Depth`} value={specs.camera.front} onChange={(e) => handleSpecChange('camera', 'front', e.target.value)} error={errors.spec_camera_front} />
+                            </div>
+
+                            <div className="grid grid-cols-2 lg:grid-cols-3 gap-5">
+                                <Inputs variant='adminPrimary' className='py-2.5' size='sm' labelIcon={<Battery size={16} />} label={"Battery"} placeholder={`5000 mAh`} value={specs.battery} onChange={(e) => handleSpecChange('battery', null, e.target.value)} error={errors.spec_battery} />
+                                <Inputs variant='adminPrimary' className='py-2.5' size='sm' labelIcon={<Cpu size={16} />} label={"Processor"} placeholder={`elite gen 5`} value={specs.processor} onChange={(e) => handleSpecChange('processor', null, e.target.value)} error={errors.spec_processor} />
+                                <Inputs variant='adminPrimary' className='py-2.5' size='sm' labelIcon={<Monitor size={16} />} label={"OS"} placeholder={`iOS 17`} value={specs.os} onChange={(e) => handleSpecChange('os', null, e.target.value)} error={errors.spec_os} />
+                                <Inputs variant='adminPrimary' className='py-2.5' size='sm' labelIcon={<Network size={16} />} label={"Network"} placeholder={`5G`} value={specs.network} onChange={(e) => handleSpecChange('network', null, e.target.value)} error={errors.spec_network} />
+                                <Inputs variant='adminPrimary' className='py-2.5' size='sm' labelIcon={<Weight size={16} />} label={"Weight"} placeholder={`221g`} value={specs.weight} onChange={(e) => handleSpecChange('weight', null, e.target.value)} error={errors.spec_weight} />
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Logistics Section */}
+                    <section className="p-6 bg-white rounded-3xl border border-border shadow-sm flex flex-col gap-4">
+                        <h2 className="text-lg font-bold font-space text-brand flex items-center gap-2">
+                            <ShieldCheck size={18} className="text-accent" /> Logistics & Metadata
+                        </h2>
+                        <div className="flex flex-col gap-4">
+                            <Inputs variant='adminPrimary' label={"Warranty"} name="warranty" value={formData.warranty} onChange={handleInputChange} placeholder={"No warranty"} />
+                            <Inputs variant='adminPrimary' label={"Shipping"} name="shipping" value={formData.shipping} onChange={handleInputChange} placeholder={"Ships in 3-5 days"} />
                         </div>
 
-                    </div>
-
-                    {/* ================= RIGHT COLUMN (Variants Manager - BIGGER) ================= */}
-                    <div className="lg:col-span-5 flex flex-col gap-6">
-
-                        <section className="p-6 bg-[#0B0F1A] rounded-4xl border border-white/5 shadow-2xl sticky top-24">
-                            <div className="flex items-center justify-between mb-8 border-b border-white/10 pb-4">
-                                <h2 className="text-2xl font-bold font-space text-white">
-                                    Variations
+                        <section className="p-6 bg-white rounded-3xl border border-border shadow-sm flex flex-col gap-4">
+                            <div className="flex items-center justify-between pb-1 border-b border-border/40">
+                                <h2 className="text-lg font-bold font-space text-brand flex items-center gap-2">
+                                    <TagIcon size={18} className="text-accent" /> Metadata
                                 </h2>
-                                <button
-                                    onClick={addVariant}
-                                    className="px-4 py-2 bg-accent rounded-xl text-white font-semibold font-space text-xs hover:scale-105 active:scale-95 transition-all cursor-pointer flex items-center gap-1 shadow-lg shadow-accent/10"
-                                >
-                                    <Plus size={16} /> New Variant
-                                </button>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider">Active Status</span>
+                                    <label className="relative inline-flex items-center cursor-pointer select-none">
+                                        <input type="checkbox" name="isActive" checked={formData.isActive} onChange={handleInputChange} className="sr-only peer" />
+                                        <div className="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-success"></div>
+                                    </label>
+                                </div>
                             </div>
 
-                            <div className="flex flex-col gap-6 max-h-[80vh] overflow-y-auto pr-3" style={{ msOverflowStyle: 'none', scrollbarWidth: 'none', WebkitScrollbar: { display: 'none' } }} >
-                                {variants.map((variant, index) => (
-                                    <div key={variant.id} className="relative p-5 rounded-2xl border border-white/10 bg-white/5 flex flex-col gap-6 group hover:bg-white/10 transition-all">
-                                        <div className="flex items-center justify-between">
-                                            <span className={`px-4 py-1 rounded-full text-[11px] font-semibold font-space uppercase tracking-[0.2em] ${index === 0 ? 'bg-success text-white' : 'bg-white/10 text-white/50'}`}>
-                                                {index === 0 ? 'Main' : `Var #${index + 1}`}
-                                            </span>
-                                            {index > 0 && (
-                                                <button onClick={() => removeVariant(variant.id)} className="w-8 h-8 flex items-center justify-center rounded-lg bg-error/20 text-error hover:bg-error hover:text-white transition-all cursor-pointer"><Trash2 size={14} /></button>
-                                            )}
-                                        </div>
-
-                                        <div className="grid grid-cols-2 gap-x-6 gap-y-4">
-                                            <Inputs variant='adminPrimary' size='medium' className='border-white/10 text-white bg-white/5' labelClassName={"text-slate-300 text-xs"} label={"SKU"} placeholder={"IPH-15-256"} value={variant.sku} onChange={(e) => handleVariantChange(variant.id, 'sku', e.target.value)} error={errors[`variant_${index}_sku`]} />
-                                            <Inputs variant='adminPrimary' size='medium' className='border-white/10 text-white bg-white/5' labelClassName={"text-slate-300 text-xs"} label={"COLOR"} placeholder={"Space Gray"} value={variant.color} onChange={(e) => handleVariantChange(variant.id, 'color', e.target.value)} error={errors[`variant_${index}_color`]} />
-                                            <Inputs variant='adminPrimary' size='medium' className='border-white/10 text-white bg-white/5' labelClassName={"text-slate-300 text-xs"} type='number' label={"RAM (GB)"} placeholder={"8"} value={variant.ram} onChange={(e) => handleVariantChange(variant.id, 'ram', e.target.value, 'number')} error={errors[`variant_${index}_ram`]} />
-                                            <Inputs variant='adminPrimary' size='medium' className='border-white/10 text-white bg-white/5' labelClassName={"text-slate-300 text-xs"} type='number' label={"Storage (GB)"} placeholder={"256"} value={variant.storage} onChange={(e) => handleVariantChange(variant.id, 'storage', e.target.value, 'number')} error={errors[`variant_${index}_storage`]} />
-
-                                            <div className='border-t border-white/5 pt-3'>
-                                                <Inputs variant='adminPrimary' size='medium' className='border-white/10 text-white bg-accent/20' labelClassName={"text-accent/80 text-xs"} type='number' label={"Price"} placeholder={"99.00"} value={variant.price} onChange={(e) => handleVariantChange(variant.id, 'price', e.target.value, 'number')} error={errors[`variant_${index}_price`]} />
-                                            </div>
-                                            <div className='border-t border-white/5 pt-3'>
-                                                <Inputs variant='adminPrimary' size='medium' className='border border-success/30 text-white bg-success/10' labelClassName={"text-success/80 text-xs"} type='number' label={"Stock"} placeholder={"50"} value={variant.stock} onChange={(e) => handleVariantChange(variant.id, 'stock', e.target.value, 'number')} error={errors[`variant_${index}_stock`]} />
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto">
+                                {tags.map((tag, i) => (
+                                    <span key={i} className="px-3 py-1 bg-brand text-white rounded-lg text-[11px] font-bold font-space flex items-center gap-1.5">
+                                        {tag}
+                                        <button type="button" onClick={() => removeTag(i)} className="cursor-pointer opacity-70 hover:opacity-100 font-sans">x</button>
+                                    </span>
                                 ))}
                             </div>
-                        </section>
 
-                    </div>
+                            <div className="relative">
+                                <input
+                                    type="text"
+                                    value={tagInput}
+                                    onChange={(e) => setTagInput(e.target.value)}
+                                    onKeyDown={addTag}
+                                    placeholder="Type search tag and press Enter..."
+                                    className="w-full pl-10 pr-4 py-3 bg-surface border border-border rounded-xl focus:border-accent outline-none text-xs font-bold text-brand shadow-sm"
+                                />
+                                <Plus className="absolute left-3.5 top-1/2 -translate-y-1/2 text-accent" size={14} />
+                            </div>
+                        </section>
+                    </section>
+                    {/* Variants Section (BOTTTOM OF GENERAL INFOS & SPECS!) */}
+                    <VariantManager
+                        variants={variants}
+                        setVariants={setVariants}
+                        errors={errors}
+                        setErrors={setErrors}
+                    />
+
                 </div>
             </div>
         </>
     );
 };
 
-export default page;
+export default Page;

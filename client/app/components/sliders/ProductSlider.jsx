@@ -17,12 +17,12 @@ const ProductSlider = ({ products }) => {
                     {products.map((item, i) => (
                         <div key={i} className="shrink-0 basis-22 md:basis-35.5">
                             <SellerCard
-                                img={item.thumbnail || item.image}
+                                img={item.variants[0].thumbnail || item.image}
                                 badge={item.badge}
                                 slug={item.slug}
                                 title={item.title}
                                 variant={item.brand}
-                                price={item.price}
+                                price={item.variants[0].price}
                                 rating={item.rating || 4.89}
                                 reviews={item.reviews || 129}
                             />

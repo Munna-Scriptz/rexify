@@ -69,7 +69,7 @@ const ProductCard = ({ view, filteredProducts, handleDelete }) => {
                                         </td>
                                         <td className="py-4">
                                             <div className="flex items-center gap-4">
-                                                <Image width={200} height={200} className='h-14 w-14 rounded-sm' src={`${product.thumbnail || "https://www.applegadgetsbd.com/_next/image?url=https%3A%2F%2Fadminapi.applegadgetsbd.com%2Fstorage%2Fmedia%2Flarge%2FiPhone-16-Pro-Maxaaaa-5516.png&w=1920&q=100"}`} alt="Product image" />
+                                                <Image width={200} height={200} className='h-14 w-14 rounded-sm' src={`${product.variants?.[0]?.thumbnail}`} alt="Product image" />
                                                 <div className="space-y-1">
                                                     <h3 className="text-coil font-semibold text-sm leading-tight group-hover:text-accent transition-colors line-clamp-1">{product.title}</h3>
                                                 </div>

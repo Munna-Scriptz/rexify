@@ -1,15 +1,15 @@
 "use client"
 import { useState } from 'react';
-import { Plus, Trash2, Package, Cpu, Battery, Monitor, Camera, Tag as TagIcon, Smartphone, ShieldCheck, Layers, Network, Weight, Sparkles, CheckCircle2 } from 'lucide-react';
+import { Plus, Package, Cpu, Battery, Monitor, Camera, Tag as TagIcon, Smartphone, ShieldCheck, Layers, Network, Weight } from 'lucide-react';
 import CreateHeader from '../../components/createProduct/CreateHeader';
 import VariantManager from '../../components/createProduct/VariantManager';
 import Inputs from '../../components/ui/Inputs';
 import { useCreateProductMutation, useGetCategoryQuery } from '../../services/api';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 const Page = () => {
     // ------------ Get categories from server -------------
-    const { data: categories, error: categoryError, isLoading } = useGetCategoryQuery();
+    const { data: categories } = useGetCategoryQuery();
 
     const [formData, setFormData] = useState({
         title: '',
@@ -118,7 +118,6 @@ const Page = () => {
         if (!formData.title) newErrors.title = "Title is required";
         if (!formData.brand) newErrors.brand = "Brand is required";
         if (!formData.category) newErrors.category = "Category is required";
-        if (!formData.description) newErrors.description = "Description is required";
 
         // Specifications
         const requiredSpecs = [
@@ -143,20 +142,19 @@ const Page = () => {
             if (!v.price || v.price < 1) newErrors[`variant_${index}_price`] = "Min price 1";
             if (v.stock === '' || v.stock < 0) newErrors[`variant_${index}_stock`] = "Min stock 0";
             if (!v.thumbnailFile) newErrors[`variant_${index}_thumbnail`] = "Cover image required";
-            if (!v.imageFiles[0] || !v.imageFiles[1]) newErrors[`variant_${index}_gallery`] = "Both gallery slots required";
         });
 
         setErrors(newErrors);
 
         if (Object.keys(newErrors).length > 0) {
             const firstErrorField = Object.keys(newErrors)[0];
-            toast.error(`Please fix form errors (check variant and specification sections)`);
+            toast.error(`Please fix info or check variant and specification sections`);
+            window.scrollTo({ top: 0, behavior: 'smooth' })
             return false;
         }
 
         return true;
     };
-
     // --------------- Handle submit ----------------
     const [createProduct] = useCreateProductMutation();
 
@@ -225,21 +223,18 @@ const Page = () => {
                 }
             }
         );
-    };
 
-    // ----------- Dynamic Preview Data -----------
-    const defaultVar = variants.find(v => v.isDefault) || variants[0];
-    const previewThumbnailUrl = defaultVar?.thumbnailFile ? URL.createObjectURL(defaultVar.thumbnailFile) : null;
-    const categoryName = categories?.data?.find(c => c._id === formData.category)?.name || "Technology";
+
+
+    };
 
     return (
         <>
-            <ToastContainer />
-            <div className="flex flex-col gap-6 pb-20 animate-fade-in">
+            <div className="pb-10 space-y-6">
                 {/* ---------------- Header ---------------- */}
                 <CreateHeader onPublish={handleSubmit} />
 
-                {/* ================= LEFT COLUMN ================= */}
+                {/* ================= MAIN PART ================= */}
                 <div className="flex flex-col gap-6">
 
                     {/* General Information */}
@@ -380,8 +375,25 @@ const Page = () => {
                         errors={errors}
                         setErrors={setErrors}
                     />
-
                 </div>
+
+                {/* ================= Publish product ================= */}
+                <div className="flex gap-3 w-full">
+                    <button
+                        onClick={() => window.location.reload()}
+                        className="px-5 py-2.5 rounded-xl border-2 border-border text-brand font-bold font-space hover:bg-surface transition-all cursor-pointer"
+                    >
+                        Reset
+                    </button>
+
+                    <button
+                        onClick={handleSubmit}
+                        className="flex-1 py-4 rounded-xl bg-brand text-white font-bold font-space shadow-lg shadow-brand/10 active:scale-95 transition-all cursor-pointer"
+                    >
+                        Publish Product
+                    </button>
+                </div>
+
             </div>
         </>
     );

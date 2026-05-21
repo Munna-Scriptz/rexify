@@ -5,6 +5,7 @@ import Navbar from "./components/common/Navbar";
 import Header from "./components/common/Header";
 import { ApiProvider } from "@reduxjs/toolkit/query/react";
 import { adminApis } from "./services/api"
+import { ToastContainer } from "react-toastify";
 
 export default function Layout({ children }) {
     const pathname = usePathname();
@@ -13,6 +14,7 @@ export default function Layout({ children }) {
     return (
         <section className='flex items-start'>
             <Navbar />
+            <ToastContainer />
 
             {/* -------------------- Right side content and header -------------------- */}
             <aside className='flex flex-col w-full '>

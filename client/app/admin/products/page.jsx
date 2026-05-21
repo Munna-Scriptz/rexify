@@ -7,29 +7,32 @@ import StatCard from '../components/common/StatCards'
 import { useGetProductsQuery } from '../services/api'
 
 const Products = () => {
-  const { data: products, error, isLoading } = useGetProductsQuery()
-  
+  const { data: products, isLoading } = useGetProductsQuery()
+
+  const inStock = products?.data?.products?.reduce((sum, product) => sum + product.variants.reduce((variantSum, variant) => variantSum + variant.stock, 0), 0)
+  const outOfStock = products?.data?.products?.filter(product => product.variants.some(variant => (variant.stock || 0) <= 0)).length || 0
+
   return (
     <>
       <section className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-10'>
         <StatCard
           title="Total Product Items"
-          value="3,521"
+          value={products?.data?.products?.length || 0}
           unit='(items)'
           icon={<Package size={32} strokeWidth={1.2} />}
           variant="accent"
         />
         <StatCard
           title="In Stock Product"
-          value="1,311"
+          value={inStock}
           unit='(items)'
           icon={<LayoutList size={32} strokeWidth={1.2} />}
           variant="accent"
         />
         <StatCard
           title="Out Of Stock Product"
-          value="43"
-          unit='(items)'
+          value={outOfStock}
+          unit="(items)"
           icon={<ShoppingBag size={32} strokeWidth={1.2} />}
           variant="rose"
         />

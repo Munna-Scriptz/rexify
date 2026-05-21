@@ -27,12 +27,11 @@ const Header = ({ pageName }) => {
       const data = await res.json();
       if (!res.ok) {
         setLoading(false)
-        toast.error(data.message, { theme: "dark", transition: Bounce, });
+        toast.error(data.message, { transition: Bounce, });
         return
       }
       setLoading(false)
       toast.success(data.message, {
-        theme: "dark",
         transition: Bounce,
       });
 

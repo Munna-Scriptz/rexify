@@ -35,8 +35,7 @@ const page = () => {
               return data?.data?.message || "Something went wrong";
             }
           }
-        },
-        { theme: "dark" }
+        }
       );
     } catch (err) {
       console.log("Error:", err);

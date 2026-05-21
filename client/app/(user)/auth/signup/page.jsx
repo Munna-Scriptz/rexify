@@ -74,10 +74,9 @@ const page = () => {
             })
 
             const data = await res.json();
-            if (!res.ok) return toast.error(data.message, { theme: "dark", transition: Bounce, });
+            if (!res.ok) return toast.error(data.message, { transition: Bounce, });
 
             toast.success(data.message, {
-                theme: "dark",
                 transition: Bounce,
             });
 

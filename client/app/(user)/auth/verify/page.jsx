@@ -84,7 +84,6 @@ const page = () => {
         }
 
         toast.success(data.message, {
-            theme: "dark",
             transition: Bounce,
         });
     };
@@ -108,7 +107,6 @@ const page = () => {
         }
 
         toast.success(data.message, {
-            theme: "dark",
             transition: Bounce,
         });
         setTimeout(() => {

@@ -59,8 +59,7 @@ const CreateCategoryModal = ({ isOpen, onClose }) => {
                             return data?.data?.message || "Something went wrong";
                         }
                     }
-                },
-                { theme: "dark" }
+                }
             );
             onClose()
             setFormData({ name: '', slug: '', description: '', isActive: true, thumbnail: null })

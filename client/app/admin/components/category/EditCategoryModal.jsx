@@ -50,7 +50,7 @@ const EditCategoryModal = ({ categories, isEditOpen, onClose }) => {
         }
 
         if (!hasChanges) {
-            return toast.info("No changes detected", { theme: "dark" });
+            return toast.info("No changes detected");
         }
 
         try {
@@ -68,8 +68,7 @@ const EditCategoryModal = ({ categories, isEditOpen, onClose }) => {
                             return data?.data?.message || "Something went wrong";
                         }
                     }
-                },
-                { theme: "dark" }
+                }
             );
             onClose()
         } catch (err) {

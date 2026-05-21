@@ -45,12 +45,11 @@ const page = () => {
       if (!res.ok) {
         setLoading(false)
         if (data.message === "Invalid or incorrect password!") return setFormData(prev => ({ ...prev, passwordError: data.message }))
-        toast.error(data.message, { theme: "dark", transition: Bounce, });
+        toast.error(data.message, { transition: Bounce, });
         return
       }
       setLoading(false)
       toast.success(data.message, {
-        theme: "dark",
         transition: Bounce,
       });
 

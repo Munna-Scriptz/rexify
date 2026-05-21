@@ -191,7 +191,7 @@ const page = () => {
 
         if (Object.keys(newErrors).length > 0) {
             const firstErrorField = Object.keys(newErrors)[0];
-            toast.error(`Please enter ${firstErrorField}`, { theme: "dark" });
+            toast.error(`Please enter ${firstErrorField}`);
             return false;
         }
 
@@ -231,8 +231,7 @@ const page = () => {
                         return data?.data?.message || "Something went wrong";
                     }
                 }
-            },
-            { theme: "dark" }
+            }
         );
     };
 

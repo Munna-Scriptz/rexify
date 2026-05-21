@@ -1,5 +1,50 @@
 const mongoose = require('mongoose');
 
+const variantItem = mongoose.Schema({
+    sku: {
+        type: String,
+        required: true,
+        unique: true,
+    },
+
+    color: {
+        name: String,
+        code: String,
+    },
+
+    ram: Number,
+    storage: Number,
+
+    price: {
+        type: Number,
+        required: true,
+        min: 1
+    },
+
+    discountPercentage: {
+        type: Number,
+        default: 0,
+        min: 0,
+        max: 100,
+    },
+    stock: {
+        type: Number,
+        required: true,
+        min: 0
+    },
+
+    thumbnail: String,
+
+    images: [String],
+
+    isDefault: {
+        type: Boolean,
+        default: false,
+    },
+
+})
+
+
 const productSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -21,46 +66,8 @@ const productSchema = new mongoose.Schema({
         ref: 'category',
         required: true,
     },
-    discountPercentage: {
-        type: Number,
-        default: 0,
-        min: 0,
-        max: 100,
-    },
-    price: {
-        type: Number,
-        min: 0,
-        required: true
-    },
-    variants: [
-        {
-            sku: {
-                type: String,
-                required: true,
-            },
-            color: {
-                type: String,
-                required: true
-            },
-            storage: {
-                type: Number,
-            },
-            ram: {
-                type: Number,
-            },
-            price: {
-                type: Number,
-                required: true,
-                min: 1
-            },
-            stock: {
-                type: Number,
-                required: true,
-                min: 0
-            },
-            _id: false
-        }
-    ],
+    variants: [variantItem],
+
     specifications: {
         display: {
             size: { type: String, required: true },
@@ -78,6 +85,7 @@ const productSchema = new mongoose.Schema({
         weight: { type: String, required: true },
         os: { type: String, required: true },
     },
+
     brand: {
         type: String,
         required: true
@@ -102,19 +110,10 @@ const productSchema = new mongoose.Schema({
             type: String,
         },
     ],
-    thumbnail: {
-        type: String,
-        // required: true,
-    },
-    images: [
-        {
-            type: String,
-        },
-    ],
     isActive: {
         type: Boolean,
         default: true,
-    }
+    },
 
 }, { timestamps: true });
 

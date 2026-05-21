@@ -1,5 +1,6 @@
 import { Poppins, Manrope, Space_Grotesk } from 'next/font/google'
 import "./globals.css";
+import { ToastContainer } from 'react-toastify';
 
 // ---------- Meta -------------
 export const metadata = {
@@ -30,6 +31,7 @@ export default function Layout({ children }) {
         <html lang="en" className={`${poppins.variable} ${manrope.variable} ${space.variable}`}>
             <body>
                 <main>
+                    <ToastContainer />
                     {children}
                 </main>
             </body>

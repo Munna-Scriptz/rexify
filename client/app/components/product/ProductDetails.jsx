@@ -1,13 +1,32 @@
 "use client"
 import React, { useState } from 'react'
 import { Star, Minus, Plus, ShoppingCart, Zap, Truck, ShieldCheck } from 'lucide-react'
+import { toast } from 'react-toastify'
+import { apiClient } from '@/app/lib/apiClient'
 
 const ProductDetails = ({ product }) => {
+    const [price, setPrice] = useState(product?.variants[0]?.price)
+    const [sku, setSku] = useState(product?.variants[0]?.sku)
     const [selectedColor, setSelectedColor] = useState(product?.variants[0]?.color)
     const [selectedStorage, setSelectedStorage] = useState(product?.variants[0]?.storage)
     const [selectedRam, setSelectedRam] = useState(product?.variants[0]?.ram)
     const [quantity, setQuantity] = useState(1)
 
+    // ---------- Handle cart -------------- 
+    const handleCart = async () => {
+        toast.promise(
+            await apiClient.post(`/cart/create`, {
+                product: product._id,
+                sku,
+                quantity
+            })).unwrap(),
+        {
+            pending: "Adding to cart...",
+            success: "Added to cart",
+            error: "Something went wrong",
+        }
+
+    }
     return (
         <div>
             <div className="mb-2 flex items-center gap-2">
@@ -27,10 +46,10 @@ const ProductDetails = ({ product }) => {
                 </div>
                 <span className="md:text-sm text-xs text-text-secondary">({product?.reviews} Reviews)</span>
                 <span className="text-text-border">|</span>
-                <span className="md:text-sm text-xs text-text-secondary">SKU: {product?.sku}</span>
+                <span className="md:text-sm text-xs text-text-secondary">SKU: {sku}</span>
             </div>
 
-            <div className="text-3xl font-bold font-space md:mb-8 mb-6">${product?.price.toLocaleString()}</div>
+            <div className="text-3xl font-bold font-space md:mb-8 mb-6">${price.toLocaleString()}</div>
 
             <p className="text-text-secondary leading-relaxed md:mb-8 mb-6 md:text-lg text-base line-clamp-2">
                 {product?.description}
@@ -48,7 +67,7 @@ const ProductDetails = ({ product }) => {
                         {product?.variants?.map((item, i) => (
                             <button
                                 key={i}
-                                onClick={() => setSelectedColor(item.color)}
+                                onClick={() => { setSelectedColor(item.color), setSku(item.sku), setPrice(item.price) }}
                                 className={`flex items-center gap-3 px-4 md:text-base text-sm py-2 cursor-pointer rounded-lg border font-medium transition-all ${selectedColor === item.color ? 'border-accent bg-accent/5 text-accent' : 'border-border text-text-secondary hover:border-gray-400'}`}
                             >
                                 <div
@@ -70,7 +89,7 @@ const ProductDetails = ({ product }) => {
                         {product?.variants?.map((item, i) => (
                             <button
                                 key={i}
-                                onClick={() => { setSelectedStorage(item.storage), setSelectedRam(item.ram) }}
+                                onClick={() => { setSelectedStorage(item.storage), setSelectedRam(item.ram), setSku(item.sku), setPrice(item.price) }}
                                 className={`px-4 md:text-base text-sm py-2 cursor-pointer rounded-lg border font-medium transition-all ${selectedStorage === item.storage ? 'border-accent bg-accent/5 text-accent' : 'border-border text-text-secondary hover:border-gray-400'}`}
                             >
                                 {item.ram}/{item.storage}
@@ -103,7 +122,7 @@ const ProductDetails = ({ product }) => {
                 <button className="flex-1 bg-accent text-white font-bold md:py-4 py-3 rounded-xl hover:bg-blue-700 transition-all shadow-lg shadow-accent/20 flex items-center justify-center gap-2">
                     Buy Now <Zap size={20} />
                 </button>
-                <button className="md:p-4 p-3 border border-border rounded-xl hover:bg-muted text-text-secondary hover:text-text-primary transition-all">
+                <button onClick={handleCart} className="md:p-4 p-3 border border-border rounded-xl hover:bg-muted text-text-secondary hover:text-text-primary transition-all">
                     <ShoppingCart size={24} />
                 </button>
             </div>

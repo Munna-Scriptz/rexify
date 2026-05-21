@@ -1,6 +1,5 @@
 const BASE_URL = process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:8000";
 
-// Generic request handler
 async function request(endpoint, options = {}) {
     const {
         method = "GET",
@@ -12,12 +11,27 @@ async function request(endpoint, options = {}) {
         tags = [],
     } = options;
 
+    const requestHeaders = {
+        "Content-Type": "application/json",
+        ...headers,
+    };
+
+    if (typeof window === "undefined") {
+        try {
+            const { cookies } = await import("next/headers");
+            const cookieStore = await cookies();
+            const cookieString = cookieStore.toString();
+            if (cookieString) {
+                requestHeaders["Cookie"] = headers["Cookie"] || headers["cookie"] || cookieString;
+            }
+        } catch (error) {
+           
+        }
+    }
+
     const fetchOptions = {
         method,
-        headers: {
-            "Content-Type": "application/json",
-            ...headers,
-        },
+        headers: requestHeaders,
         credentials: "include",
         ...(body && { body: JSON.stringify(body) }),
 
@@ -48,6 +62,7 @@ async function request(endpoint, options = {}) {
         throw error;
     }
 }
+
 
 // Convenience methods
 export const apiClient = {

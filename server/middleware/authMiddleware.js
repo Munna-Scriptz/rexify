@@ -2,12 +2,12 @@ const { verifyToken } = require("../services/tokens")
 
 const authMiddleware = (req, res, next) => {
     try {
-        const token = req.cookies
+        const token = req.cookies?.["X-AS-TOKEN"]
         // --------- Validations 
-        if (!token["X-AS-TOKEN"]) return res.status(401).send({ message: 'Invalid request' })
+        if (!token) return res.status(401).send({ message: 'No token provided' })
 
         // ------- verify 
-        const decoded = verifyToken(token["X-AS-TOKEN"])
+        const decoded = verifyToken(token)
         if (!decoded) return res.status(401).send({ message: 'Invalid request' })
 
         // ----- Set to req 

@@ -25,6 +25,9 @@ const createCart = async (req, res) => {
         // --------- discount and subtotal
         const discountPercentage = existingProduct.discountPercentage
         const price = existingProduct.variants.find(item => item.sku === sku)?.price;
+        const color = existingProduct.variants.find(item => item.sku === sku)?.color;
+        const ram = existingProduct.variants.find(item => item.sku === sku)?.ram;
+        const storage = existingProduct.variants.find(item => item.sku === sku)?.storage;
         if (!price) return resHandler.error(res, 404, "Wrong product sku")
         const subTotal = price * quantity * (1 - discountPercentage / 100);
 
@@ -38,6 +41,9 @@ const createCart = async (req, res) => {
             existingCart.items.push({
                 product,
                 sku,
+                color,
+                ram,
+                storage,
                 quantity,
                 discountPercentage,
                 price,
@@ -146,7 +152,7 @@ const getCart = async (req, res) => {
         if (!user) return resHandler.error(res, 400, "invalid cart request")
 
         // ---------- Find from DB 
-        const existingCart = await cartSchema.find({ user }).select("-user -createdAt -updatedAt -__v")
+        const existingCart = await cartSchema.findOne({ user }).populate("items.product", "thumbnail title").select("-user -createdAt -updatedAt -__v")
 
         // ----------- Success 
         resHandler.success(res, 200, "Your cart", existingCart)

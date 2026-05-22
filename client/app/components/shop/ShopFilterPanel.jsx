@@ -1,4 +1,6 @@
-import React from 'react';
+"use client"
+
+import React, { useRef, useEffect } from 'react';
 import {
     X,
     SlidersHorizontal,
@@ -11,35 +13,51 @@ import {
 import FilterSection from './FilterSection';
 import RatingStars from './RatingStars';
 import RangeSlider from './RangeSlider';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 const ShopFilterPanel = ({ filters, setFilters, onReset, isMobileDrawer, onClose }) => {
 
-    const categories = ['All', 'Smartphones', 'Laptops', 'Tablets', 'Audio', 'Wearables', 'Gaming'];
+    const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+
+    const categories = ['Smartphones', 'Laptops', 'Tablets', 'Audio', 'Wearables', 'Gaming'];
     const brands = ['Apple', 'Samsung', 'Sony', 'Dell', 'Asus', 'Bose', 'Logitech'];
     const ratings = [4, 3, 2, 1];
 
-    const handleCategoryChange = (cat) => {
-        setFilters(f => ({ ...f, category: cat }));
+    // ========== Handle category =========
+    const selectedCategory = searchParams.get('category');
+
+    const handleQuery = (name, value) => {
+        const params = new URLSearchParams(searchParams.toString());
+
+        // 2. Set multiple parameters
+        params.set(name, value);
+
+        // 3. Push the new URL
+        router.push(`${pathname}?${params.toString()}`);
     };
+
+    // ========== Remove query =========
+    const clearQuery = (name) => {
+        // 1. Create a mutable version of the current params
+        const params = new URLSearchParams(searchParams.toString());
+
+        // 2. Delete the specific parameter
+        params.delete(name);
+
+        // 3. Construct the new URL and update the router
+        const queryString = params.toString();
+        const updatedUrl = queryString ? `${pathname}?${queryString}` : pathname;
+
+        router.replace(updatedUrl);
+    };
+
 
     const handleBrandToggle = (brand) => {
         setFilters(f => {
             const brands = f.brands.includes(brand) ? f.brands.filter(b => b !== brand) : [...f.brands, brand];
             return { ...f, brands };
-        });
-    };
-
-    const MIN_PRICE = 0;
-    const MAX_PRICE = 5000;
-
-    const handlePriceChange = (e, key) => {
-        const value = Number(e.target.value);
-        setFilters(f => {
-            if (key === 'min') {
-                return { ...f, priceRange: { ...f.priceRange, min: Math.min(value, f.priceRange.max - 50) } };
-            } else {
-                return { ...f, priceRange: { ...f.priceRange, max: Math.max(value, f.priceRange.min + 50) } };
-            }
         });
     };
 
@@ -63,7 +81,7 @@ const ShopFilterPanel = ({ filters, setFilters, onReset, isMobileDrawer, onClose
                 </div>
                 <div className="flex items-center gap-2">
                     <button
-                        onClick={onReset}
+                        onClick={() => router.push(`/shop`)}
                         className="flex items-center gap-1 text-xs text-text-secondary hover:text-red-500 cursor-pointer transition-colors font-medium px-2 py-1 rounded-md hover:bg-red-50"
                     >
                         Reset
@@ -82,11 +100,20 @@ const ShopFilterPanel = ({ filters, setFilters, onReset, isMobileDrawer, onClose
             {/* Category */}
             <FilterSection title="Category" icon={LayoutGrid}>
                 <div className="flex flex-col gap-2">
+                    <button
+                        onClick={() => clearQuery("category")}
+                        className={`text-left text-sm px-3 py-2 rounded-lg transition-all cursor-pointer font-medium ${!selectedCategory
+                            ? 'bg-accent text-white'
+                            : 'text-text-secondary hover:bg-muted hover:text-text-primary'
+                            }`}
+                    >
+                        All
+                    </button>
                     {categories.map(cat => (
                         <button
                             key={cat}
-                            onClick={() => handleCategoryChange(cat)}
-                            className={`text-left text-sm px-3 py-2 rounded-lg transition-all cursor-pointer font-medium ${filters.category === cat
+                            onClick={() => handleQuery("category", cat)}
+                            className={`text-left text-sm px-3 py-2 rounded-lg transition-all cursor-pointer font-medium ${selectedCategory === cat
                                 ? 'bg-accent text-white'
                                 : 'text-text-secondary hover:bg-muted hover:text-text-primary'
                                 }`}
@@ -99,11 +126,11 @@ const ShopFilterPanel = ({ filters, setFilters, onReset, isMobileDrawer, onClose
 
             {/* Price Range */}
             <FilterSection title="Price Range" icon={DollarSign}>
-                <RangeSlider filters={(filters)} MIN_PRICE={MIN_PRICE} MAX_PRICE={MAX_PRICE} handlePriceChange={handlePriceChange} />
+                <RangeSlider />
             </FilterSection>
 
             {/* Brands */}
-            <FilterSection title="Brand" icon={Tag} defaultOpen={true}>
+            {/* <FilterSection title="Brand" icon={Tag} defaultOpen={true}>
                 <div className="flex flex-col gap-2">
                     {brands.map(brand => (
                         <label key={brand} className="flex items-center gap-3 cursor-pointer group">
@@ -129,10 +156,10 @@ const ShopFilterPanel = ({ filters, setFilters, onReset, isMobileDrawer, onClose
                         </label>
                     ))}
                 </div>
-            </FilterSection>
+            </FilterSection> */}
 
             {/* Rating */}
-            <FilterSection title="Min. Rating" icon={Star}>
+            {/* <FilterSection title="Min. Rating" icon={Star}>
                 <div className="flex flex-col gap-2">
                     {ratings.map(r => (
                         <button
@@ -148,10 +175,10 @@ const ShopFilterPanel = ({ filters, setFilters, onReset, isMobileDrawer, onClose
                         </button>
                     ))}
                 </div>
-            </FilterSection>
+            </FilterSection> */}
 
             {/* Availability */}
-            <FilterSection title="Availability" icon={PackageCheck} defaultOpen={true}>
+            {/* <FilterSection title="Availability" icon={PackageCheck} defaultOpen={true}>
                 <div className="flex flex-col gap-2">
                     {[{ label: 'All Products', val: false }, { label: 'In Stock Only', val: true }].map(opt => (
                         <button
@@ -166,7 +193,7 @@ const ShopFilterPanel = ({ filters, setFilters, onReset, isMobileDrawer, onClose
                         </button>
                     ))}
                 </div>
-            </FilterSection>
+            </FilterSection> */}
         </aside>
     );
 };

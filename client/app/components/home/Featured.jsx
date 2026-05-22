@@ -6,8 +6,7 @@ const Featured = async () => {
     const products = await apiClient.get("/product", {
         revalidate: 60 * 5,
     });
-
-    console.log(products)
+    
     return (
         <>
             <section id='Best-Seller' className='md:mt-28 mt-20'>

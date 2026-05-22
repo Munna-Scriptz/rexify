@@ -22,8 +22,8 @@ const ProductSlider = ({ products }) => {
                                 title={item.title}
                                 variant={item.brand}
                                 price={item.variants[0].price}
-                                rating={item.rating || 4.89}
-                                reviews={item.reviews || 129}
+                                rating={item.avgReview || 0}
+                                reviews={item.totalReview || 0}
                             />
                         </div>
                     ))}

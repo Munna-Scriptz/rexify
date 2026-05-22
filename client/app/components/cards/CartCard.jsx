@@ -17,7 +17,22 @@ const CartCard = ({ item }) => {
         } catch (error) {
             toast.error("Something went wrong")
         }
+    }
 
+    const updateCart = async (quantity) => {
+        if (quantity < 1) return;
+        if (quantity > 20) return;
+
+        try {
+            await apiClient.patch(`/cart/update`, {
+                product: item.product._id,
+                sku: item.sku,
+                quantity
+            });
+            await refreshCart();
+        } catch (error) {
+            toast.error("Something went wrong")
+        }
     }
 
     return (
@@ -65,11 +80,15 @@ const CartCard = ({ item }) => {
                 <div className="flex justify-between items-end mt-4">
                     {/* Quantity Control */}
                     <div className="flex items-center gap-3 bg-white border border-border rounded-lg p-1">
-                        <button className='w-8 h-8 flex items-center cursor-pointer justify-center rounded-md hover:bg-muted text-text-secondary transition-colors'>
+                        <button
+                            onClick={() => updateCart(item.quantity - 1)}
+                            className='w-8 h-8 flex items-center cursor-pointer justify-center rounded-md hover:bg-muted text-text-secondary transition-colors'>
                             -
                         </button>
                         <span className="text-sm font-semibold w-6 text-center select-none">{item.quantity}</span>
-                        <button className='w-8 h-8 flex items-center cursor-pointer justify-center rounded-md hover:bg-muted text-text-secondary transition-colors'>
+                        <button
+                            onClick={() => updateCart(item.quantity + 1)}
+                            className='w-8 h-8 flex items-center cursor-pointer justify-center rounded-md hover:bg-muted text-text-secondary transition-colors'>
                             +
                         </button>
                     </div>

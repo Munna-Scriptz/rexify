@@ -9,25 +9,8 @@ import ShopEmptyState from '../../components/emptyState/ShopEmptyState';
 import SortProduct from '../../components/shop/SortProduct';
 import MobileFilter from '@/app/components/shop/MobileFilter';
 
-// const DEFAULT_FILTERS = {
-//     category: 'All',
-//     brands: [],
-//     priceRange: { min: 0, max: 5000 },
-//     rating: 0,
-//     inStockOnly: false,
-// };
-
 const page = () => {
 
-    const filters = []
-    // ============ Handle reset ============
-    const handleFilterChange = () => {
-
-    }
-    // ============ Handle reset ============
-    const handleReset = () => {
-
-    }
     return (
         <>
             <section className="py-10">
@@ -37,7 +20,7 @@ const page = () => {
                         {/* ── Sidebar Filter (Desktop) ── */}
                         <div className="hidden lg:block w-64 shrink-0">
                             <div className="sticky top-4">
-                                <ShopFilterPanel filters={filters} setFilters={handleFilterChange} onReset={handleReset} />
+                                <ShopFilterPanel />
                             </div>
                         </div>
 
@@ -47,20 +30,20 @@ const page = () => {
                             {/* Toolbar */}
                             <div className="flex flex-wrap items-center justify-between gap-4 mb-6 pb-4 border-b border-border">
                                 {/* Left: count + mobile filter toggle */}
-                                {/* <div className="flex items-center gap-3">
+                                <div className="flex justify-between items-center gap-3 w-full md:w-auto" >
+                                    <p className="text-base text-text-secondary">
+                                        <span className="font-bold text-text-primary">5</span> products found
+                                    </p>
                                     <button
                                         onClick={() => setMobileFiltersOpen(true)}
                                         className="lg:hidden flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-xl border border-border hover:border-accent hover:text-accent transition-all"
                                     >
                                         <SlidersHorizontal size={15} /> Filters
                                     </button>
-                                    <p className="text-base text-text-secondary">
-                                        <span className="font-bold text-text-primary">{filteredProducts.length}</span> products found
-                                    </p>
-                                </div> */}
+                                </div>
 
                                 {/* Right: sort + view toggles */}
-                                {/* <SortProduct sortBy={sortBy} setSortBy={setSortBy} setCurrentPage={setCurrentPage} setViewMode={setViewMode} viewMode={viewMode} /> */}
+                                <SortProduct sortBy={""} setSortBy={""} setCurrentPage={5} setViewMode={true} viewMode={true} />
                             </div>
 
 

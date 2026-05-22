@@ -1,32 +1,22 @@
-"use client"
-
-import React, { useRef, useEffect } from 'react';
-import {
-    X,
-    SlidersHorizontal,
-    LayoutGrid,
-    DollarSign,
-    Tag,
-    Star,
-    PackageCheck
-} from 'lucide-react';
+import React from 'react';
+import { X, SlidersHorizontal, LayoutGrid, DollarSign, Tag, Star } from 'lucide-react';
 import FilterSection from './FilterSection';
-import RatingStars from './RatingStars';
 import RangeSlider from './RangeSlider';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
-const ShopFilterPanel = ({ filters, setFilters, onReset, isMobileDrawer, onClose }) => {
+const ShopFilterPanel = ({ isMobileDrawer, onClose }) => {
 
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
 
     const categories = ['Smartphones', 'Laptops', 'Tablets', 'Audio', 'Wearables', 'Gaming'];
-    const brands = ['Apple', 'Samsung', 'Sony', 'Dell', 'Asus', 'Bose', 'Logitech'];
-    const ratings = [4, 3, 2, 1];
+    const brands = ['Apple', 'Samsung', 'Xiaomi', 'Vivo', 'Oppo', 'Realme', 'Google', 'Motorola', 'OnePlus', 'Techno'];
 
-    // ========== Handle category =========
+    // ========== Handle Query =========
     const selectedCategory = searchParams.get('category');
+    const selectedBrand = searchParams.get('brand');
+    const selectedRating = searchParams.get('rating');
 
     const handleQuery = (name, value) => {
         const params = new URLSearchParams(searchParams.toString());
@@ -40,33 +30,11 @@ const ShopFilterPanel = ({ filters, setFilters, onReset, isMobileDrawer, onClose
 
     // ========== Remove query =========
     const clearQuery = (name) => {
-        // 1. Create a mutable version of the current params
         const params = new URLSearchParams(searchParams.toString());
-
-        // 2. Delete the specific parameter
         params.delete(name);
-
-        // 3. Construct the new URL and update the router
         const queryString = params.toString();
         const updatedUrl = queryString ? `${pathname}?${queryString}` : pathname;
-
         router.replace(updatedUrl);
-    };
-
-
-    const handleBrandToggle = (brand) => {
-        setFilters(f => {
-            const brands = f.brands.includes(brand) ? f.brands.filter(b => b !== brand) : [...f.brands, brand];
-            return { ...f, brands };
-        });
-    };
-
-    const handleRatingChange = (rating) => {
-        setFilters(f => ({ ...f, rating: f.rating === rating ? 0 : rating }));
-    };
-
-    const handleAvailability = (val) => {
-        setFilters(f => ({ ...f, inStockOnly: val }));
     };
 
     return (
@@ -130,25 +98,25 @@ const ShopFilterPanel = ({ filters, setFilters, onReset, isMobileDrawer, onClose
             </FilterSection>
 
             {/* Brands */}
-            {/* <FilterSection title="Brand" icon={Tag} defaultOpen={true}>
+            <FilterSection title="Brand" icon={Tag} defaultOpen={true}>
                 <div className="flex flex-col gap-2">
                     {brands.map(brand => (
                         <label key={brand} className="flex items-center gap-3 cursor-pointer group">
                             <div
-                                onClick={() => handleBrandToggle(brand)}
-                                className={`w-4.5 h-4.5 rounded flex items-center justify-center border-2 transition-all cursor-pointer shrink-0 ${filters.brands.includes(brand)
+                                onClick={() => handleQuery("brand", brand)}
+                                className={`w-4.5 h-4.5 rounded flex items-center justify-center border-2 transition-all cursor-pointer shrink-0 ${selectedBrand === brand
                                     ? 'bg-accent border-accent'
                                     : 'border-border group-hover:border-accent/60'
                                     }`}
                             >
-                                {filters.brands.includes(brand) && (
+                                {selectedBrand === brand && (
                                     <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
                                         <path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                                     </svg>
                                 )}
                             </div>
                             <span
-                                onClick={() => handleBrandToggle(brand)}
+                                onClick={() => handleQuery("brand", brand)}
                                 className="text-sm text-text-secondary group-hover:text-text-primary transition-colors"
                             >
                                 {brand}
@@ -156,44 +124,30 @@ const ShopFilterPanel = ({ filters, setFilters, onReset, isMobileDrawer, onClose
                         </label>
                     ))}
                 </div>
-            </FilterSection> */}
+            </FilterSection>
 
             {/* Rating */}
-            {/* <FilterSection title="Min. Rating" icon={Star}>
+            <FilterSection title="Min. Rating" icon={Star}>
                 <div className="flex flex-col gap-2">
-                    {ratings.map(r => (
+                    {[4, 3, 2, 1].map((item) => (
                         <button
-                            key={r}
-                            onClick={() => handleRatingChange(r)}
-                            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${filters.rating === r
+                            key={item}
+                            onClick={() => handleQuery("rating", item)}
+                            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm transition-all ${selectedRating == item
                                 ? 'bg-accent/10 text-accent font-semibold'
                                 : 'text-text-secondary hover:bg-muted hover:text-text-primary'
                                 }`}
                         >
-                            <RatingStars count={r} />
+                            <span className="flex">
+                                {Array.from({ length: 5 }).map((_, i) => (
+                                    <Star key={i} size={13} className={i < item ? 'text-yellow-400 fill-yellow-400' : 'text-border fill-border'} />
+                                ))}
+                            </span>
                             <span>& Up</span>
                         </button>
                     ))}
                 </div>
-            </FilterSection> */}
-
-            {/* Availability */}
-            {/* <FilterSection title="Availability" icon={PackageCheck} defaultOpen={true}>
-                <div className="flex flex-col gap-2">
-                    {[{ label: 'All Products', val: false }, { label: 'In Stock Only', val: true }].map(opt => (
-                        <button
-                            key={opt.label}
-                            onClick={() => handleAvailability(opt.val)}
-                            className={`text-left text-sm px-3 py-2 rounded-lg transition-all font-medium ${filters.inStockOnly === opt.val
-                                ? 'bg-accent text-white'
-                                : 'text-text-secondary hover:bg-muted hover:text-text-primary'
-                                }`}
-                        >
-                            {opt.label}
-                        </button>
-                    ))}
-                </div>
-            </FilterSection> */}
+            </FilterSection>
         </aside>
     );
 };

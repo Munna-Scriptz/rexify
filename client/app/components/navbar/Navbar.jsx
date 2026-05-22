@@ -3,14 +3,13 @@ import React, { useEffect, useState, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { FiHeart } from 'react-icons/fi'
-import { PiUser } from 'react-icons/pi'
 import SearchField from './SearchField'
 import ProductMenu from './ProductMenu'
 import { Search, ShoppingCart, X, Home, ShoppingBag, LayoutGrid, Info, PhoneCall, Zap, Heart, User } from 'lucide-react'
 import { HiMiniBars3BottomLeft } from 'react-icons/hi2'
 import UserButton from './UserButton'
 
-const Navbar = () => {
+const Navbar = ({ cart }) => {
     const navbarRef = useRef(null);
     const lastScrollYRef = useRef(0);
     const [isNavbarWhite, setIsNavbarWhite] = useState(false);
@@ -51,14 +50,12 @@ const Navbar = () => {
         return () => window.removeEventListener("scroll", handleScroll);
     }, [isHomePage, search, productMenuOpen]);
 
-    // Lock body scroll when product menu is open
     useEffect(() => {
         if (typeof window === 'undefined') return;
 
         document.body.style.overflow = productMenuOpen ? 'hidden' : '';
         return () => { document.body.style.overflow = ''; };
     }, [productMenuOpen]);
-
 
     return (
         <>
@@ -116,7 +113,7 @@ const Navbar = () => {
 
                             <Link href={"/cart"} className={`w-8 h-8 flex items-center justify-center hover:bg-text-muted/30 group-hover:text-text-primary duration-300 ${isNavbarWhite && 'text-text-primary'} rounded-full relative`}>
                                 <div className='w-4 h-4 bg-accent rounded-full text-xs text-white flex items-center justify-center absolute -top-1 -right-1'>
-                                    <span>3</span>
+                                    <span>{cart || 0}</span>
                                 </div>
                                 <ShoppingCart strokeWidth={1} />
                             </Link>
@@ -127,7 +124,7 @@ const Navbar = () => {
                             </Link>
 
                             {/* --------- User  */}
-                            <UserButton isNavbarWhite={isNavbarWhite}/>
+                            <UserButton isNavbarWhite={isNavbarWhite} />
                         </div>
 
                     </div>

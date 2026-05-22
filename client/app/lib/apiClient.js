@@ -27,7 +27,7 @@ async function request(endpoint, options = {}) {
                 requestHeaders["Cookie"] = headers["Cookie"] || headers["cookie"] || cookieString;
             }
         } catch (error) {
-           
+
         }
     }
 
@@ -38,7 +38,7 @@ async function request(endpoint, options = {}) {
         ...(body && { body: JSON.stringify(body) }),
 
         // Next.js specific options (only work on server)
-        ...(next || revalidate || tags
+        ...(next || revalidate || tags.length > 0
             ? {
                 next: {
                     revalidate: revalidate ?? next?.revalidate ?? 0,
@@ -52,7 +52,7 @@ async function request(endpoint, options = {}) {
 
     try {
         const res = await fetch(`${BASE_URL}${endpoint}`, fetchOptions);
-        if(res.status == 401) {
+        if (res.status == 401) {
             redirect("/auth/signin")
         }
         if (!res.ok) {

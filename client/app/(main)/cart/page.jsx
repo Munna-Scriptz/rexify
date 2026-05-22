@@ -7,7 +7,7 @@ import { apiClient } from '@/app/lib/apiClient';
 const Cart = async () => {
     // -------- From server ---------
     const carts = await apiClient.get("/cart", {
-        cache: 'no-store'
+        tags: ["cart"],
     });
 
     // Empty State Component

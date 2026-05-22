@@ -9,7 +9,6 @@ const ProductSlider = ({ products }) => {
         align: "start",
         containScroll: "trimSnaps"
     });
-
     return (
         <div className="relative overflow-hidden">
             <div ref={emblaRef}>

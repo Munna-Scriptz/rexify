@@ -14,9 +14,10 @@ const SellerCard = ({ img, badge, slug, title, variant, price, rating, reviews }
                 />
 
                 {/* Floating badge */}
-                <span className="absolute top-4 left-4 text-[11px] tracking-wide uppercase px-3 py-1 rounded-full border border-neutral-300 text-text-secondary bg-white">
+                {badge && <span className="absolute top-4 left-4 text-[11px] tracking-wide uppercase px-3 py-1 rounded-full border border-neutral-300 text-text-secondary bg-white">
                     {badge}
-                </span>
+                </span>}
+
 
                 {/* Hover Actions */}
                 <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-3 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">

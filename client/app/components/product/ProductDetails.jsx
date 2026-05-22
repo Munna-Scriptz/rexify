@@ -3,38 +3,30 @@ import React, { useState } from 'react'
 import { Star, Minus, Plus, ShoppingCart, Zap, Truck, ShieldCheck } from 'lucide-react'
 import { toast } from 'react-toastify'
 import { apiClient } from '@/app/lib/apiClient'
+import { refreshCart } from '@/app/lib/RefreshCart'
 
 const ProductDetails = ({ product, selectedVariantIndex, setSelectedVariantIndex, currentUser }) => {
     const [quantity, setQuantity] = useState(1);
-    
+
     const selectedVariant = product?.variants?.[selectedVariantIndex] || product?.variants?.[0];
     const isOutOfStock = !selectedVariant || selectedVariant.stock === 0;
 
     // ---------- Handle cart -------------- 
     const handleCart = async () => {
-        if (isOutOfStock) {
-            toast.error("This variation is currently out of stock!");
-            return;
-        }
-
-        const promise = apiClient.post(`/cart/create`, {
-            product: product._id,
-            sku: selectedVariant?.sku,
-            quantity
-        });
-
         await toast.promise(
-            promise,
+            apiClient.post("/cart/create", {
+                product: product._id,
+                sku: selectedVariant?.sku,
+                quantity,
+            }),
             {
                 pending: "Adding to cart...",
                 success: "Added to cart successfully!",
-                error: {
-                    render({ data }) {
-                        return data?.response?.data?.message || "Something went wrong";
-                    }
-                }
+                error: (err) => err?.response?.data?.message || "Something went wrong",
             }
         );
+
+        await refreshCart();
     };
 
     return (
@@ -109,19 +101,17 @@ const ProductDetails = ({ product, selectedVariantIndex, setSelectedVariantIndex
                                         setSelectedVariantIndex(i);
                                         setQuantity(1);
                                     }}
-                                    className={`flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-xl border font-semibold transition-all ${
-                                        isSelected 
-                                            ? 'border-accent bg-accent/5 text-accent shadow-sm' 
-                                            : 'border-border text-text-secondary hover:border-gray-400'
-                                    }`}
+                                    className={`flex items-center gap-3 px-4 py-2.5 cursor-pointer rounded-xl border font-semibold transition-all ${isSelected
+                                        ? 'border-accent bg-accent/5 text-accent shadow-sm'
+                                        : 'border-border text-text-secondary hover:border-gray-400'
+                                        }`}
                                 >
                                     <div
-                                        className={`w-6 h-6 rounded-full flex items-center justify-center border-2 transition-all ${
-                                            isSelected ? 'border-accent' : 'border-transparent'
-                                        }`}
+                                        className={`w-6 h-6 rounded-full flex items-center justify-center border-2 transition-all ${isSelected ? 'border-accent' : 'border-transparent'
+                                            }`}
                                     >
-                                        <div 
-                                            className="w-4 h-4 rounded-full border border-black/10" 
+                                        <div
+                                            className="w-4 h-4 rounded-full border border-black/10"
                                             style={{ backgroundColor: item.color?.code || '#ccc' }}
                                         />
                                     </div>
@@ -146,11 +136,10 @@ const ProductDetails = ({ product, selectedVariantIndex, setSelectedVariantIndex
                                         setSelectedVariantIndex(i);
                                         setQuantity(1);
                                     }}
-                                    className={`px-4 py-2.5 text-sm cursor-pointer rounded-xl border font-semibold transition-all ${
-                                        isSelected 
-                                            ? 'border-accent bg-accent/5 text-accent shadow-sm' 
-                                            : 'border-border text-text-secondary hover:border-gray-400'
-                                    }`}
+                                    className={`px-4 py-2.5 text-sm cursor-pointer rounded-xl border font-semibold transition-all ${isSelected
+                                        ? 'border-accent bg-accent/5 text-accent shadow-sm'
+                                        : 'border-border text-text-secondary hover:border-gray-400'
+                                        }`}
                                 >
                                     {item.ram}GB/{item.storage}GB
                                 </button>
@@ -183,15 +172,15 @@ const ProductDetails = ({ product, selectedVariantIndex, setSelectedVariantIndex
                     </button>
                 </div>
 
-                <button 
+                <button
                     type="button"
                     disabled={isOutOfStock}
                     className="flex-1 bg-accent text-white font-bold md:py-4 py-3 rounded-xl hover:bg-blue-700 transition-all shadow-lg shadow-accent/20 flex items-center justify-center gap-2 cursor-pointer disabled:bg-slate-350 disabled:shadow-none disabled:cursor-not-allowed"
                 >
                     Buy Now <Zap size={20} />
                 </button>
-                
-                <button 
+
+                <button
                     type="button"
                     onClick={handleCart}
                     disabled={isOutOfStock}

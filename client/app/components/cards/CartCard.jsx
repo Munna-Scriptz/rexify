@@ -4,18 +4,20 @@ import React from 'react'
 import { Trash2 } from 'lucide-react'
 import { toast } from 'react-toastify';
 import { apiClient } from '@/app/lib/apiClient';
+import { refreshCart } from '@/app/lib/RefreshCart';
 
 const CartCard = ({ item }) => {
     const cart = item.product.variants.find(item => item.sku === item.sku);
+
     const removeCart = async () => {
         try {
-            await apiClient.delete(`/cart/delete`, {
-                product: "item.product._id",
-                sku: item.sku,
-            });
+            await apiClient.delete(`/cart/delete/?product=${item.product._id}&sku=${item.sku}`);
+            await refreshCart();
+            toast.success("Cart deleted")
         } catch (error) {
             toast.error("Something went wrong")
         }
+
     }
 
     return (

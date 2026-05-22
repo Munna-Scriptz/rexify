@@ -1,15 +1,32 @@
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import React from 'react'
+"use client"
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+const Pagination = ({ totalPages }) => {
+    const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
+
+    const currentPage = Number(searchParams.get("page") || 1);
+
+    const setPage = (page) => {
+        const params = new URLSearchParams(searchParams.toString());
+        params.set("page", page);
+
+        router.push(`${pathname}?${params.toString()}`);
+    };
+
     const pages = [];
     for (let i = 1; i <= totalPages; i++) pages.push(i);
-    const visiblePages = pages.filter(p => p === 1 || p === totalPages || Math.abs(p - currentPage) <= 1);
+
+    const visiblePages = pages.filter(
+        (p) => p === 1 || p === totalPages || Math.abs(p - currentPage) <= 1
+    );
 
     return (
         <div className="flex items-center justify-center gap-2 mt-10">
             <button
-                onClick={() => onPageChange(currentPage - 1)}
+                onClick={() => setPage(currentPage - 1)}
                 disabled={currentPage === 1}
                 className="w-9 h-9 flex items-center justify-center rounded-lg border border-border text-text-secondary hover:border-accent hover:text-accent transition-all disabled:opacity-30 disabled:pointer-events-none"
             >
@@ -19,21 +36,28 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
             {visiblePages.map((page, idx) => {
                 const prev = visiblePages[idx - 1];
                 const showEllipsis = prev && page - prev > 1;
+
                 return (
-                    <React.Fragment key={page}>
-                        {showEllipsis && <span className="px-1 text-text-muted text-sm">…</span>}
+                    <div key={page}>
+                        {showEllipsis && (
+                            <span className="px-1 text-text-muted text-sm">…</span>
+                        )}
+
                         <button
-                            onClick={() => onPageChange(page)}
-                            className={`w-9 h-9 rounded-lg text-sm font-medium transition-all ${currentPage === page ? 'bg-accent text-white shadow-md shadow-accent/25' : 'border border-border text-text-secondary hover:border-accent hover:text-accent'}`}
+                            onClick={() => setPage(page)}
+                            className={`w-9 h-9 rounded-lg text-sm font-medium transition-all ${currentPage === page
+                                    ? "bg-accent text-white shadow-md shadow-accent/25"
+                                    : "border border-border text-text-secondary hover:border-accent hover:text-accent"
+                                }`}
                         >
                             {page}
                         </button>
-                    </React.Fragment>
+                    </div>
                 );
             })}
 
             <button
-                onClick={() => onPageChange(currentPage + 1)}
+                onClick={() => setPage(currentPage + 1)}
                 disabled={currentPage === totalPages}
                 className="w-9 h-9 flex items-center justify-center rounded-lg border border-border text-text-secondary hover:border-accent hover:text-accent transition-all disabled:opacity-30 disabled:pointer-events-none"
             >
@@ -43,4 +67,4 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
     );
 };
 
-export default Pagination
+export default Pagination;

@@ -1,10 +1,11 @@
-import React from 'react';
+'use client'
+
 import { X, SlidersHorizontal, LayoutGrid, DollarSign, Tag, Star } from 'lucide-react';
 import FilterSection from './FilterSection';
 import RangeSlider from './RangeSlider';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
-const ShopFilterPanel = ({ isMobileDrawer, onClose }) => {
+const ShopFilterPanel = ({ isMobileDrawer }) => {
 
     const router = useRouter();
     const pathname = usePathname();
@@ -56,7 +57,7 @@ const ShopFilterPanel = ({ isMobileDrawer, onClose }) => {
                     </button>
                     {isMobileDrawer && (
                         <button
-                            onClick={onClose}
+                            onClick={()=>clearQuery("filter")}
                             className="flex items-center justify-center w-8 h-8 rounded-full bg-muted text-text-primary hover:bg-accent hover:text-white transition-all"
                         >
                             <X size={16} />

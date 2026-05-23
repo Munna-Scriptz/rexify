@@ -148,11 +148,12 @@ const getAll = async (req, res) => {
         const search = req.query.search || ""
         const brand = req.query.brand
         const rating = Number(req.query.rating)
-        const minPrice = parseInt(req.query.minPrice)
-        const maxPrice = parseInt(req.query.maxPrice)
+        const minPrice = Number(req.query.minPrice)
+        const maxPrice = Number(req.query.maxPrice)
         const limit = parseInt(req.query.limit) || 10
         const page = parseInt(req.query.page) || 1
         const skip = (page - 1) * limit
+
 
         const baseMatch = {
             isActive: true,
@@ -160,7 +161,7 @@ const getAll = async (req, res) => {
             ...(search && { title: { $regex: search, $options: "i" } }),
             ...(brand && { brand }),
             ...(rating && { avgReview: { $lte: Number(rating) } }),
-            ...(minPrice && { price: { $gte: minPrice, $lte: maxPrice } })
+            ...(minPrice && { "variants.price": { $gte: Number(minPrice), $lte: Number(maxPrice) } })
         }
 
         const countPipeline = [

@@ -1,9 +1,9 @@
 import { cookies } from 'next/headers'
 import ProductContainer from '../../../components/product/ProductContainer'
 import Specifications from '../../../components/product/Specifications'
-import RelatedProduct from '../../../components/common/RelatedProduct'
 import { apiClient } from '@/app/lib/apiClient'
 import ProductReview from '@/app/components/product/ProductReview'
+import ProductSlider from '@/app/components/sliders/ProductSlider'
 
 const page = async ({ params }) => {
     const { slug } = await params;
@@ -15,19 +15,17 @@ const page = async ({ params }) => {
     let related = { data: [] };
 
     try {
-        const [productRes, userRes, relatedPro] = await Promise.all([
+        const [productRes, userRes] = await Promise.all([
             apiClient.get(`/product/${slug}`),
             token ? apiClient.get('/auth/profile', { headers: { Cookie: `X-AS-TOKEN=${token}` } }) : null,
-            apiClient.get(`/product/related?tags=${product?.data?.product?.tags}&limit=${10}`),
         ]);
         product = productRes;
         currentUser = userRes;
-        related = relatedPro;
+
+        related = await apiClient.get(`/product/related/?tags=${product?.data?.product?.tags}&limit=${10}`)
     } catch (error) {
         console.log(error)
     }
-
-    console.log(related)
 
     return (
         <section id='Product-details' className="text-text-primary pb-20 mt-8">
@@ -50,7 +48,23 @@ const page = async ({ params }) => {
                     />
 
                     {/* ================= Related Products ================= */}
-                    {/* <RelatedProduct product={product} /> */}
+                    <section id='Best-Seller' className='md:mt-28 mt-20'>
+                        <div className="container">
+                            <div id="Header-Row" className="mb-6 md:mb-10 flex items-center md:items-end justify-between">
+                                <h2 className="text-2xl md:text-4xl font-semibold text-text-primary">
+                                    Related Products
+                                </h2>
+
+                                <button className="text-sm md:text-base font-medium text-text-secondary hover:text-neutral-900 flex items-center gap-1 transition cursor-pointer " >
+                                    View all
+                                    <span className="text-base">→</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* ----------- Slider Content ----------- */}
+                        <ProductSlider products={related?.data} />
+                    </section>
                 </div>
             </div>
         </section>

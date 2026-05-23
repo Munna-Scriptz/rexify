@@ -5,13 +5,12 @@ import FilterSection from './FilterSection';
 import RangeSlider from './RangeSlider';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
-const ShopFilterPanel = ({ isMobileDrawer }) => {
+const ShopFilterPanel = ({ isMobileDrawer, categories }) => {
 
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
 
-    const categories = ['Smartphones', 'Laptops', 'Tablets', 'Audio', 'Wearables', 'Gaming'];
     const brands = ['Apple', 'Samsung', 'Xiaomi', 'Vivo', 'Oppo', 'Realme', 'Google', 'Motorola', 'OnePlus', 'Techno'];
 
     // ========== Handle Query =========
@@ -57,7 +56,7 @@ const ShopFilterPanel = ({ isMobileDrawer }) => {
                     </button>
                     {isMobileDrawer && (
                         <button
-                            onClick={()=>clearQuery("filter")}
+                            onClick={() => clearQuery("filter")}
                             className="flex items-center justify-center w-8 h-8 rounded-full bg-muted text-text-primary hover:bg-accent hover:text-white transition-all"
                         >
                             <X size={16} />
@@ -78,16 +77,16 @@ const ShopFilterPanel = ({ isMobileDrawer }) => {
                     >
                         All
                     </button>
-                    {categories.map(cat => (
+                    {categories?.map((item, i) => (
                         <button
-                            key={cat}
-                            onClick={() => handleQuery("category", cat)}
-                            className={`text-left text-sm px-3 py-2 rounded-lg transition-all cursor-pointer font-medium ${selectedCategory === cat
+                            key={i}
+                            onClick={() => handleQuery("category", item?.slug)}
+                            className={`text-left text-sm px-3 capitalize py-2 rounded-lg transition-all cursor-pointer font-medium ${selectedCategory === item.slug
                                 ? 'bg-accent text-white'
                                 : 'text-text-secondary hover:bg-muted hover:text-text-primary'
                                 }`}
                         >
-                            {cat}
+                            {item.name}
                         </button>
                     ))}
                 </div>
@@ -130,7 +129,7 @@ const ShopFilterPanel = ({ isMobileDrawer }) => {
             {/* Rating */}
             <FilterSection title="Min. Rating" icon={Star}>
                 <div className="flex flex-col gap-2">
-                    {[4, 3, 2, 1].map((item) => (
+                    {[5, 4, 3, 2, 1].map((item) => (
                         <button
                             key={item}
                             onClick={() => handleQuery("rating", item)}

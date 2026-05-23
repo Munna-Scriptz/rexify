@@ -55,15 +55,10 @@ async function request(endpoint, options = {}) {
         if (res.status == 401) {
             redirect("/auth/signin")
         }
-        if (!res.ok) {
-            const errorData = await res.json().catch(() => ({}));
-            throw new Error(errorData.message || `Request failed: ${res.status}`);
-        }
 
         return await res.json();
     } catch (error) {
         console.error("API Error:", error.message);
-        throw error;
     }
 }
 

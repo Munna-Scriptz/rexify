@@ -146,16 +146,24 @@ const getAll = async (req, res) => {
         // --------- query
         const categorySlug = req.query.category
         const search = req.query.search || ""
+        const brand = req.query.brand
+        const rating = Number(req.query.rating)
+        const minPrice = parseInt(req.query.minPrice)
+        const maxPrice = parseInt(req.query.maxPrice)
         const limit = parseInt(req.query.limit) || 10
         const page = parseInt(req.query.page) || 1
         const skip = (page - 1) * limit
 
-        // --------- Count & Page
-        const productsCount = await productSchema.countDocuments()
-        const totalPages = Math.ceil(productsCount / limit)
+        const baseMatch = {
+            isActive: true,
+            ...(categorySlug && { "category.slug": categorySlug }),
+            ...(search && { title: { $regex: search, $options: "i" } }),
+            ...(brand && { brand }),
+            ...(rating && { avgReview: { $lte: Number(rating) } }),
+            ...(minPrice && { price: { $gte: minPrice, $lte: maxPrice } })
+        }
 
-        // --------- Search and Pipeline
-        const pipline = [
+        const countPipeline = [
             {
                 $lookup: {
                     from: "categories",
@@ -164,16 +172,34 @@ const getAll = async (req, res) => {
                     as: "category"
                 }
             },
-            { $match: { "isActive": true, ...(categorySlug && { "category.slug": categorySlug }) } },
-            { $match: { title: { $regex: search, $options: "i" } } },
             { $unwind: "$category" },
+            { $match: baseMatch },
+            { $count: "total" }
+        ]
+
+        const countResult = await productSchema.aggregate(countPipeline)
+        const productsCount = countResult[0]?.total || 0
+        const totalPages = Math.ceil(productsCount / limit)
+
+        // --------- Search and Pipeline
+        const pipeline = [
+            {
+                $lookup: {
+                    from: "categories",
+                    localField: "category",
+                    foreignField: "_id",
+                    as: "category"
+                }
+            },
+            { $unwind: "$category" },
+            { $match: baseMatch },
             { $sort: { createdAt: -1 } },
             { $skip: skip },
             { $limit: limit },
             { $project: { __v: 0, isActive: 0, updatedAt: 0, "category.__v": 0, "category.isActive": 0, "category._id": 0, "variants._id": 0 } }
         ]
         // ---------- Find product 
-        const products = await productSchema.aggregate(pipline)
+        const products = await productSchema.aggregate(pipeline)
 
         // ---------- Success 
         resHandler.success(res, 201, "", {

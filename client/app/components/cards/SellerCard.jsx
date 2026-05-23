@@ -25,10 +25,6 @@ const SellerCard = ({ img, badge, slug, title, variant, price, rating, reviews }
                     <button
                         className="h-11 w-11 rounded-full cursor-pointer border border-neutral-300 bg-white flex items-center justify-center text-text-primary hover:border-neutral-900 hover:text-neutral-900 transition"
                         aria-label="Add to cart"
-                        onClick={(e) => {
-                            e.preventDefault()
-                            e.stopPropagation()
-                        }}
                     >
                         <FiShoppingBag size={18} />
                     </button>
@@ -36,10 +32,6 @@ const SellerCard = ({ img, badge, slug, title, variant, price, rating, reviews }
                     {/* Wishlist */}
                     <button className="h-11 w-11 rounded-full cursor-pointer border border-neutral-300 bg-white flex items-center justify-center text-text-primary hover:border-neutral-900 hover:text-neutral-900 transition"
                         aria-label="Add to wishlist"
-                        onClick={(e) => {
-                            e.preventDefault()
-                            e.stopPropagation()
-                        }}
                     >
                         <FiHeart size={18} />
                     </button>

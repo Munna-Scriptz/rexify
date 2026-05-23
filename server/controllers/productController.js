@@ -219,6 +219,28 @@ const getAll = async (req, res) => {
     }
 }
 
+// =============== Get Related Product ==================
+const getRelatedProducts = async (req, res) => {
+    try {
+        const { limit = 10 } = req.query;
+        const tags = JSON.parse(req.query.tags);
+
+        if (!tags || !Array.isArray(tags) || tags.length === 0) resHandler.error(res, 400, 'Tags are required')
+
+        // ------------ Find from db 
+        const products = await productSchema.find({
+            isActive: true,
+            tags: { $in: tags },
+        }).limit(limit);
+
+
+        // ------------ Success 
+        resHandler.success(res, 200, 'Data fetched', products)
+    } catch (error) {
+        resHandler.error(res, 500, 'Internal server error');
+    }
+};
+
 // =============== Get Single Product ==================
 const getSingle = async (req, res) => {
     try {
@@ -336,4 +358,4 @@ const updateProduct = async (req, res) => {
 
 
 
-module.exports = { createProduct, getAll, getSingle, updateProduct }
+module.exports = { createProduct, getAll, getRelatedProducts, getSingle, updateProduct }

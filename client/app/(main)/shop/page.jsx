@@ -12,6 +12,7 @@ export default async function Page({ searchParams }) {
     const PRODUCTS_PER_PAGE = 10
     const totalProduct = 5
     const viewMode = "grid"
+
     // -------- All Queries ---------
     const query = await searchParams
     const category = query.category
@@ -45,6 +46,7 @@ export default async function Page({ searchParams }) {
         console.log(error)
     }
 
+    console.log(res)
     return (
         <>
             <section className="py-10">
@@ -60,7 +62,7 @@ export default async function Page({ searchParams }) {
                         {/* ── Main Content ── */}
                         <div className="flex-1 min-w-0">
                             {/* Toolbar */}
-                            <ShopHeader />
+                            <ShopHeader totalProducts={res?.data?.products?.length}/>
 
                             {/* Drawer */}
                             <MobileFilter />
@@ -94,11 +96,11 @@ export default async function Page({ searchParams }) {
                             )}
 
                             {/* Pagination */}
-                            <Pagination totalPages={5} />
+                            <Pagination totalPages={res?.data?.pagination?.showing} />
 
                             {/* Showing range */}
                             <p className="text-center text-xs text-text-muted mt-4">-
-                                Showing {PRODUCTS_PER_PAGE} of {totalProduct} products
+                                Showing {res?.data?.pagination?.showing} of {res?.data?.pagination?.total} products
                             </p>
                         </div>
                     </div>

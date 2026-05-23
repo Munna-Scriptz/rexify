@@ -2,13 +2,12 @@
 import { ChevronDown, LayoutGrid, List, SlidersHorizontal } from 'lucide-react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
-const ShopHeader = () => {
+const ShopHeader = ({ totalProducts }) => {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
 
     // ========== Handle Query =========
-    const sortBy = searchParams.get('sortBy');
     const toggle = searchParams.get('toggle');
 
     const handleQuery = (name, value) => {
@@ -42,7 +41,7 @@ const ShopHeader = () => {
                 {/* Left: count + mobile filter toggle */}
                 <div className="flex justify-between items-center gap-2 w-full md:w-auto" >
                     <p className="text-base text-text-secondary">
-                        <span className="font-bold text-text-primary">5</span> products found
+                        <span className="font-bold text-text-primary">{totalProducts || 0}</span> products found
                     </p>
                     <button
                         onClick={() => router.push(`/shop`)}

@@ -11,7 +11,7 @@ const ProductReview = ({ reviews, productId, currentUser }) => {
                 </div>
                 <div className="flex items-center gap-2 bg-accent/5 px-4 py-2 rounded-2xl border border-accent/10 text-accent">
                     <Star size={18} fill="currentColor" />
-                    <span className="font-bold text-xl">4.8</span>
+                    <span className="font-bold text-xl">{reviews?.length}</span>
                     <span className="text-sm opacity-70">({reviews?.length} reviews)</span>
                 </div>
             </div>

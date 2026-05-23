@@ -1,11 +1,12 @@
 import { ArrowRight, Smartphone } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
 
 const CategoryCard = ({ item, compact = false }) => {
     const containerClass = compact
-        ? 'group relative md:h-60 h-40 rounded-3xl overflow-hidden cursor-pointer duration-500'
-        : 'group relative md:h-100 h-60 rounded-3xl overflow-hidden cursor-pointer shadow-sm hover:shadow-2xl transition-all duration-500'
+        ? 'group relative md:h-60 h-40 rounded-3xl overflow-hidden cursor-pointer block duration-500'
+        : 'group relative md:h-100 h-60 rounded-3xl overflow-hidden cursor-pointer block shadow-sm hover:shadow-2xl transition-all duration-500'
 
     const contentClass = compact
         ? 'absolute inset-0 p-4 flex flex-col justify-end'
@@ -24,7 +25,7 @@ const CategoryCard = ({ item, compact = false }) => {
         : 'flex items-center gap-2 text-white font-semibold opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100'
 
     return (
-        <div className={containerClass}>
+        <Link href={`/shop?category=${item.slug}`} className={containerClass}>
             {/* Background Image */}
             <div className="absolute inset-0">
                 <Image
@@ -55,7 +56,7 @@ const CategoryCard = ({ item, compact = false }) => {
                     </div>
                 </div>
             </div>
-        </div>
+        </Link>
     )
 }
 

@@ -1,23 +1,6 @@
-"use client"
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
 
-const UserButton = ({ isNavbarWhite }) => {
-    const [user, setUser] = useState("")
-    const [data, setData] = useState(null);
-
-    useEffect(() => {
-        fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/profile`, {
-            method: "GET",
-            credentials: "include",
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                setData(data)
-                setUser(data.role)
-            })
-            .catch((err) => console.error(err));
-    }, []);
+const UserButton = ({ isNavbarWhite, user, loading }) => {
     return (
         <>
             <Link

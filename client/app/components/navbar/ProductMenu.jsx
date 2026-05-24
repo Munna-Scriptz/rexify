@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { ChevronRight, ArrowRight, Laptop, Smartphone, Tablet, Headphones, Watch, Monitor } from 'lucide-react'
 import Link from 'next/link'
 
-const ProductMenu = ({ productMenuOpen, setProductMenuOpen }) => {
+const ProductMenu = ({ setProductMenuOpen }) => {
     const [activeCategory, setActiveCategory] = useState('Laptops')
     const [navTop, setNavTop] = useState(56);
 
@@ -63,10 +63,7 @@ const ProductMenu = ({ productMenuOpen, setProductMenuOpen }) => {
 
             <div
                 onMouseLeave={() => setProductMenuOpen(false)}
-                className={`fixed left-0 right-0 z-40 transition-all duration-300 ${productMenuOpen
-                    ? "opacity-100 visible translate-y-0"
-                    : "opacity-0 invisible -translate-y-2 pointer-events-none"
-                    }`}
+                className={`fixed left-0 right-0 z-40 transition-all duration-300 animate-animate-in`}
                 style={{ top: navTop }}
             >
                 <div className='absolute top-0 left-0 bg-black/70 w-full h-screen' onMouseEnter={() => setProductMenuOpen(false)} onClick={() => setProductMenuOpen(false)}></div>
@@ -75,7 +72,7 @@ const ProductMenu = ({ productMenuOpen, setProductMenuOpen }) => {
                         <div className="flex flex-col lg:flex-row">
 
                             {/* Sidebar Categories */}
-                            <div className="w-full lg:w-64 border-b lg:border-b-0 lg:border-r border-gray-100 py-4 lg:py-6 lg:pr-6 px-4 lg:px-0">
+                            <div className="w-full lg:w-64 border-b lg:border-b-0 lg:border-r border-gray-100 py-4 lg:py-10 lg:pr-6 px-4 lg:px-0">
                                 <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 lg:mb-4 font-space">Categories</h3>
                                 <div className="flex lg:flex-col overflow-x-auto lg:overflow-x-visible gap-2 lg:space-y-1 pb-4 lg:pb-0 scrollbar-hide">
                                     {categories.map((cat) => (
@@ -121,24 +118,6 @@ const ProductMenu = ({ productMenuOpen, setProductMenuOpen }) => {
                                             No products found in this category.
                                         </div>
                                     )}
-                                </div>
-                            </div>
-
-                            {/* Promo / Banner Area (Optional - keeping it clean for now, but adding space for it) */}
-                            <div className="w-64 p-6 border-l border-gray-100 bg-gray-50/50 hidden xl:block">
-                                <div className="h-full rounded-2xl bg-linear-to-br from-gray-900 to-black p-6 flex flex-col justify-end text-white relative overflow-hidden group">
-                                    {/* Abstract shine */}
-                                    <div className="absolute top-0 right-0 w-32 h-32 bg-accent/20 blur-3xl rounded-full -translate-y-1/2 translate-x-1/2"></div>
-
-                                    <div className="relative z-10">
-                                        <span className="inline-block px-2 py-1 bg-white/20 text-xs font-bold rounded mb-3 backdrop-blur-sm">New</span>
-                                        <h4 className="text-xl font-bold font-space mb-2">iPhone 17 Pro</h4>
-                                        <p className="text-sm text-gray-300 mb-4">Titanium. So strong. So light. So Pro.</p>
-                                        <Link href="/product" className="inline-flex items-center gap-2 text-sm font-bold hover:text-accent transition-colors">
-                                            Shop Now <ArrowRight size={16} />
-                                        </Link>
-                                    </div>
-                                    <img src="https://images.unsplash.com/photo-1696446701796-da61225697cc?q=80&w=200&auto=format&fit=crop" alt="" className="absolute top-4 -right-4 w-32 object-contain opacity-50 group-hover:scale-110 transition-transform duration-700 hover:opacity-100" />
                                 </div>
                             </div>
 

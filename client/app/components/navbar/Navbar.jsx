@@ -9,7 +9,8 @@ import { Search, ShoppingCart, X, Home, ShoppingBag, LayoutGrid, Info, PhoneCall
 import { HiMiniBars3BottomLeft } from 'react-icons/hi2'
 import UserButton from './UserButton'
 
-const Navbar = ({ cart }) => {
+const Navbar = ({ cart, categories }) => {
+    console.log(categories)
     const navbarRef = useRef(null);
     const lastScrollYRef = useRef(0);
     const [isNavbarWhite, setIsNavbarWhite] = useState(false);
@@ -206,7 +207,8 @@ const Navbar = ({ cart }) => {
             {search && <SearchField close={setSearch} />}
 
             {/* -------------- Products Mega Menu ------------ */}
-            <ProductMenu setProductMenuOpen={setProductMenuOpen} productMenuOpen={productMenuOpen} />
+            {productMenuOpen && <ProductMenu setProductMenuOpen={setProductMenuOpen} />}
+
 
         </>
     )

@@ -7,9 +7,12 @@ export default async function Layout({ children }) {
     const cartCount = await apiClient.get("/cart/count", {
         tags: ["cart"],
     });
+
+    const categories = await apiClient.get("/category/all");
+
     return (
         <>
-            <Navbar cart={cartCount?.data?.totalItems}/>
+            <Navbar cart={cartCount?.data?.totalItems} categories={categories} />
             {children}
             <Footer />
         </>

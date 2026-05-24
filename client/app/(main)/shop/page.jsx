@@ -46,7 +46,7 @@ export default async function Page({ searchParams }) {
         console.log(error)
     }
 
-    console.log(res)
+    
     return (
         <>
             <section className="py-10">

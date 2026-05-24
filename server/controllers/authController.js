@@ -237,6 +237,8 @@ const resetPassword = async (req, res) => {
 const getProfile = async (req, res) => {
     try {
         const { _id } = req.user
+        if (!req.user || !_id) return res.status(200).send({ message: "You're not logged in" })
+            console.log(_id, req.user)
         const userInfo = await userSchema.findById(_id).select('-password -otp -otpExpires -updatedAt')
         if (!userInfo) return res.status(404).send({ message: "User doesn't exist" })
 

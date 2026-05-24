@@ -3,12 +3,18 @@ import OrderSummary from '../../components/cart/OrderSummary';
 import EmptyCart from '../../components/cart/EmptyCart';
 import CartCard from '../../components/cards/CartCard';
 import { apiClient } from '@/app/lib/apiClient';
+import { cookies } from 'next/headers';
 
 const Cart = async () => {
+    const cookieStore = await cookies();
+    const token = cookieStore.get('X-AS-TOKEN')?.value;
+
     // -------- From server ---------
-    const carts = await apiClient.get("/cart", {
+    const carts =  token ? await apiClient.get("/cart", {
         tags: ["cart"],
-    });
+    }) : null
+
+
 
     // Empty State Component
     if (!carts?.data || carts.data?.items?.length === 0) {

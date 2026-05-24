@@ -111,7 +111,7 @@ const Navbar = ({ user, cart, categories }) => {
                                 <Search strokeWidth={1} />
                             </button>
 
-                            <Link href={"/cart"} className={`w-8 h-8 flex items-center justify-center hover:bg-text-muted/30 group-hover:text-text-primary duration-300 ${isNavbarWhite && 'text-text-primary'} rounded-full relative`}>
+                            <Link href={user ? `/cart` : '/auth/signin '} className={`w-8 h-8 flex items-center justify-center hover:bg-text-muted/30 group-hover:text-text-primary duration-300 ${isNavbarWhite && 'text-text-primary'} rounded-full relative`}>
                                 <div className='w-4 h-4 bg-accent rounded-full text-xs text-white flex items-center justify-center absolute -top-1 -right-1'>
                                     <span>{cart || 0}</span>
                                 </div>
@@ -119,7 +119,7 @@ const Navbar = ({ user, cart, categories }) => {
                             </Link>
 
                             {/* --------- Favorites  */}
-                            <Link href={"/wishlist"} className={`w-8 h-8 hidden md:flex items-center justify-center hover:bg-text-muted/20 duration-300 group-hover:text-text-primary ${isNavbarWhite && 'text-text-primary'} text-xl rounded-full cursor-pointer relative`}>
+                            <Link href={user ? `/wishlist` : '/auth/signin '} className={`w-8 h-8 hidden md:flex items-center justify-center hover:bg-text-muted/20 duration-300 group-hover:text-text-primary ${isNavbarWhite && 'text-text-primary'} text-xl rounded-full cursor-pointer relative`}>
                                 <FiHeart strokeWidth={1.5} />
                             </Link>
 

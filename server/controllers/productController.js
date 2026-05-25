@@ -7,7 +7,7 @@ const resHandler = require("../utils/resHandler")
 // =============== Create Product ==================
 const createProduct = async (req, res) => {
     try {
-        const { title, slug, description, category, price, discountPercentage, brand, badge, warranty, shipping, isActive } = req.body
+        const { title, slug, description, category, price, discountPercentage, brand, badge, warranty, shipping, isActive, isFeatured, isEveryday } = req.body
         const variants = JSON.parse(req.body.variants);
         const specifications = JSON.parse(req.body.specifications);
         const tags = JSON.parse(req.body.tags);
@@ -128,7 +128,9 @@ const createProduct = async (req, res) => {
             warranty,
             shipping,
             tags,
-            isActive
+            isActive,
+            isFeatured,
+            isEveryday
         })
         product.save()
 
@@ -267,36 +269,134 @@ const updateProduct = async (req, res) => {
         const productSlug = req.params.slug
         const thumbnail = req.files?.thumbnail?.[0]
         const images = req.files?.images
-        const { title, slug, description, category, discountPercentage, variants, specifications, brand, badge, warranty, shipping, tags, isActive, destroyImg = [] } = req.body
+        const { productId, title, slug, description, category, price, discountPercentage, brand, badge, warranty, shipping, isActive, isFeatured, isEveryday, destroyImg = [] } = req.body
+
+        // Parse JSON fields if provided
+        let variants = req.body.variants ? JSON.parse(req.body.variants) : null
+        let specifications = req.body.specifications ? JSON.parse(req.body.specifications) : null
+        let tags = req.body.tags ? JSON.parse(req.body.tags) : null
+        const files = req.files || []
+
+        // ------- Find from DB
+        const existingProduct = await productSchema.findOne({
+            slug,
+            _id: { $ne: productId },
+        });
+        if (!existingProduct) return resHandler.error(res, 404, "Couldn't found any product")
 
         // ---------- Validation ----------
         if (slug) {
             const existSlug = await productSchema.findOne({ slug: slug?.toLowerCase() })
-            if (existSlug) return resHandler.error(res, 400, 'Slug with this name already exists')
+            if (existSlug && existSlug._id.toString() !== existingProduct._id.toString()) return resHandler.error(res, 400, 'Slug with this name already exists')
         }
-        if (variants) {
-            for (const variant of variants) {
-                if (variant.stock && variant.stock < 1) return resHandler.error(res, 400, 'Stock must be at least 1')
-            }
-            const AllSku = variants.map(item => item.sku)
-            if (new Set(AllSku).size !== AllSku.length) return resHandler.error(res, 400, 'SKU with this name already exists')
-        }
+
         if (category) {
             const existCategory = await categorySchema.findById(category)
             if (!existCategory) return resHandler.error(res, 400, "Invalid category or doesn't exist")
         }
+
+        // Variants validation
+        if (variants) {
+            if (!Array.isArray(variants) || variants.length === 0) return resHandler.error(res, 400, 'Variants must be a non-empty array')
+            for (const variant of variants) {
+                if (!variant.sku) return resHandler.error(res, 400, 'Product SKU is required')
+                if (!variant.color) return resHandler.error(res, 400, 'Product color is required')
+                if (!variant.ram) return resHandler.error(res, 400, 'Product RAM is required')
+                if (!variant.storage) return resHandler.error(res, 400, 'Product Storage is required')
+                if (!variant.price) return resHandler.error(res, 400, 'Product price is required')
+                if (!variant.stock || variant.stock < 1) return resHandler.error(res, 400, 'Stock is required and must be at least 1')
+            }
+            const AllSku = variants.map(item => item.sku)
+            if (new Set(AllSku).size !== AllSku.length) return resHandler.error(res, 400, 'SKU with this name already exists')
+        }
+
+        // Specifications validation
+        if (specifications) {
+            if (!specifications.display || !specifications.display.size) return resHandler.error(res, 400, 'Specification display size required')
+            if (!specifications.display.type) return resHandler.error(res, 400, 'Specification display type required')
+            if (!specifications.display.resolution) return resHandler.error(res, 400, 'Specification display resolution required')
+            if (!specifications.display.refreshRate) return resHandler.error(res, 400, 'Specification display refreshRate required')
+            if (!specifications.camera || !specifications.camera.rear) return resHandler.error(res, 400, 'Specification camera rear required')
+            if (!specifications.battery) return resHandler.error(res, 400, 'Specification battery required')
+            if (!specifications.processor) return resHandler.error(res, 400, 'Specification processor required')
+            if (!specifications.network) return resHandler.error(res, 400, 'Specification network required')
+            if (!specifications.weight) return resHandler.error(res, 400, 'Specification weight required')
+            if (!specifications.os) return resHandler.error(res, 400, 'Specification os required')
+        }
+
         if (tags && tags?.length > 0 && !Array.isArray(tags)) return resHandler.error(res, 400, "Tags must be in array or syntax error")
 
-        // ------- Find from DB
-        const existingProduct = await productSchema.findOne({ slug: productSlug })
-        if (!existingProduct) return resHandler.error(res, 404, "Coudn't found any product")
+        // ---------- Upload variant files ----------
+        if (variants) {
+            for (let i = 0; i < variants.length; i++) {
+                const variant = variants[i]
 
-        // ------- Changes
+                // Handle variant thumbnail upload
+                const varThumbFile = files.find(f => f.fieldname === `variant_${i}_thumbnail`)
+                if (varThumbFile) {
+                    const uploadRes = await cloudUpload({ file: varThumbFile, folderPath: "rexify/products", folder: "product" })
+                    variant.thumbnail = uploadRes?.secure_url || variant.thumbnail || ""
+                } else if (!variant.thumbnail) {
+                    variant.thumbnail = ""
+                }
+
+                // Handle variant images upload
+                const variantImages = variant.images || []
+                const varImg0 = files.find(f => f.fieldname === `variant_${i}_image_0`)
+                const varImg1 = files.find(f => f.fieldname === `variant_${i}_image_1`)
+
+                if (varImg0) {
+                    const uploadRes = await cloudUpload({ file: varImg0, folderPath: "rexify/products", folder: "product" })
+                    if (uploadRes?.secure_url) variantImages[0] = uploadRes.secure_url
+                }
+                if (varImg1) {
+                    const uploadRes = await cloudUpload({ file: varImg1, folderPath: "rexify/products", folder: "product" })
+                    if (uploadRes?.secure_url) variantImages[1] = uploadRes.secure_url
+                }
+
+                variant.images = variantImages
+            }
+        }
+
+        // ---------- Handle Main Thumbnail ----------
+        if (thumbnail) {
+            if (existingProduct.thumbnail) {
+                cloudDelete({ folder: "product", file: existingProduct.thumbnail })
+            }
+            const uploadRes = await cloudUpload({ file: thumbnail, folderPath: "rexify/products", folder: "product" })
+            existingProduct.thumbnail = uploadRes?.secure_url || ""
+        }
+
+        // ---------- Handle Main Images ----------
+        let updatedImageUrls = [...existingProduct.images]
+
+        // Delete specified images
+        if (Array.isArray(destroyImg) && destroyImg.length > 0) {
+            for (const imgUrl of destroyImg) {
+                cloudDelete({ folder: "product", file: imgUrl })
+            }
+            updatedImageUrls = updatedImageUrls.filter(img => !destroyImg.includes(img))
+        }
+
+        // Upload new images
+        if (Array.isArray(images) && images.length > 0) {
+            for (const img of images) {
+                const uploadRes = await cloudUpload({ file: img, folderPath: "rexify/products", folder: "product" })
+                if (uploadRes?.secure_url) updatedImageUrls.push(uploadRes.secure_url)
+            }
+        }
+
+        // Validate total image count
+        if (updatedImageUrls.length > 4) return resHandler.error(res, 400, "You can upload maximum of 4 images")
+        if (updatedImageUrls.length < 1 && !thumbnail) return resHandler.error(res, 400, "Please upload at least 1 image")
+
+        // ---------- Apply Changes ----------
         if (title) existingProduct.title = title
         if (slug) existingProduct.slug = slug.toLowerCase()
         if (description) existingProduct.description = description
         if (category) existingProduct.category = category
-        if (discountPercentage) existingProduct.discountPercentage = discountPercentage
+        if (price) existingProduct.price = price
+        if (discountPercentage !== undefined) existingProduct.discountPercentage = discountPercentage
         if (variants) existingProduct.variants = variants
         if (specifications) existingProduct.specifications = specifications
         if (brand) existingProduct.brand = brand
@@ -304,44 +404,10 @@ const updateProduct = async (req, res) => {
         if (warranty) existingProduct.warranty = warranty
         if (shipping) existingProduct.shipping = shipping
         if (tags) existingProduct.tags = tags
+        if (isActive !== undefined) existingProduct.isActive = isActive
+        if (isFeatured !== undefined) existingProduct.isFeatured = isFeatured
+        if (isEveryday !== undefined) existingProduct.isEveryday = isEveryday
 
-
-        // ------------ Thumbnail -------------
-        if (thumbnail) {
-            cloudDelete({ folder: "thumbnail", file: existingProduct.thumbnail }) // --- Delete previous thumbnail
-            const cloudRes = await cloudUpload({ file: thumbnail, folderPath: "rexify/products", folder: "product" })
-            existingProduct.thumbnail = cloudRes.secure_url
-        }
-
-        // ------------ Images -------------
-        let updatedImageUrls = []
-
-        let totalImages = existingProduct.images.length
-        if (destroyImg.length > 0) totalImages -= destroyImg.length
-        if (Array.isArray(images) && images?.length > 0) totalImages += images.length
-        if (totalImages > 4) return resHandler.error(res, 400, "You can upload maximum of 4 images")
-        if (totalImages < 0) return resHandler.error(res, 400, "Please upload at least 1 image")
-
-
-        if (Array.isArray(destroyImg) && destroyImg.length > 0) {
-            for (const imgs of destroyImg) {
-                cloudDelete({ folder: "product", file: imgs }) // --- Delete previous images
-            }
-        }
-
-        if (images && images.length > 0) {
-            for (const img of images) {
-                const uploadRes = await cloudUpload({ file: img, folderPath: "rexify/products", folder: "product" })
-                updatedImageUrls.push(uploadRes.secure_url)
-            }
-
-        }
-
-        const filteredImg = existingProduct.images.filter((item) => {
-            return !destroyImg.includes(item)
-        })
-
-        updatedImageUrls = updatedImageUrls.concat(filteredImg)
         existingProduct.images = updatedImageUrls
 
         // ---- Save

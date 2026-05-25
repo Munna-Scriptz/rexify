@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react'
-import { FiCalendar, FiTrash2, FiEye, FiEdit } from 'react-icons/fi';
+import { FiCalendar, FiTrash2, FiEdit } from 'react-icons/fi';
 import { GoFilter } from 'react-icons/go';
 
 const ProductCard = ({ view, filteredProducts, handleDelete }) => {
@@ -94,10 +94,7 @@ const ProductCard = ({ view, filteredProducts, handleDelete }) => {
                                         </td>
                                         <td className="py-4 pr-6">
                                             <div className='flex gap-2'>
-                                                <Link href={"/products/view"} className="rounded-xl bg-surface/50 border border-border/60 text-text-muted hover:bg-white hover:text-blue-500 hover:border-blue-400 transition-all active:scale-95 cursor-pointer p-2">
-                                                    <FiEye className="text-lg" />
-                                                </Link>
-                                                <Link href={"/products/edit"} className="rounded-xl bg-surface/50 border border-border/60 text-text-muted hover:bg-white hover:text-green-500 hover:border-green-400 transition-all active:scale-95 cursor-pointer p-2">
+                                                <Link href={`products/edit/${product.slug}`} className="rounded-xl bg-surface/50 border border-border/60 text-text-muted hover:bg-white hover:text-green-500 hover:border-green-400 transition-all active:scale-95 cursor-pointer p-2">
                                                     <FiEdit className="text-lg" />
                                                 </Link>
                                                 <button onClick={() => handleDelete()} className="rounded-xl bg-surface/50 border border-border/60 text-text-muted hover:bg-white hover:text-red-500 hover:border-red-400 transition-all active:scale-95 cursor-pointer p-2">
@@ -117,14 +114,11 @@ const ProductCard = ({ view, filteredProducts, handleDelete }) => {
                         <div key={i} className="bg-white border border-border/60 rounded-[28px] p-6 hover:shadow-[0_20px_50px_rgba(0,0,0,0.06)] hover:border-accent/20 transition-all duration-500 group flex flex-col h-full">
                             {/* Card Header*/}
                             <div className="flex justify-between items-start mb-6 w-full">
-                                <Image width={200} height={200} className='h-20 w-20 rounded-sm' src={`${product.thumbnail || "https://www.applegadgetsbd.com/_next/image?url=https%3A%2F%2Fadminapi.applegadgetsbd.com%2Fstorage%2Fmedia%2Flarge%2FiPhone-16-Pro-Maxaaaa-5516.png&w=1920&q=100"}`} alt="Product image" />
+                                <Image width={200} height={200} className='h-20 w-20 rounded-sm' src={product.variants?.[0]?.thumbnail} alt="Product image" />
                                 <div className='flex gap-2'>
-                                    <button className="rounded-xl bg-surface/50 border border-border/60 text-text-muted hover:bg-white hover:text-blue-500 hover:border-blue-400 transition-all active:scale-95 cursor-pointer p-2">
-                                        <FiEye className="text-lg" />
-                                    </button>
-                                    <button className="rounded-xl bg-surface/50 border border-border/60 text-text-muted hover:bg-white hover:text-green-500 hover:border-green-400 transition-all active:scale-95 cursor-pointer p-2">
+                                    <Link href={`products/edit/${product.slug}`} className="rounded-xl bg-surface/50 border border-border/60 text-text-muted hover:bg-white hover:text-green-500 hover:border-green-400 transition-all active:scale-95 cursor-pointer p-2">
                                         <FiEdit className="text-lg" />
-                                    </button>
+                                    </Link>
                                     <button className="rounded-xl bg-surface/50 border border-border/60 text-text-muted hover:bg-white hover:text-red-500 hover:border-red-400 transition-all active:scale-95 cursor-pointer p-2">
                                         <FiTrash2 className="text-lg" />
                                     </button>

@@ -8,7 +8,7 @@ const upload = multer()
 
 
 router.post('/create', authMiddleware, roleCheckMiddleware("admin", "editor"), upload.any(), createProduct)
-router.put('/update/:slug', authMiddleware, roleCheckMiddleware("admin", "editor"), upload.any(), updateProduct)
+router.patch('/update/:slug', authMiddleware, roleCheckMiddleware("admin", "editor"), upload.any(), updateProduct)
 
 router.get("/", getAll)
 router.get("/related", getRelatedProducts)

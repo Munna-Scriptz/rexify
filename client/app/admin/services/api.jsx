@@ -36,10 +36,15 @@ export const adminApis = createApi({
 
 
     endpoints: (build) => ({
-
         // ------------ Products --------------
         getProducts: build.query({
             query: () => "/product",
+            providesTags: ['products'],
+        }),
+
+        getSingleProduct: build.query({
+            query: (slug) => `product/${slug}`,
+            providesTags: ['products'],
         }),
 
         createProduct: build.mutation({
@@ -47,7 +52,17 @@ export const adminApis = createApi({
                 url: "/product/create",
                 method: "POST",
                 body: data
-            })
+            }),
+            invalidatesTags: ['products'],
+        }),
+
+        updateProduct: build.mutation({
+            query: ({ slug, formData }) => ({
+                url: `/product/update/${slug}`,
+                method: "PATCH",
+                body: formData
+            }),
+            invalidatesTags: ['products'],
         }),
 
 
@@ -90,9 +105,11 @@ export const adminApis = createApi({
 })
 
 
-export const { 
+export const {
     useGetProductsQuery,
+    useGetSingleProductQuery,
     useCreateProductMutation,
+    useUpdateProductMutation,
 
     useGetCategoryQuery,
     useCreateCategoryMutation,

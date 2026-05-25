@@ -122,6 +122,14 @@ const productSchema = new mongoose.Schema({
         type: Boolean,
         default: true,
     },
+    isFeatured: {
+        type: Boolean,
+        default: true,
+    },
+    isEveryday: {
+        type: Boolean,
+        default: true,
+    },
 
 }, { timestamps: true });
 

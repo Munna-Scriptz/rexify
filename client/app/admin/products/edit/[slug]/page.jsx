@@ -197,7 +197,7 @@ const Page = () => {
         const fd = new FormData();
 
         // 1. Product ID (required by backend to find the document)
-        fd.append('productId', product._id);
+        fd.append('productId', JSON.stringify(product._id));
 
         // 2. General fields
         for (const key in formData) {
@@ -236,7 +236,11 @@ const Page = () => {
         });
 
         await toast.promise(
-            updateProduct({ slug: params.slug, formData: fd }).unwrap(),
+            updateProduct({
+                slug: params.slug,
+                id: product._id,
+                formData: fd
+            }).unwrap(),
             {
                 pending: 'Saving changes...',
                 success: { render({ data }) { return data?.message || 'Product updated successfully!'; } },

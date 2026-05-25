@@ -57,12 +57,13 @@ export const adminApis = createApi({
         }),
 
         updateProduct: build.mutation({
-            query: ({ slug, formData }) => ({
-                url: `/product/update/${slug}`,
+            query: ({ slug, id, formData }) => ({
+                url: `/product/update/${slug}?id=${id}`,
                 method: "PATCH",
-                body: formData
+                body: formData,
             }),
-            invalidatesTags: ['products'],
+
+            invalidatesTags: ["products"],
         }),
 
 

@@ -32,7 +32,7 @@ const baseQueryWithReauth = async (args, api, options) => {
 
 export const adminApis = createApi({
     baseQuery: baseQueryWithReauth,
-    tagTypes: ['products', 'category'],
+    tagTypes: ['products', 'category', 'order'],
 
 
     endpoints: (build) => ({
@@ -100,7 +100,11 @@ export const adminApis = createApi({
             invalidatesTags: ['category'],
         }),
 
-
+        // ------------ Orders --------------
+        getOrders: build.query({
+            query: () => "/checkout/get",
+            providesTags: ['order'],
+        }),
     }),
 
 })
@@ -115,5 +119,8 @@ export const {
     useGetCategoryQuery,
     useCreateCategoryMutation,
     useDeleteCategoryMutation,
-    useUpdateCategoryMutation
+    useUpdateCategoryMutation,
+
+
+    useGetOrdersQuery,
 } = adminApis

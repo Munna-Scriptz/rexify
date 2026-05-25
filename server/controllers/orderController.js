@@ -10,7 +10,7 @@ const endpointSecret = process.env.STRIPE_SIGNING_SEC;
 const checkout = async (req, res) => {
     try {
         const user = req.user._id
-        const { paymentMethod, cartId, shippingAddress, division, } = req.body
+        const { paymentMethod, cartId, shippingAddress, division } = req.body
 
         // ------- Validation
         if (!paymentMethod) return resHandler.error(res, 400, "Payment type is required")
@@ -77,9 +77,9 @@ const checkout = async (req, res) => {
                 success_url: `https://rexifyshop.vercel.app/checkout/complete`,
                 cancel_url: `https://rexifyshop.vercel.app/checkout/error`,
             });
-            // res.redirect(303, session.url);
+
             // ------------- Success 
-            resHandler.success(res, 200, "Please complete the checkout", session.url)
+            resHandler.success(res, 200, "Please complete the checkout", { url: session.url })
         }
 
     } catch (error) {
@@ -121,7 +121,7 @@ const webhook = async (req, res) => {
     if (event.type === 'charge.updated') {
         const session = event.data.object;
 
-       // ------- Save to DB
+        // ------- Save to DB
         await orderSchema.findOneAndUpdate(
             session.metadata.orderId,
             {
@@ -134,5 +134,20 @@ const webhook = async (req, res) => {
     res.send();
 }
 
+// ================= Get All orders =====================
+const getOrders = async (req, res) => {
+    try {
+        // ----- Find from db
+        const orders = await orderSchema.find({})
+        if (!orders) return resHandler.error(res, 404, "Couldn't found any orders")
 
-module.exports = { checkout, webhook }
+
+        // ----- Success
+        resHandler.success(res, 200, "Total Orders Fetched", orders)
+    } catch (error) {
+        resHandler.error(res, 500, "Internal server error")
+    }
+}
+
+
+module.exports = { checkout, webhook, getOrders }

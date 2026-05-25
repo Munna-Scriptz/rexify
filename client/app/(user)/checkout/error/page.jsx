@@ -77,7 +77,7 @@ const page = () => {
                             {/* Action Buttons */}
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 animate-fade-up">
                                 <Link
-                                    href="/checkout"
+                                    href="/"
                                     className="flex items-center justify-center gap-2 bg-text-primary text-white py-4 px-6 rounded-2xl font-bold hover:bg-black transition-all hover:shadow-xl shadow-black/10 active:scale-95 group"
                                 >
                                     <RefreshCw size={18} className="group-hover:rotate-180 transition-transform duration-500" />

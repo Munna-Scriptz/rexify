@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { ShieldCheck, CircleCheck } from 'lucide-react';
 import { apiClient } from '@/app/lib/apiClient';
 import CheckoutSummery from '@/app/components/checkout/CheckoutSummery';
+import { toast } from 'react-toastify';
 
 const page = () => {
     const [paymentMethod, setPaymentMethod] = useState('stripe');
@@ -53,26 +54,41 @@ const page = () => {
 
     // -------------- Handle checkout ---------------
     const handleConfirm = async () => {
-        const res = await fetch(
-            "http://localhost:8000/checkout",
-            {
-                method: "POST",
-                credentials: "include",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
+        try {
+            const res = await toast.promise(
+                apiClient.post("/checkout", {
                     paymentMethod,
                     cartId,
                     shippingAddress: shippingAddress.addressLine1,
                     division: shippingAddress.division
-                })
-            }
-        );
+                }),
+                {
+                    pending: "Placing order...",
+                    success: {
+                        render({ data }) {
+                            return data.message || "Order placed";
+                        }
+                    },
+                    error: {
+                        render({ data }) {
+                            return (
+                                data?.data?.message ||
+                                "Something went wrong"
+                            );
+                        }
+                    }
+                }
+            );
 
-        const data = await res.json();
-        window.location.href = data.data.url
-    }
+            // Redirect to stripe
+            if (res?.data?.url) {
+                window.location.href = res.data.url;
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
 
     return (

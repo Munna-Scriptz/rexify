@@ -50,8 +50,13 @@ const checkout = async (req, res) => {
 
         order.save()
 
-        // ---------- Cod Success 
-        if (paymentMethod === "cod") return resHandler.success(res, 200, "Order placed successfully")
+        // ---------- Cod Success
+        if (paymentMethod === "cod") {
+            existingCart.items = []
+            existingCart.save()
+            
+            return resHandler.success(res, 200, "Order placed successfully")
+        }
 
         // ---------- Handle stripe payment 
         if (paymentMethod === "stripe") {
@@ -74,10 +79,12 @@ const checkout = async (req, res) => {
                 metadata: {
                     orderId: `${order._id}`
                 },
-                success_url: `https://rexifyshop.vercel.app/checkout/complete`,
+                success_url: `https://rexifyshop.vercel.app/checkout/success`,
                 cancel_url: `https://rexifyshop.vercel.app/checkout/error`,
             });
 
+            existingCart.items = []
+            existingCart.save()
             // ------------- Success 
             resHandler.success(res, 200, "Please complete the checkout", { url: session.url })
         }

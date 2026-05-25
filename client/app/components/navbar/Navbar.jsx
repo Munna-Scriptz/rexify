@@ -10,6 +10,7 @@ import { HiMiniBars3BottomLeft } from 'react-icons/hi2'
 import UserButton from './UserButton'
 
 const Navbar = ({ user, cart, categories }) => {
+
     const navbarRef = useRef(null);
     const lastScrollYRef = useRef(0);
     const [isNavbarWhite, setIsNavbarWhite] = useState(false);
@@ -124,7 +125,7 @@ const Navbar = ({ user, cart, categories }) => {
                             </Link>
 
                             {/* --------- User  */}
-                            <UserButton isNavbarWhite={isNavbarWhite} userData={user} />
+                            <UserButton isNavbarWhite={isNavbarWhite} user={user} />
                         </div>
 
                     </div>

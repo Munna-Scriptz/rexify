@@ -16,7 +16,7 @@ export default async function Layout({ children }) {
         }),
         apiClient.get("/category/all")
     ]);
-
+    
     return (
         <>
             <Navbar user={user} cart={cartCount?.data?.totalItems} categories={categories?.data} />

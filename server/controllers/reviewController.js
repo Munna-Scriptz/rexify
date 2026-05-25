@@ -102,7 +102,7 @@ const getByUser = async (req, res) => {
             user: req.user._id
         })
             .select("-user -updatedAt -__v")
-            .populate("product", "title slug thumbnail")
+            .populate("product", "title slug variants.thumbnail brand")
 
         if (!reviews) return resHandler.error(res, 404, "Couldn't found any reviews")
 

@@ -1,13 +1,17 @@
-import { User, ShieldCheck, ShoppingBag,LogOut, Rss, MapPin, } from 'lucide-react';
+"use client";
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { User, ShieldCheck, ShoppingBag, LogOut, Rss, MapPin } from 'lucide-react';
 
-const ProfileNavbar = ({ user, activeTab , setActiveTab}) => {
+const ProfileNavbar = ({ user }) => {
+    const pathname = usePathname();
 
     const tabs = [
-        { id: 'profile', label: 'Public Profile', icon: User },
-        { id: 'orders', label: 'Order History', icon: ShoppingBag },
-        { id: 'reviews', label: 'My Reviews', icon: Rss },
-        { id: 'addresses', label: 'My Addresses', icon: MapPin },
-        { id: 'security', label: 'Security', icon: ShieldCheck },
+        { id: 'profile', href: '/profile', label: 'Public Profile', icon: User },
+        { id: 'orders', href: '/profile/orders', label: 'Order History', icon: ShoppingBag },
+        { id: 'reviews', href: '/profile/reviews', label: 'My Reviews', icon: Rss },
+        { id: 'addresses', href: '/profile/addresses', label: 'My Addresses', icon: MapPin },
+        { id: 'security', href: '/profile/security', label: 'Security', icon: ShieldCheck },
     ];
 
     return (
@@ -22,23 +26,23 @@ const ProfileNavbar = ({ user, activeTab , setActiveTab}) => {
                     {/* Avatar */}
                     <div className="relative group mb-4">
                         <div className="w-25 h-25 rounded-2xl overflow-hidden border-2 border-accent/40 shadow-[0_0_0_4px_#155dfc14,0_16px_40px_#00000080] group-hover:scale-105 transition-transform duration-500">
-                            <img src={user.avatar} alt="User avatar" className="w-full h-full object-cover" />
+                            <img src={user?.avatar || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=200&auto=format&fit=crop"} alt="User avatar" className="w-full h-full object-cover" />
                         </div>
                         <div className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-[#22c55e] border-2 border-[#0d1117] shadow-[0_0_8px_#22c55e99]" />
                     </div>
 
                     {/* Name */}
                     <h2 className="text-white text-lg font-semibold truncate w-full tracking-tight">
-                        {user.name}
+                        {user?.fullname || "User"}
                     </h2>
 
                     {/* Email */}
                     <p className="text-[#ffffff4d] text-xs truncate w-full mt-0.5 mb-4">
-                        {user.email}
+                        {user?.email || ""}
                     </p>
 
                     {/* Verified badge */}
-                    {user.isVerified ? (
+                    {user?.isVerified ? (
                         <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#22c55e14] border border-[#22c55e33]">
                             <span className="w-1.5 h-1.5 rounded-full bg-[#22c55e] shadow-[0_0_6px_#22c55ecc]" />
                             <span className="text-[10px] font-bold uppercase tracking-widest text-[#22c55ecc]">Verified</span>
@@ -55,13 +59,13 @@ const ProfileNavbar = ({ user, activeTab , setActiveTab}) => {
             {/* Navigation */}
             <nav className="relative z-10 flex-1 px-4 py-5 space-y-1 overflow-y-auto">
                 {tabs.map((tab) => {
-                    const active = activeTab === tab.id;
+                    const active = pathname === tab.href;
                     return (
-                        <button
+                        <Link
                             key={tab.id}
-                            onClick={() => setActiveTab(tab.id)}
+                            href={tab.href}
                             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all duration-200 cursor-pointer relative
-            ${active
+                                ${active
                                     ? 'bg-[#155dfc1a] border border-[#155dfc33] text-[#7aabff] font-semibold shadow-[0_4px_20px_#155dfc14]'
                                     : 'border border-transparent text-[#ffffff40] font-medium hover:bg-white/4 hover:text-white/75'
                                 }`}
@@ -78,7 +82,7 @@ const ProfileNavbar = ({ user, activeTab , setActiveTab}) => {
                             {active && (
                                 <span className="ml-auto w-1.5 h-1.5 rounded-full bg-accent shadow-[0_0_6px_#155dfccc]" />
                             )}
-                        </button>
+                        </Link>
                     );
                 })}
             </nav>
@@ -95,4 +99,4 @@ const ProfileNavbar = ({ user, activeTab , setActiveTab}) => {
     )
 }
 
-export default ProfileNavbar
+export default ProfileNavbar;

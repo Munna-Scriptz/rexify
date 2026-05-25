@@ -1,115 +1,221 @@
 "use client"
-import { useState } from 'react';
-import ProfileTab from '../components/ProfileTab';
-import OrderTab from '../components/OrderTab';
-import AddressTab from '../components/AddressTab';
-import SecurityTab from '../components/SecurityTab';
-import ProfileNavbar from '../components/ProfileNavbar';
-import ReviewTab from '../components/ReviewTab';
+import { apiClient } from '../../lib/apiClient';
+import { useEffect, useState } from 'react'
+import { User, Mail, Camera, CheckCircle, AlertCircle, ShieldCheck, Edit3, X, Check } from 'lucide-react';
+import ProfileSL from '@/app/components/skeletonLoaders/ProfileSL';
 
 const page = () => {
-  const [activeTab, setActiveTab] = useState('profile');
+  const [user, setUser] = useState("")
+  const [orders, setOrders] = useState([])
+  const [reviews, setReviews] = useState([])
+  const [loading, setLoading] = useState(true)
 
-  const [user, setUser] = useState({
-    name: "John Doe",
-    email: "john.doe@example.com",
-    avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=200&auto=format&fit=crop",
-    isVerified: true,
-  });
+  // ------------ Fetch user Data ---------------
+  useEffect(() => {
+    const fetch = async () => {
+      const [user, orders, review] = await Promise.all([
+        apiClient.get('/auth/profile'),
+        apiClient.get('/checkout/user'),
+        apiClient.get('/review/user'),
+      ]);
 
+      setUser(user)
+      setOrders(orders)
+      setReviews(review)
+      setLoading(false)
+    };
+    fetch();
+  }, [])
 
-  const [orders] = useState([
-    { id: '#REX-9281', date: 'Oct 24, 2025', status: 'Delivered', total: '$1,240.00', items: 3, img: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=200&auto=format&fit=crop' },
-    { id: '#REX-8172', date: 'Sep 12, 2025', status: 'Processing', total: '$899.00', items: 1, img: 'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?q=80&w=100&auto=format&fit=crop' },
-    { id: '#REX-7163', date: 'Aug 05, 2025', status: 'Cancelled', total: '$45.00', items: 2, img: 'https://images.unsplash.com/photo-1613040809024-b4ef7ba99bc3?q=80&w=100&auto=format&fit=crop' },
-  ]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [newName, setNewName] = useState(user?.fullname);
 
-  const reviewData = [
-    {
-      id: 'REV-001',
-      product: 'Wireless Noise Cancelling Headphones',
-      productImg: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200&h=200&fit=crop',
-      category: 'Electronics',
-      rating: 5,
-      date: 'Mar 12, 2025',
-      comment: 'Absolutely love these headphones! The noise cancellation is top-notch and battery life is incredible. Worth every penny.',
-      helpful: 24,
-      verified: true,
-    },
-    {
-      id: 'REV-002',
-      product: 'Minimalist Leather Watch',
-      productImg: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=200&h=200&fit=crop',
-      category: 'Accessories',
-      rating: 4,
-      date: 'Feb 28, 2025',
-      comment: 'Great build quality and looks stunning. Strap is a bit stiff at first but softens up over time. Overall very happy with this purchase.',
-      helpful: 11,
-      verified: true,
-    },
-    {
-      id: 'REV-003',
-      product: 'Ergonomic Office Chair',
-      productImg: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=200&h=200&fit=crop',
-      category: 'Furniture',
-      rating: 3,
-      date: 'Jan 15, 2025',
-      comment: 'Decent chair but assembly was a nightmare. Lumbar support is okay but not great for long sessions. Expected better for the price.',
-      helpful: 6,
-      verified: false,
-    },
-    {
-      id: 'REV-004',
-      product: 'Mechanical Keyboard TKL',
-      productImg: 'https://images.unsplash.com/photo-1511467687858-23d96c32e4ae?w=200&h=200&fit=crop',
-      category: 'Electronics',
-      rating: 5,
-      date: 'Dec 4, 2024',
-      comment: 'The tactile feedback is chefs kiss. RGB lighting is vibrant and software customization is excellent. My productivity has genuinely improved.',
-      helpful: 38,
-      verified: true,
-    },
-  ];
+  const handleNameUpdate = () => {
+    // setUser({ ...userData, name: newName });
+    setIsEditing(false);
+  };
 
-
-  const [addresses] = useState([
-    { id: 1, type: 'Home', isDefault: true, details: '123 Tech Lane, Silicon Valley, CA 94025', phone: '+1 (555) 000-1234' },
-    { id: 2, type: 'Office', isDefault: false, details: '456 Innovation Way, San Francisco, CA 94105', phone: '+1 (555) 999-5678' },
-  ]);
-
+  const handleCancel = () => {
+    // setNewName(userData.name);
+    setIsEditing(false);
+  };
 
   return (
     <>
+      {
+        loading ?
+          <ProfileSL />
+          :
+          <div className="space-y-5">
+            {/* ── Hero Profile Card ── */}
+            <div className="relative rounded-2xl overflow-hidden border border-accent/10 bg-white shadow-[0_2px_24px_#155dfc0d]">
+              {/* Background glow blobs */}
+              <div className="absolute top-0 right-0 w-80 h-80 bg-accent/5 blur-3xl rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+              <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#dbeafe]/60 blur-2xl rounded-full translate-y-1/2 -translate-x-1/2 pointer-events-none" />
 
-      <main className="flex min-h-screen">
-        {/* --------------- Sidebar ---------------- */}
-        <ProfileNavbar user={user} activeTab={activeTab} setActiveTab={setActiveTab} />
+              {/* Top accent stripe */}
+              <div className="h-1 w-full bg-linear-to-r from-accent via-[#4d8bff] to-accent/30" />
 
-        {/*  --------------- Content ---------------- */}
-        <section className="flex-1 h-screen overflow-y-auto pt-6 pb-10 px-6">
-          {activeTab === 'profile' && (
-            <ProfileTab userData={user} setUser={setUser} />
-          )}
+              <div className="relative p-8 flex flex-col sm:flex-row items-center gap-8">
 
-          {activeTab === 'orders' && (
-            <OrderTab orderData={orders} />
-          )}
+                {/* Avatar */}
+                <div className="relative shrink-0 group">
+                  <div className="w-32 h-32 rounded-2xl overflow-hidden border-2 border-accent/20 shadow-[0_0_0_4px_#155dfc0f,0_16px_40px_#155dfc14]">
+                    <img
+                      src={user?.avatar}
+                      alt="User avatar"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  </div>
+                  <button className="absolute -bottom-2 -right-2 bg-accent text-white p-2.5 rounded-xl shadow-[0_4px_14px_#155dfc55] border-2 border-white hover:bg-[#1a6aff] hover:scale-110 active:scale-95 transition-all cursor-pointer">
+                    <Camera size={15} />
+                  </button>
+                </div>
 
-          {activeTab === 'reviews' && (
-            <ReviewTab reviews={reviewData} />
-          )}
+                {/* Info */}
+                <div className="flex-1 text-center sm:text-left min-w-0">
 
-          {activeTab === 'addresses' && (
-            <AddressTab addressData={addresses} />
-          )}
+                  {/* Name row */}
+                  <div className="flex items-center justify-center sm:justify-start gap-3 mb-2 flex-wrap">
+                    {isEditing ? (
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <input
+                          type="text"
+                          value={newName}
+                          onChange={(e) => setNewName(e.target.value)}
+                          className="text-2xl font-semibold text-[#0f172a] bg-[#f8faff] border border-accent/30 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/15 px-3 py-1.5 rounded-xl transition-all"
+                          autoFocus
+                        />
+                        <button
+                          onClick={handleNameUpdate}
+                          className="flex items-center gap-1.5 bg-accent text-white px-4 py-2 rounded-xl font-semibold text-sm hover:bg-[#1a6aff] hover:shadow-[0_4px_14px_#155dfc44] transition-all cursor-pointer"
+                        >
+                          <Check size={14} /> Save
+                        </button>
+                        <button
+                          onClick={handleCancel}
+                          className="flex items-center gap-1.5 bg-[#f1f5f9] text-[#64748b] px-4 py-2 rounded-xl font-semibold text-sm hover:bg-[#e2e8f0] hover:text-[#334155] transition-all cursor-pointer"
+                        >
+                          <X size={14} /> Cancel
+                        </button>
+                      </div>
+                    ) : (
+                      <>
+                        <h2 className="text-2xl font-semibold text-[#0f172a] tracking-tight">{user?.fullname}</h2>
+                        <button
+                          onClick={() => setIsEditing(true)}
+                          className="w-8 h-8 flex items-center justify-center rounded-lg bg-[#f1f5f9] border border-[#e2e8f0] text-[#94a3b8] hover:text-accent hover:bg-[#eff6ff] hover:border-accent/20 transition-all duration-200 cursor-pointer"
+                        >
+                          <Edit3 size={14} />
+                        </button>
+                      </>
+                    )}
+                  </div>
 
-          {activeTab === 'security' && (
-            <SecurityTab />
-          )}
-        </section>
-      </main>
+                  {/* Email */}
+                  <p className="text-[#64748b] flex items-center justify-center sm:justify-start gap-2 text-sm mb-5">
+                    <Mail size={14} className="text-accent" />
+                    {user?.email}
+                  </p>
+
+                  {/* Badges row */}
+                  <div className="flex flex-wrap items-center justify-center sm:justify-start gap-3">
+                    {user?.isVerified ? (
+                      <div className="flex items-center gap-2 px-3 py-1.5 bg-[#f0fdf4] text-success text-[11px] font-semibold rounded-full border border-[#bbf7d0] tracking-wide uppercase">
+                        <CheckCircle size={12} /> Verified Account
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2 px-3 py-1.5 bg-[#fffbeb] text-[#d97706] text-[11px] font-semibold rounded-full border border-[#fde68a] tracking-wide uppercase">
+                        <AlertCircle size={12} /> Not Verified
+                      </div>
+                    )}
+                    <button className="text-[11px] font-semibold text-accent border border-accent/30 px-4 py-1.5 rounded-full hover:bg-accent hover:text-white hover:border-accent hover:shadow-[0_4px_14px_#155dfc33] transition-all duration-200 cursor-pointer tracking-wide uppercase">
+                      {user?.isVerified ? 'View Badge' : 'Get Verified'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* ── Details Grid ── */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+              {/* Personal Details */}
+              <div className="bg-white rounded-2xl border border-[#e8edf5] shadow-[0_2px_16px_#155dfc08] p-7 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-[#eff6ff] blur-2xl rounded-full pointer-events-none" />
+                <h3 className="text-sm font-semibold text-[#0f172a] mb-6 flex items-center gap-3 relative">
+                  <div className="w-8 h-8 rounded-lg bg-[#eff6ff] border border-accent/15 flex items-center justify-center">
+                    <User size={15} className="text-accent" />
+                  </div>
+                  Personal Details
+                </h3>
+
+                <div className="space-y-0 relative">
+                  {[
+                    { label: 'Full Name', value: user?.fullname },
+                    { label: 'Email Address', value: user?.email },
+                    { label: 'Account Type', value: 'Individual Client', accent: true },
+                  ].map((item, i, arr) => (
+                    <div
+                      key={item.label}
+                      className={`flex justify-between items-center py-4 ${i < arr.length - 1 ? 'border-b border-[#f1f5f9]' : ''}`}
+                    >
+                      <span className="text-[10px] font-semibold text-[#94a3b8] uppercase tracking-widest">{item.label}</span>
+                      <span className={item.accent
+                        ? 'text-accent bg-[#eff6ff] border border-accent/15 px-2.5 py-1 rounded-lg text-xs font-semibold'
+                        : 'text-sm font-semibold text-[#334155]'
+                      }>
+                        {item.value}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Verification Center */}
+              <div className="bg-white rounded-2xl border border-[#e8edf5] shadow-[0_2px_16px_#155dfc08] p-7 relative overflow-hidden">
+                <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#eff6ff]/70 blur-2xl rounded-full pointer-events-none" />
+
+                <h3 className="text-sm font-semibold text-[#0f172a] mb-6 flex items-center gap-3 relative">
+                  <div className="w-8 h-8 rounded-lg bg-[#eff6ff] border border-accent/15 flex items-center justify-center">
+                    <ShieldCheck size={16} className="text-accent" />
+                  </div>
+                  Account Overview
+                </h3>
+
+                <div className="grid grid-cols-2 gap-5 text-center">
+                  {/* Total Orders */}
+                  <div className="bg-[#f8fafc] rounded-xl p-4">
+                    <p className="text-2xl font-bold text-[#0f172a]">{orders?.data?.length}</p>
+                    <p className="text-xs text-[#64748b] mt-1 font-medium">Total Orders</p>
+                  </div>
+
+                  {/* Total Spent */}
+                  <div className="bg-[#f8fafc] rounded-xl p-4">
+                    <p className="text-2xl font-bold text-[#0f172a]">৳{orders?.data?.reduce((acc, item) => acc + item.totalPrice, 0)}</p>
+                    <p className="text-xs text-[#64748b] mt-1 font-medium">Total Spent</p>
+                  </div>
+
+                  {/* Total Reviews */}
+                  <div className="bg-[#f8fafc] rounded-xl p-4">
+                    <p className="text-2xl font-bold text-[#0f172a]">{reviews?.data?.length}</p>
+                    <p className="text-xs text-[#64748b] mt-1 font-medium">Reviews Given</p>
+                  </div>
+
+                  {/* Member Since */}
+                  <div className="bg-[#f8fafc] rounded-xl p-4">
+                    <p className="text-2xl font-bold text-[#0f172a]">{new Date(user?.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }).toLowerCase()}</p>
+                    <p className="text-xs text-[#64748b] mt-1 font-medium">Member Since</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+      }
     </>
   );
 };
 
 export default page;
+
+

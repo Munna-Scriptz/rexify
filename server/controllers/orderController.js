@@ -54,7 +54,7 @@ const checkout = async (req, res) => {
         if (paymentMethod === "cod") {
             existingCart.items = []
             existingCart.save()
-            
+
             return resHandler.success(res, 200, "Order placed successfully")
         }
 
@@ -155,6 +155,20 @@ const getOrders = async (req, res) => {
         resHandler.error(res, 500, "Internal server error")
     }
 }
+// ================= Get All orders =====================
+const getUserOrders = async (req, res) => {
+    try {
+        // ----- Find from db
+        const orders = await orderSchema.find({ user: req.user._id }).populate("items.product", "variants.thumbnail title")
+        if (!orders) return resHandler.error(res, 404, "Couldn't found any orders")
 
 
-module.exports = { checkout, webhook, getOrders }
+        // ----- Success
+        resHandler.success(res, 200, "Total Orders Fetched", orders)
+    } catch (error) {
+        resHandler.error(res, 500, "Internal server error")
+    }
+}
+
+
+module.exports = { checkout, webhook, getOrders, getUserOrders }

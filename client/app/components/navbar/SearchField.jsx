@@ -1,5 +1,6 @@
 import { apiClient } from "@/app/lib/apiClient";
 import { Search, X } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 const topSearches = [
@@ -144,7 +145,11 @@ const SearchField = ({ close }) => {
                                             key={i}
                                             className="flex flex-col bg-white border border-gray-100 rounded-lg p-3 group cursor-pointer hover:shadow hover:scale-[1.01]"
                                         >
-                                            <div className="flex items-start gap-3">
+                                            <Link h
+                                                ref={`/product/${item.slug}`}
+                                                onClick={() => close(false)}
+                                                className="flex items-start gap-3"
+                                            >
                                                 <div className="w-20 h-20 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center shrink-0 overflow-hidden">
                                                     <img
                                                         src={item.variants[0]?.thumbnail}
@@ -159,7 +164,7 @@ const SearchField = ({ close }) => {
                                                     <p className="text-sm text-gray-500 mt-1">{item.variants[0]?.price}</p>
                                                     <p className="text-xs text-gray-400 mt-2 line-clamp-2">{item.description || item.shortDescription || ''}</p>
                                                 </div>
-                                            </div>
+                                            </Link>
                                         </div>
                                     ))
                                 )}

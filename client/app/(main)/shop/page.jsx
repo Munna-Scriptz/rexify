@@ -9,10 +9,6 @@ import { apiClient } from '@/app/lib/apiClient';
 import SellerCard from '@/app/components/cards/SellerCard';
 
 export default async function Page({ searchParams }) {
-    const PRODUCTS_PER_PAGE = 10
-    const totalProduct = 5
-    const viewMode = "grid"
-
     // -------- All Queries ---------
     const query = await searchParams
     const category = query.category
@@ -20,6 +16,7 @@ export default async function Page({ searchParams }) {
     const maxPrice = query.maxPrice
     const brand = query.brand
     const rating = query.rating
+    const viewMode = query.toggle
 
     // -------- From server ---------
     let res = { data: [] };
@@ -70,7 +67,7 @@ export default async function Page({ searchParams }) {
                             {/* Product Grid / List */}
                             {res?.data?.products?.length === 0 ? (
                                 <ShopEmptyState />
-                            ) : viewMode === 'grid' ? (
+                            ) : !viewMode ? (
                                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
                                     {res?.data?.products?.map((item, i) => (
                                         <div key={i}>

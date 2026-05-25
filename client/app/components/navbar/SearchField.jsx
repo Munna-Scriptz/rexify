@@ -1,46 +1,47 @@
+import { apiClient } from "@/app/lib/apiClient";
 import { Search, X } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const topSearches = [
-    "Power Bank",
-    "Charger",
-    "USB-C Hub",
-    "UGREEN Flash Sale",
-    "Ugreen Network Attached Storage",
-    "What is NAS",
-];
-
-const suggestedProducts = [
-    {
-        title: "UGREEN 145W 25000mAh 3-Port Power Bank",
-        img: "https://www.startech.com.bd/image/cache/catalog/smart-watch/xiaomi/watch-s3/xiaomi-watch-s3-228x228.webp",
-    },
-    {
-        title: "Apple Watch Series 9",
-        img: "https://www.startech.com.bd/image/cache/catalog/watch/apple/watch-series-9/watch-series-9-midnight-01-228x228.webp",
-    },
-    {
-        title: "Nothing Ear (2)",
-        img: "https://www.startech.com.bd/image/cache/catalog/smart-watch/xiaomi/watch-s3/xiaomi-watch-s3-228x228.webp",
-    },
-    {
-        title: "Samsung Galaxy Watch 6",
-        img: "https://www.startech.com.bd/image/cache/catalog/smart-watch/samsung/galaxy-watch-7-40mm/galaxy-watch-7-40mm-228x228.webp",
-    },
-    {
-        title: "Logitech MX Master 3S",
-        img: "https://www.startech.com.bd/image/cache/catalog/mouse/logitech/mx-master-3s/logitech-mx-master-3s-01-228x228.jpg",
-    },
-    {
-        title: "Sony WH-1000XM5",
-        img: "https://www.startech.com.bd/image/cache/catalog/headphone/sony/wh-1000xm5/wh-1000xm5-offical-228x228.webp",
-    },
+    "Iphone",
+    "Samsung",
+    "Google",
+    "OnePlus",
+    "xiaomi",
+    "Red magic",
 ];
 
 const SearchField = ({ close }) => {
-    const inputRef = useRef(null);
+    const [query, setQuery] = useState('');
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(false);
 
-    // Lock body scroll + auto-focus input + Escape to close
+    // ----------- Fetch with Debouncing --------------
+    useEffect(() => {
+        const delayDebounceFn = setTimeout(async () => {
+            if (query.length > 2) {
+                try {
+                    setLoading(true);
+                    const res = await apiClient.get(`/product?search=${query}`, {
+                        revalidate: 60 * 5,
+                    });
+                    setProducts(res?.data?.products || []);
+                } catch (err) {
+                    setProducts([]);
+                } finally {
+                    setLoading(false);
+                }
+            } else {
+                setProducts([]);
+            }
+        }, 700);
+
+        return () => clearTimeout(delayDebounceFn);
+    }, [query]);
+
+
+    // ----------- Lock Body on input --------------
+    const inputRef = useRef(null);
     useEffect(() => {
         document.body.style.overflow = "hidden";
         inputRef.current?.focus();
@@ -74,11 +75,11 @@ const SearchField = ({ close }) => {
                             />
                             <input
                                 ref={inputRef}
+                                onChange={(e) => setQuery(e.target.value)}
+                                value={query}
                                 type="text"
                                 placeholder="What are you looking for?"
-                                className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl
-                                 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent
-                                 text-sm text-text-primary bg-surface transition"
+                                className="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent text-sm text-text-primary bg-surface transition"
                             />
                         </div>
                         <button
@@ -101,6 +102,10 @@ const SearchField = ({ close }) => {
                                 {topSearches.map((item, index) => (
                                     <button
                                         key={index}
+                                        onClick={() => {
+                                            setQuery(item);
+                                            inputRef.current?.focus();
+                                        }}
                                         className="flex items-center gap-2 w-full text-left text-sm cursor-pointer px-3 py-2 rounded-lg text-gray-600 hover:bg-accent/5 hover:text-accent transition"
                                     >
                                         <Search size={12} className="text-gray-300 shrink-0" />
@@ -113,26 +118,51 @@ const SearchField = ({ close }) => {
                         {/* Right – Suggested Products */}
                         <div className="col-span-12 md:col-span-9">
                             <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">
-                                Suggested Products
+                                {products.length === 0 ?
+                                    "Search Your Product here"
+                                    :
+                                    `Products found - ${products.length}`
+                                }
                             </h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-                                {suggestedProducts.map((product, index) => (
-                                    <div
-                                        key={index}
-                                        className="flex items-center gap-3 p-3 group rounded-xl cursor-pointer hover:bg-surface transition"
-                                    >
-                                        <div className="w-12 h-12 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center shrink-0 overflow-hidden">
-                                            <img
-                                                src={product.img}
-                                                alt={product.title}
-                                                className="w-full h-full object-contain"
-                                            />
-                                        </div>
-                                        <p className="text-sm font-medium text-text-primary group-hover:text-accent duration-200 leading-snug line-clamp-2">
-                                            {product.title}
-                                        </p>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                {loading ? (
+                                    <div className="col-span-1 md:col-span-2 lg:col-span-3 flex items-center justify-center p-8">
+                                        <div className="animate-pulse text-center text-gray-400">Searching...</div>
                                     </div>
-                                ))}
+                                ) : query.length <= 0 ? (
+                                    <div className="col-span-1 md:col-span-2 lg:col-span-3 flex items-center justify-center p-8 text-gray-400">
+                                        Search your product.
+                                    </div>
+                                ) : products.length === 0 ? (
+                                    <div className="col-span-1 md:col-span-2 lg:col-span-3 flex flex-col items-center justify-center p-8 text-center text-gray-400">
+                                        <div className="mb-2">No products found</div>
+                                        <div className="text-sm">Try different keywords or check spelling.</div>
+                                    </div>
+                                ) : (
+                                    products.map((item, i) => (
+                                        <div
+                                            key={i}
+                                            className="flex flex-col bg-white border border-gray-100 rounded-lg p-3 group cursor-pointer hover:shadow hover:scale-[1.01]"
+                                        >
+                                            <div className="flex items-start gap-3">
+                                                <div className="w-20 h-20 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center shrink-0 overflow-hidden">
+                                                    <img
+                                                        src={item.variants[0]?.thumbnail}
+                                                        alt={item.title}
+                                                        className="w-full h-full object-contain"
+                                                    />
+                                                </div>
+                                                <div className="flex-1 min-w-0">
+                                                    <p className="text-sm font-semibold text-text-primary group-hover:text-accent leading-snug line-clamp-2">
+                                                        {item.title}
+                                                    </p>
+                                                    <p className="text-sm text-gray-500 mt-1">{item.variants[0]?.price}</p>
+                                                    <p className="text-xs text-gray-400 mt-2 line-clamp-2">{item.description || item.shortDescription || ''}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
                             </div>
                         </div>
                     </div>

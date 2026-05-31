@@ -21,7 +21,7 @@ const UserButton = ({ isNavbarWhite, user, loading }) => {
 
                 {/* Name */}
                 <span className={`text-sm font-medium`}>
-                    {!user ? "Sign In" : user.role === "admin" ? "Admin" : data.fullname}
+                    {!user ? "Sign In" : user.role === "admin" ? "Admin" : user.fullname}
                 </span>
 
                 {/* Icon */}

@@ -4,15 +4,17 @@ import { Star, Minus, Plus, ShoppingCart, Zap, Truck, ShieldCheck } from 'lucide
 import { toast, ToastContainer } from 'react-toastify'
 import { apiClient } from '@/app/lib/apiClient'
 import { refreshCart } from '@/app/lib/RefreshCart'
+import AuthCard from '../cards/AuthCard'
 
 const ProductDetails = ({ product, selectedVariantIndex, setSelectedVariantIndex, currentUser }) => {
     const [quantity, setQuantity] = useState(1);
-
+    const [isAuthCardOpen, setIsAuthCardOpen] = useState(false);
     const selectedVariant = product?.variants?.[selectedVariantIndex] || product?.variants?.[0];
     const isOutOfStock = !selectedVariant || selectedVariant.stock === 0;
 
     // ---------- Handle cart -------------- 
     const handleCart = async () => {
+        if (!currentUser) return setIsAuthCardOpen(true)
         await toast.promise(
             apiClient.post("/cart/create", {
                 product: product._id,
@@ -31,7 +33,9 @@ const ProductDetails = ({ product, selectedVariantIndex, setSelectedVariantIndex
 
     return (
         <>
+            <AuthCard isOpen={isAuthCardOpen} onClose={() => setIsAuthCardOpen(false)} message='You need to be signed in to add to cart' />
             <ToastContainer />
+
             <div className="w-full">
                 <div className="mb-3 flex flex-wrap items-center gap-2">
                     {product?.badge && (

@@ -36,7 +36,7 @@ const ProductDetails = ({ product, selectedVariantIndex, setSelectedVariantIndex
 
     // ---------- Handle buy -------------- 
     const handleBuy = async () => {
-        router.push(`/checkout/${product.slug}`)
+        router.push(`/checkout/${product.slug}?sku=${selectedVariant?.sku}&quantity=${quantity}`)
     };
 
     return (

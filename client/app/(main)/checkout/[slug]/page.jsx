@@ -4,11 +4,14 @@ import { ShieldCheck, CircleCheck } from 'lucide-react';
 import { apiClient } from '@/app/lib/apiClient';
 import CheckoutSummery from '@/app/components/checkout/CheckoutSummery';
 import { toast } from 'react-toastify';
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 
 const page = () => {
     const params = useParams();
+    const searchParams = useSearchParams();
     const slug = params.slug
+    const sku = searchParams.get("sku");
+    const quantity = searchParams.get("quantity");
 
     const [paymentMethod, setPaymentMethod] = useState('cod');
     const [cartId, setCartId] = useState('');
@@ -25,14 +28,14 @@ const page = () => {
     });
 
     // Product and price
-    const [product, setProduct] = useState([])
+    const [product, setProduct] = useState(null)
     useEffect(() => {
         (async () => {
             const res = await apiClient.get(`/product/${slug}`)
-            setProduct(res?.data?.product)
+            const pro = res?.data?.product.variants.find(item => item.sku === sku);
+            setProduct(pro)
         })();
     }, [])
-    console.log(product)
 
     const methods = [
         { id: 'cod', label: 'Cash on delivery', icon: "https://static.vecteezy.com/system/resources/thumbnails/028/825/029/small/speed-style-cash-on-delivery-banner-label-clipart-vector.jpg", description: 'Pay upon delivery' },
@@ -260,11 +263,15 @@ const page = () => {
                     </div>
 
                     {/* Right Column: Order Summary */}
-                    <CheckoutSummery
-                        cartItems={product}
-                        buttonText="Pay Now"
-                        handleConfirm={handleConfirm}
-                    />
+                    {product && (
+                        <CheckoutSummery
+                            cartItems={product}
+                            type="single"
+                            quantity={quantity}
+                            buttonText="Pay Now"
+                            handleConfirm={handleConfirm}
+                        />
+                    )}
                 </div>
             </div>
         </section>

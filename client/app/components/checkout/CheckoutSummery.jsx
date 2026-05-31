@@ -1,27 +1,29 @@
 'use client'
 import { ShoppingBag, Wallet, ChevronRight } from 'lucide-react'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-const CheckoutSummery = ({ cartItems, type, handleConfirm }) => {
+const CheckoutSummery = ({ cartItems, type, handleConfirm, quantity }) => {
     const [total, setTotal] = useState(0)
     const [shipping, setShipping] = useState(9)
     const [subtotal, setSubtotal] = useState(0)
 
-    if (type == "cart") {
-        const subtotal = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-        const shipping = 9
-        const total = subtotal + shipping;
-        setTotal(total)
-        setSubtotal(subtotal)
-    } else {
-        const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+    useEffect(() => {
+        if (type == "cart") {
+            const subtotal = cartItems?.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+            const shipping = 9
+            const total = subtotal + shipping;
+            setTotal(total)
+            setSubtotal(subtotal)
+        } else {
+            console.log(cartItems)
+            const subtotal = cartItems?.price * quantity
+            const discountAmount = subtotal * (cartItems?.discountPercentage / 100)
+            const finalTotal = subtotal - discountAmount
 
-        const shipping = 9;
-        const total = subtotal + shipping;
-
-        setSubtotal(subtotal);
-        setTotal(total);
-    }
+            setSubtotal(finalTotal);
+            setTotal(finalTotal + shipping);
+        }
+    }, [])
 
     return (
         <div className="lg:col-span-1">
@@ -33,7 +35,7 @@ const CheckoutSummery = ({ cartItems, type, handleConfirm }) => {
                     <div className="space-y-4 mb-8">
                         <div className="flex justify-between text-text-secondary">
                             <span>Subtotal</span>
-                            <span className="text-text-primary font-medium">${subtotal.toLocaleString()}</span>
+                            <span className="text-text-primary font-medium">${subtotal?.toLocaleString()}</span>
                         </div>
                         <div className="flex justify-between text-text-secondary">
                             <span>Delivery Charge</span>
@@ -44,7 +46,7 @@ const CheckoutSummery = ({ cartItems, type, handleConfirm }) => {
 
                         <div className="flex justify-between items-center">
                             <span className="font-bold text-lg">Total</span>
-                            <span className="font-bold text-2xl font-space">${total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                            <span className="font-bold text-2xl font-space">${total?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                         </div>
                     </div>
 

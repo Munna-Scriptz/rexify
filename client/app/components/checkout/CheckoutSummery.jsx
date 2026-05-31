@@ -1,9 +1,27 @@
-import { ShoppingBag,  Wallet, ChevronRight } from 'lucide-react'
+'use client'
+import { ShoppingBag, Wallet, ChevronRight } from 'lucide-react'
+import { useState } from 'react';
 
-const CheckoutSummery = ({ cartItems, handleConfirm }) => {
-    const subtotal = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-    const shipping = 9
-    const total = subtotal + shipping;
+const CheckoutSummery = ({ cartItems, type, handleConfirm }) => {
+    const [total, setTotal] = useState(0)
+    const [shipping, setShipping] = useState(9)
+    const [subtotal, setSubtotal] = useState(0)
+
+    if (type == "cart") {
+        const subtotal = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+        const shipping = 9
+        const total = subtotal + shipping;
+        setTotal(total)
+        setSubtotal(subtotal)
+    } else {
+        const subtotal = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+
+        const shipping = 9;
+        const total = subtotal + shipping;
+
+        setSubtotal(subtotal);
+        setTotal(total);
+    }
 
     return (
         <div className="lg:col-span-1">

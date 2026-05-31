@@ -5,8 +5,11 @@ import { toast, ToastContainer } from 'react-toastify'
 import { apiClient } from '@/app/lib/apiClient'
 import { refreshCart } from '@/app/lib/RefreshCart'
 import AuthCard from '../cards/AuthCard'
+import { useRouter } from 'next/navigation'
 
 const ProductDetails = ({ product, selectedVariantIndex, setSelectedVariantIndex, currentUser }) => {
+    const router = useRouter();
+
     const [quantity, setQuantity] = useState(1);
     const [isAuthCardOpen, setIsAuthCardOpen] = useState(false);
     const selectedVariant = product?.variants?.[selectedVariantIndex] || product?.variants?.[0];
@@ -29,6 +32,11 @@ const ProductDetails = ({ product, selectedVariantIndex, setSelectedVariantIndex
         );
 
         await refreshCart();
+    };
+
+    // ---------- Handle buy -------------- 
+    const handleBuy = async () => {
+        router.push(`/checkout/${product.slug}`)
     };
 
     return (
@@ -180,6 +188,7 @@ const ProductDetails = ({ product, selectedVariantIndex, setSelectedVariantIndex
 
                     <button
                         type="button"
+                        onClick={handleBuy}
                         disabled={isOutOfStock}
                         className="flex-1 bg-accent text-white font-bold md:py-4 py-3 rounded-xl hover:bg-blue-700 transition-all shadow-lg shadow-accent/20 flex items-center justify-center gap-2 cursor-pointer disabled:bg-slate-350 disabled:shadow-none disabled:cursor-not-allowed"
                     >

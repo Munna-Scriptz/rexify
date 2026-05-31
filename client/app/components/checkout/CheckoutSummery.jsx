@@ -15,7 +15,6 @@ const CheckoutSummery = ({ cartItems, type, handleConfirm, quantity }) => {
             setTotal(total)
             setSubtotal(subtotal)
         } else {
-            console.log(cartItems)
             const subtotal = cartItems?.price * quantity
             const discountAmount = subtotal * (cartItems?.discountPercentage / 100)
             const finalTotal = subtotal - discountAmount

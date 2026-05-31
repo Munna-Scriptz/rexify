@@ -91,7 +91,8 @@ const page = () => {
     return (
         <>
             <ToastContainer />
-            <BreadCrumbs to={'/'} name={'Home'} absolute={true} />
+            <BreadCrumbs to={'/'} name={'Home'} absolute={true} type={"back"}/>
+
             <div className="min-h-screen flex items-center justify-center p-6 overflow-x-hidden">
                 <form onSubmit={handleForm} className="w-full max-w-lg lg:max-w-xl flex flex-col items-center animate-slide-in">
                     <Stepper step={step} setStep={setStep} />

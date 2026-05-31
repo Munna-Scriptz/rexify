@@ -55,7 +55,7 @@ const page = () => {
 
       setTimeout(() => {
         setLoading(false)
-        router.push("/")
+        router.back()
       }, 2000)
 
     } catch (error) {

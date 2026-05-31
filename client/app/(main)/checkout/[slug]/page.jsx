@@ -60,9 +60,12 @@ const page = () => {
     const handleConfirm = async () => {
         try {
             const res = await toast.promise(
-                apiClient.post("/checkout", {
+                apiClient.post("/checkout/single", {
                     paymentMethod,
-                    cartId,
+                    slug,
+                    sku,
+                    quantity,
+                    fullname: shippingAddress.fullName,
                     shippingAddress: shippingAddress.addressLine1,
                     division: shippingAddress.division
                 }),
@@ -128,7 +131,7 @@ const page = () => {
 
                                 <div>
                                     <label className="block text-sm font-medium text-text-primary mb-1">
-                                        Address Line 1
+                                        Full Address
                                     </label>
                                     <input
                                         type="text"
@@ -137,20 +140,6 @@ const page = () => {
                                         onChange={handleAddressChange}
                                         className="w-full px-4 py-3 rounded-xl border border-border focus:border-accent focus:ring-1 focus:ring-accent outline-none"
                                         placeholder="House 12, Road 5, Block B"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-medium text-text-primary mb-1">
-                                        Address Line 2 (Optional)
-                                    </label>
-                                    <input
-                                        type="text"
-                                        name="addressLine2"
-                                        value={shippingAddress.addressLine2}
-                                        onChange={handleAddressChange}
-                                        className="w-full px-4 py-3 rounded-xl border border-border focus:border-accent focus:ring-1 focus:ring-accent outline-none"
-                                        placeholder="Apartment/Suite (optional)"
                                     />
                                 </div>
 
@@ -188,20 +177,6 @@ const page = () => {
                                 </div>
 
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                                    <div>
-                                        <label className="block text-sm font-medium text-text-primary mb-1">
-                                            Postal Code
-                                        </label>
-                                        <input
-                                            type="text"
-                                            name="postalCode"
-                                            value={shippingAddress.postalCode}
-                                            onChange={handleAddressChange}
-                                            className="w-full px-4 py-3 rounded-xl border border-border focus:border-accent focus:ring-1 focus:ring-accent outline-none"
-                                            placeholder="1200"
-                                        />
-                                    </div>
-
                                     <div>
                                         <label className="block text-sm font-medium text-text-primary mb-1">
                                             Phone Number

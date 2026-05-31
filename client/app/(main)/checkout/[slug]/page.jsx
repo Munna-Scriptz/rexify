@@ -4,9 +4,11 @@ import { ShieldCheck, CircleCheck } from 'lucide-react';
 import { apiClient } from '@/app/lib/apiClient';
 import CheckoutSummery from '@/app/components/checkout/CheckoutSummery';
 import { toast } from 'react-toastify';
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, useSearchParams, useRouter } from "next/navigation";
+import Inputs from '@/app/admin/components/ui/Inputs';
 
 const page = () => {
+    const router = useRouter();
     const params = useParams();
     const searchParams = useSearchParams();
     const slug = params.slug
@@ -14,7 +16,6 @@ const page = () => {
     const quantity = searchParams.get("quantity");
 
     const [paymentMethod, setPaymentMethod] = useState('cod');
-    const [cartId, setCartId] = useState('');
 
     // Address State
     const [shippingAddress, setShippingAddress] = useState({
@@ -58,6 +59,13 @@ const page = () => {
 
     // -------------- Handle checkout ---------------
     const handleConfirm = async () => {
+        const { fullName, addressLine1, city, division, phone } = shippingAddress;
+        if (!fullName) return toast.error("Fullname is required");
+        if (!addressLine1) return toast.error("Address is required");
+        if (!city) return toast.error("City is required");
+        if (!division) return toast.error("Division is required");
+        if (!phone) return toast.error("Phone is required");
+
         try {
             const res = await toast.promise(
                 apiClient.post("/checkout/single", {
@@ -89,9 +97,11 @@ const page = () => {
                 }
             );
 
-            // Redirect to stripe
+            // Redirect
             if (res?.data?.url) {
                 window.location.href = res.data.url;
+            } else {
+                router.push('/checkout/success');
             }
 
         } catch (error) {
@@ -117,58 +127,56 @@ const page = () => {
                             </p>
 
                             <div className="space-y-5">
-                                <div>
-                                    <label className="block text-sm font-medium text-text-primary mb-1">
-                                        Full Name
-                                    </label>
-                                    <input
-                                        type="text"
-                                        name="fullName"
-                                        value={shippingAddress.fullName}
-                                        onChange={handleAddressChange}
-                                        className="w-full px-4 py-3 rounded-xl border border-border focus:border-accent focus:ring-1 focus:ring-accent outline-none"
-                                        placeholder="John Doe"
-                                    />
-                                </div>
+                                <Inputs
+                                    label="Full Name *"
+                                    name="fullName"
+                                    value={shippingAddress.fullName}
+                                    onChange={handleAddressChange}
+                                    placeholder="John Doe"
+                                    variant="adminPrimary"
+                                    required
+                                />
 
-                                <div>
-                                    <label className="block text-sm font-medium text-text-primary mb-1">
-                                        Full Address
-                                    </label>
-                                    <input
-                                        type="text"
-                                        name="addressLine1"
-                                        value={shippingAddress.addressLine1}
-                                        onChange={handleAddressChange}
-                                        className="w-full px-4 py-3 rounded-xl border border-border focus:border-accent focus:ring-1 focus:ring-accent outline-none"
-                                        placeholder="House 12, Road 5, Block B"
-                                    />
-                                </div>
+                                <Inputs
+                                    label="Address Line 1 *"
+                                    name="addressLine1"
+                                    value={shippingAddress.addressLine1}
+                                    onChange={handleAddressChange}
+                                    placeholder="House 12, Road 5, Block B"
+                                    variant="adminPrimary"
+                                    required
+                                />
+
+                                <Inputs
+                                    label="Address Line 2 (Optional)"
+                                    name="addressLine2"
+                                    value={shippingAddress.addressLine2}
+                                    onChange={handleAddressChange}
+                                    placeholder="Apartment/Suite (optional)"
+                                    variant="adminPrimary"
+                                />
 
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                                    <div>
-                                        <label className="block text-sm font-medium text-text-primary mb-1">
-                                            City
-                                        </label>
-                                        <input
-                                            type="text"
-                                            name="city"
-                                            value={shippingAddress.city}
-                                            onChange={handleAddressChange}
-                                            className="w-full px-4 py-3 rounded-xl border border-border focus:border-accent focus:ring-1 focus:ring-accent outline-none"
-                                            placeholder="Dhaka"
-                                        />
-                                    </div>
+                                    <Inputs
+                                        label="City *"
+                                        name="city"
+                                        value={shippingAddress.city}
+                                        onChange={handleAddressChange}
+                                        placeholder="Dhaka"
+                                        variant="adminPrimary"
+                                        required
+                                    />
 
                                     <div>
                                         <label className="block text-sm font-medium text-text-primary mb-1">
-                                            Division
+                                            Division *
                                         </label>
                                         <select
                                             name="division"
                                             value={shippingAddress.division}
                                             onChange={handleAddressChange}
                                             className="w-full px-4 py-3 rounded-xl border border-border focus:border-accent focus:ring-1 focus:ring-accent outline-none bg-white"
+                                            required
                                         >
                                             <option value="">Select Division</option>
                                             {divisions.map(div => (
@@ -179,19 +187,25 @@ const page = () => {
                                 </div>
 
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                                    <div>
-                                        <label className="block text-sm font-medium text-text-primary mb-1">
-                                            Phone Number
-                                        </label>
-                                        <input
-                                            type="tel"
-                                            name="phone"
-                                            value={shippingAddress.phone}
-                                            onChange={handleAddressChange}
-                                            className="w-full px-4 py-3 rounded-xl border border-border focus:border-accent focus:ring-1 focus:ring-accent outline-none"
-                                            placeholder="+880 1XXX-XXXXXX"
-                                        />
-                                    </div>
+                                    <Inputs
+                                        label="Postal Code"
+                                        name="postalCode"
+                                        value={shippingAddress.postalCode}
+                                        onChange={handleAddressChange}
+                                        placeholder="1200"
+                                        variant="adminPrimary"
+                                    />
+
+                                    <Inputs
+                                        label="Phone Number *"
+                                        type="tel"
+                                        name="phone"
+                                        value={shippingAddress.phone}
+                                        onChange={handleAddressChange}
+                                        placeholder="+880 1XXX-XXXXXX"
+                                        variant="adminPrimary"
+                                        required
+                                    />
                                 </div>
                             </div>
                         </div>

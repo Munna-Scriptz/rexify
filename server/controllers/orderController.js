@@ -112,71 +112,95 @@ const checkoutSingle = async (req, res) => {
 
         // ----- Find from db
         const existingProduct = await productSchema.findOne({ slug, "variants.sku": sku })
-        console.log(existingProduct)
         if (!existingProduct) return resHandler.error(res, 404, "Product doesn't exist")
+        
+        const variant = existingProduct.variants.find(item => item.sku === sku);
+        if (!variant) return resHandler.error(res, 404, "Product variant doesn't exist");
+
+        const qty = parseInt(quantity) || 1;
+        const discountAmount = (variant.price * (variant.discountPercentage || 0)) / 100;
+        const priceAfterDiscount = variant.price - discountAmount;
+        const subTotal = priceAfterDiscount * qty;
+
+        const items = [{
+            product: existingProduct._id,
+            sku: sku,
+            quantity: qty,
+            discountPercentage: variant.discountPercentage || 0,
+            price: priceAfterDiscount,
+            subTotal: subTotal
+        }];
 
         // ----- Price and charges
         const insideDhaka = division.toLowerCase() == "dhaka"
         const deliveryCharge = insideDhaka ? 80 : 120
 
-        const totalPrice = existingCart.items.reduce((charge, current) => {
+        const totalPrice = items.reduce((charge, current) => {
             return charge + current.subTotal
         }, deliveryCharge)
 
         const orderId = `ORDER-${Math.random().toString(36).substring(2, 10).toUpperCase()}`
 
         // ----- Save to db
-        const order = orderSchema({
-            user,
-            items: existingCart.items,
+        const orderData = {
+            items: items,
             payment: {
                 method: paymentMethod
             },
             totalPrice,
-            shippingAddress,
+            shippingAddress: {
+                address: shippingAddress,
+                city,
+                phone
+            },
             division,
             insideDhaka,
             deliveryCharge,
             orderId
-        })
+        };
+        if (user) {
+            orderData.user = user;
+        }
+
+        const order = orderSchema(orderData)
 
         order.save()
 
         // ---------- Cod Success
         if (paymentMethod === "cod") {
-            existingCart.items = []
-            existingCart.save()
-
             return resHandler.success(res, 200, "Order placed successfully")
         }
 
         // ---------- Handle stripe payment 
         if (paymentMethod === "stripe") {
-            const session = await stripe.checkout.sessions.create({
+            const stripeSessionConfig = {
                 mode: 'payment',
-                line_items: existingCart.items.map((item) => ({
+                line_items: items.map((item) => ({
                     price_data: {
                         currency: 'bdt',
                         product_data: {
-                            name: item.product.title,
-                            description: item.product.description,
-                            images: [item.product.thumbnail],
+                            name: existingProduct.title,
+                            description: existingProduct.description,
+                            images: variant.thumbnail ? [variant.thumbnail] : [],
                         },
 
-                        unit_amount: item.price * 100,
+                        unit_amount: Math.round(item.price * 100),
                     },
                     quantity: item.quantity,
                 })),
-                customer_email: `${req.user.email}`,
                 metadata: {
                     orderId: `${order._id}`
                 },
                 success_url: `https://rexifyshop.vercel.app/checkout/success`,
                 cancel_url: `https://rexifyshop.vercel.app/checkout/error`,
-            });
+            };
 
-            existingCart.items = []
-            existingCart.save()
+            if (req?.user?.email) {
+                stripeSessionConfig.customer_email = `${req.user.email}`;
+            }
+
+            const session = await stripe.checkout.sessions.create(stripeSessionConfig);
+
             // ------------- Success 
             resHandler.success(res, 200, "Please complete the checkout", { url: session.url })
         }

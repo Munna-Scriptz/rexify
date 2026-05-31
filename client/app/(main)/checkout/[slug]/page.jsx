@@ -67,7 +67,9 @@ const page = () => {
                     quantity,
                     fullname: shippingAddress.fullName,
                     shippingAddress: shippingAddress.addressLine1,
-                    division: shippingAddress.division
+                    city: shippingAddress.city,
+                    division: shippingAddress.division,
+                    phone: shippingAddress.phone
                 }),
                 {
                     pending: "Placing order...",

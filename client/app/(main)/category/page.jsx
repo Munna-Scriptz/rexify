@@ -6,9 +6,7 @@ const page = async () => {
     // -------- From server ---------
     let categories = { data: [] };
     try {
-        categories = await apiClient.get("/category/all", {
-            revalidate: 300,
-        });
+        categories = await apiClient.get("/category/all");
     } catch (error) {
         console.log(error)
     }

@@ -1,4 +1,4 @@
-import Input from "../../components/ui/Input"
+import Input from "./Input"
 
 export const EmailField = ({ onChange, error, labelTxt }) => {
   return (

@@ -1,4 +1,5 @@
-import ProfileNavbar from '../components/ProfileNavbar';
+
+import ProfileNavbar from '@/app/components/navbar/ProfileNavbar';
 import { apiClient } from '../../lib/apiClient';
 
 export default async function ProfileLayout({ children }) {

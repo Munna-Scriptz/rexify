@@ -2,11 +2,11 @@
 import React, { useState } from 'react';
 import Button from '../../../components/ui/Buttons';
 import { Stepper } from '../../../components/utils/Stepper';
-import SocialButtons from '../../components/SocialButtons';
-import { EmailField, InfoField, PasswordField } from '../../components/InputFields';
-import OrDivider from '../../components/OrDivider';
+import SocialButtons from '../../../components/ui/SocialButtons';
+import { EmailField, InfoField, PasswordField } from '../../../components/ui/InputFields';
+import OrDivider from '../../../components/ui/OrDivider';
 import { IsValidEmail } from '../../../components/utils/Validations';
-import Header from '../../components/Header';
+import Header from '../../../components/ui/Header';
 import BreadCrumbs from '../../../components/utils/BreadCrumbs';
 import { Bounce, toast, ToastContainer } from 'react-toastify';
 import { useRouter } from 'next/navigation';
@@ -91,7 +91,7 @@ const page = () => {
     return (
         <>
             <ToastContainer />
-            <BreadCrumbs to={'/'} name={'Home'} absolute={true} type={"back"}/>
+            <BreadCrumbs to={'/'} name={'Home'} absolute={true} type={"back"} />
 
             <div className="min-h-screen flex items-center justify-center p-6 overflow-x-hidden">
                 <form onSubmit={handleForm} className="w-full max-w-lg lg:max-w-xl flex flex-col items-center animate-slide-in">

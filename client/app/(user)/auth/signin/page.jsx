@@ -1,13 +1,13 @@
 "use client"
 import React, { useState } from 'react';
 import Button from '../../../components/ui/Buttons';
-import SocialButtons from '../../components/SocialButtons';
-import { EmailField, SinglePasswordField } from '../../components/InputFields';
+import SocialButtons from '../../../components/ui/SocialButtons';
+import { EmailField, SinglePasswordField } from '../../../components/ui/InputFields';
 import { IsValidEmail } from '../../../components/utils/Validations';
-import OrDivider from '../../components/OrDivider';
+import OrDivider from '../../../components/ui/OrDivider';
 import BreadCrumbs from '../../../components/utils/BreadCrumbs';
 import Link from 'next/link';
-import Header from '../../components/Header';
+import Header from '../../../components/ui/Header';
 import { Bounce, toast, ToastContainer } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 
@@ -55,7 +55,7 @@ const page = () => {
 
       setTimeout(() => {
         setLoading(false)
-        router.back()
+        router.push("/")
       }, 2000)
 
     } catch (error) {
@@ -81,7 +81,7 @@ const page = () => {
           <div className="w-full flex items-center justify-between py-2">
 
             <div className="flex items-center gap-2 pt-2 pb-6 cursor-pointer" onClick={() => setRememberMe(!rememberMe)}>
-              <button className={` w-4 h-4 rounded-sm border transition-all duration-200 ${rememberMe ? 'bg-coil border-coil' : 'bg-transparent border-zinc-400'}`} aria-label="Keep me signed in" />
+              <button type='button' className={` w-4 h-4 rounded-sm border transition-all duration-200 ${rememberMe ? 'bg-coil border-coil' : 'bg-transparent border-zinc-400'}`} aria-label="Keep me signed in" />
               <span className="text-[13px] text-zinc-600 font-medium select-none hidden md:inline-block">
                 Keep me signed in until I sign out
               </span>

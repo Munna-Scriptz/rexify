@@ -150,8 +150,19 @@ const signIn = async (req, res) => {
         // ------------- JWT token and cookie
         const accToken = generateAccToken(existingUser)
         const refToken = generateRefToken(existingUser)
-        res.cookie("X-AS-TOKEN", accToken)
-        res.cookie("X-RF-TOKEN", refToken)
+        res.cookie("X-AS-TOKEN", accToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "none",
+            maxAge: 120 * 24 * 60 * 60 * 1000
+        })
+
+        res.cookie("X-RF-TOKEN", refToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "none",
+            maxAge: 120 * 24 * 60 * 60 * 1000
+        })
 
         // ------------ Success 
         res.status(200).send({ message: "SignIn Successfully completed!" })
@@ -163,8 +174,16 @@ const signIn = async (req, res) => {
 // ========================== Sign Out =============================
 const signout = (req, res) => {
     try {
-        res.clearCookie('X-AS-TOKEN')
-        res.clearCookie('X-RF-TOKEN')
+        res.clearCookie('X-AS-TOKEN', {
+            httpOnly: true,
+            secure: true,
+            sameSite: "none"
+        })
+        res.clearCookie('X-RF-TOKEN', {
+            httpOnly: true,
+            secure: true,
+            sameSite: "none"
+        })
         res.status(200).send({ message: 'Logout Successful' })
     } catch (error) {
         res.status(500).send({ message: "Internal server error" })
@@ -187,7 +206,7 @@ const forgetPassword = async (req, res) => {
 
         // ------------- Send forget link to email
         const { token, hashToken } = genResetToken()
-        const forgetPassLink = `${process.env.CLIENT_URL || 'http://localhost:8000/'}auth/resetPassword/${token}`
+        const forgetPassLink = `${process.env.CLIENT_URL}/auth/resetPassword/${token}`
         sendEmail({ email, subject: "Forget password", item: forgetPassLink, template: forgetPassTemp })
         existingUser.resetPassTkn = hashToken
         existingUser.resetPassExp = Date.now() + 60 * 60 * 1000
@@ -288,8 +307,12 @@ const refreshAccToken = (req, res) => {
         // -------- verify, generate and set it to cookies 
         const decoded = verifyToken(refreshToken)
         const accToken = generateAccToken(decoded)
-        res.cookie("X-AS-TOKEN", accToken)
-
+        res.cookie("X-AS-TOKEN", accToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "none",
+            maxAge: 120 * 24 * 60 * 60 * 1000
+        })
         // ---------- Success 
         res.status(201).send("Token created")
     } catch (error) {

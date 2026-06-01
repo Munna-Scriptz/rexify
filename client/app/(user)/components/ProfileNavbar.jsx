@@ -1,10 +1,13 @@
 "use client";
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { User, ShieldCheck, ShoppingBag, LogOut, Rss, MapPin } from 'lucide-react';
+import { apiClient } from '@/app/lib/apiClient';
+import { toast } from 'react-toastify';
 
 const ProfileNavbar = ({ user }) => {
     const pathname = usePathname();
+    const router = useRouter();
 
     const tabs = [
         { id: 'profile', href: '/profile', label: 'Public Profile', icon: User },
@@ -13,6 +16,23 @@ const ProfileNavbar = ({ user }) => {
         { id: 'addresses', href: '/profile/addresses', label: 'My Addresses', icon: MapPin },
         { id: 'security', href: '/profile/security', label: 'Security', icon: ShieldCheck },
     ];
+
+
+    // ----------- Handle Logout ------------
+    const handleLogout = async () => {
+        try {
+            await toast.promise(
+                apiClient.post("/auth/signout"),
+                {
+                    pending: "Logging out...",
+                    success: "Logged out",
+                    error: "Something went wrong"
+                }
+            );
+
+            router.push("/");
+        } catch (error) {}
+    };
 
     return (
         <aside className="w-72 flex flex-col h-screen sticky top-0 overflow-hidden shrink-0 bg-[#0d1117] border-r border-white/5">
@@ -89,7 +109,7 @@ const ProfileNavbar = ({ user }) => {
 
             {/* Footer */}
             <div className="relative z-10 p-4 border-t border-white/5">
-                <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-[#f8717199] border border-transparent hover:bg-[#ef444412] hover:text-[#f87171e6] hover:border-[#ef444426] transition-all duration-200 cursor-pointer">
+                <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-[#f8717199] border border-transparent hover:bg-[#ef444412] hover:text-[#f87171e6] hover:border-[#ef444426] transition-all duration-200 cursor-pointer">
                     <LogOut size={17} className="shrink-0" />
                     <span>Sign Out</span>
                 </button>

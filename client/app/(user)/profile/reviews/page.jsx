@@ -18,7 +18,6 @@ const ratingLabel = (r) => ({ 5: 'Excellent', 4: 'Good', 3: 'Average', 2: 'Poor'
 
 const page = async () => {
   const reviews = await apiClient.get('/review/user')
-  console.log(reviews)
   const avgRating = (reviews?.data?.reduce((s, r) => s + r.rating, 0) / reviews?.data?.length).toFixed(1);
 
   return (

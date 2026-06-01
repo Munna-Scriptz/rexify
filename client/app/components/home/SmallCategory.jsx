@@ -7,9 +7,7 @@ const SmallCategory = async () => {
     // -------- From server ---------
     let categories = { data: [] };
     try {
-        categories = await apiClient.get("/category/all", {
-            cache: "no-store",
-        });
+        categories = await apiClient.get("/category/all");
     } catch (error) {
         console.log(error)
     }

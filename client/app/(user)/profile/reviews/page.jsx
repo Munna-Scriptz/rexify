@@ -50,8 +50,8 @@ const page = async () => {
             {/* Rating breakdown mini bars */}
             <div className="space-y-1 hidden sm:block">
               {[5, 4, 3, 2, 1].map((star) => {
-                const count = reviews?.data?.filter((r) => r.rating === star).length;
-                const pct = Math.round((count / reviews.length) * 100);
+                const count = reviews?.data?.filter((r) => r.rating === star)?.length;
+                const pct = Math.round((count / reviews?.length) * 100);
                 return (
                   <div key={star} className="flex items-center gap-2">
                     <span className="text-[10px] font-bold text-[#94a3b8] w-2">{star}</span>

@@ -155,6 +155,8 @@ const signIn = async (req, res) => {
             secure: true,
             sameSite: "none",
             maxAge: 120 * 24 * 60 * 60 * 1000,
+            partitioned: true,
+            domain: 'https://rexifyshop.vercel.app', 
         })
 
         res.cookie("X-RF-TOKEN", refToken, {
@@ -162,6 +164,8 @@ const signIn = async (req, res) => {
             secure: true,
             sameSite: "none",
             maxAge: 120 * 24 * 60 * 60 * 1000,
+            partitioned: true,
+            domain: 'https://rexifyshop.vercel.app', 
         })
 
         // ------------ Success 
@@ -177,12 +181,14 @@ const signout = (req, res) => {
         res.clearCookie('X-AS-TOKEN', {
             httpOnly: true,
             secure: true,
-            sameSite: "none"
+            sameSite: "none",
+            partitioned: true,
         })
         res.clearCookie('X-RF-TOKEN', {
             httpOnly: true,
             secure: true,
-            sameSite: "none"
+            sameSite: "none",
+            partitioned: true,
         })
         res.status(200).send({ message: 'Logout Successful' })
     } catch (error) {
@@ -311,7 +317,8 @@ const refreshAccToken = (req, res) => {
             httpOnly: true,
             secure: true,
             sameSite: "none",
-            maxAge: 120 * 24 * 60 * 60 * 1000
+            partitioned: true,
+            maxAge: 120 * 24 * 60 * 60 * 1000,
         })
         // ---------- Success 
         res.status(201).send("Token created")

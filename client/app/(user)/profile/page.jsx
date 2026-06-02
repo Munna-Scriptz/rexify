@@ -56,11 +56,11 @@ const page = () => {
               {/* Top accent stripe */}
               <div className="h-1 w-full bg-linear-to-r from-accent via-[#4d8bff] to-accent/30" />
 
-              <div className="relative p-8 flex flex-col sm:flex-row items-center gap-8">
+              <div className="relative p-5 md:p-8 flex flex-col sm:flex-row items-center gap-6 md:gap-8">
 
                 {/* Avatar */}
                 <div className="relative shrink-0 group">
-                  <div className="w-32 h-32 rounded-2xl overflow-hidden border-2 border-accent/20 shadow-[0_0_0_4px_#155dfc0f,0_16px_40px_#155dfc14]">
+                  <div className="w-24 h-24 md:w-32 md:h-32 rounded-2xl overflow-hidden border-2 border-accent/20 shadow-[0_0_0_4px_#155dfc0f,0_16px_40px_#155dfc14]">
                     <img
                       src={user?.avatar}
                       alt="User avatar"
@@ -141,7 +141,7 @@ const page = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
 
               {/* Personal Details */}
-              <div className="bg-white rounded-2xl border border-[#e8edf5] shadow-[0_2px_16px_#155dfc08] p-7 relative overflow-hidden">
+              <div className="bg-white rounded-2xl border border-[#e8edf5] shadow-[0_2px_16px_#155dfc08] p-5 md:p-7 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-[#eff6ff] blur-2xl rounded-full pointer-events-none" />
                 <h3 className="text-sm font-semibold text-[#0f172a] mb-6 flex items-center gap-3 relative">
                   <div className="w-8 h-8 rounded-lg bg-[#eff6ff] border border-accent/15 flex items-center justify-center">
@@ -173,7 +173,7 @@ const page = () => {
               </div>
 
               {/* Verification Center */}
-              <div className="bg-white rounded-2xl border border-[#e8edf5] shadow-[0_2px_16px_#155dfc08] p-7 relative overflow-hidden">
+              <div className="bg-white rounded-2xl border border-[#e8edf5] shadow-[0_2px_16px_#155dfc08] p-5 md:p-7 relative overflow-hidden">
                 <div className="absolute bottom-0 left-0 w-32 h-32 bg-[#eff6ff]/70 blur-2xl rounded-full pointer-events-none" />
 
                 <h3 className="text-sm font-semibold text-[#0f172a] mb-6 flex items-center gap-3 relative">

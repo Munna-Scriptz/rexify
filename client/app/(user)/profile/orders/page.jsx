@@ -18,7 +18,7 @@ const page = async () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <h2 className="text-2xl font-bold text-[#0f172a] flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl bg-[#eff6ff] flex items-center justify-center border border-accent/20">
             <ShoppingBag size={20} className="text-accent" />
@@ -42,7 +42,7 @@ const page = async () => {
               {/* Top Accent Bar */}
               <div className="h-1 w-full bg-linear-to-r from-accent via-[#4d8bff] to-accent/30" />
 
-              <div className="p-5">
+              <div className="p-4 md:p-5">
                 {/* Order ID & Date */}
                 <div className="flex items-start justify-between mb-4">
                   <div>
@@ -71,15 +71,15 @@ const page = async () => {
                   <div key={i} className="flex gap-3 mb-5">
                     <div className="w-16 h-16 bg-[#f8fafc] border border-[#e8edf5] rounded-xl overflow-hidden flex items-center justify-center p-1 group-hover:border-accent/20 transition-colors">
                       <img
-                        src={item.product.variants[0].thumbnail}
-                        alt={item.product.variants[0].title}
+                        src={item?.product?.variants[0]?.thumbnail}
+                        alt={item?.product?.variants[0]?.title}
                         className="w-full h-full object-contain"
                       />
                     </div>
 
                     <div className="flex-1 text-sm">
                       <p className="font-medium text-[#0f172a] line-clamp-2">
-                        {item.product.title || "Order Items"}
+                        {item?.product?.title || "Order Items"}
                       </p>
                         <p className="text-xs text-[#64748b] mt-1">
                           {item.quantity} items

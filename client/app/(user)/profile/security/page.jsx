@@ -26,7 +26,7 @@ const page = () => {
     <>
 
       <div className="animate-slide-in-from-bottom-3 duration-500 space-y-6">
-        <div className="bg-white rounded-2xl p-10 border border-border shadow-sm">
+        <div className="bg-white rounded-2xl p-5 md:p-10 border border-border shadow-sm">
           <h2 className="text-xl font-bold text-text-primary mb-8 font-space flex items-center gap-3">
             <Lock size={22} className="text-accent" />
             Advanced Security

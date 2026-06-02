@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation'
 import { FiHeart } from 'react-icons/fi'
 import SearchField from './SearchField'
 import ProductMenu from './ProductMenu'
-import { Search, ShoppingCart, X, Home, ShoppingBag, LayoutGrid, Info, PhoneCall, Zap, Heart, User } from 'lucide-react'
+import { Search, ShoppingCart, X, Home, ShoppingBag, LayoutGrid, Info, PhoneCall, Zap, User } from 'lucide-react'
 import { HiMiniBars3BottomLeft } from 'react-icons/hi2'
 import UserButton from './UserButton'
 
@@ -184,17 +184,17 @@ const Navbar = ({ user, cart, categories }) => {
 
                             <div className="p-4 border-t border-accent-soft bg-gray-50/50 backdrop-blur-md">
                                 <div className="grid grid-cols-2 gap-3">
-                                    <Link onClick={() => setIsMenuOpen(false)} href="/auth" className="flex items-center justify-center px-2 bg-white border border-gray-100 rounded-lg text-[13px] font-bold text-gray-900 shadow-sm hover:border-accent/30 hover:text-accent transition-all duration-300">
+                                    <Link onClick={() => setIsMenuOpen(false)} href="/profie" className="flex items-center justify-center px-2 bg-white border border-gray-100 rounded-lg text-[13px] font-bold text-gray-900 shadow-sm hover:border-accent/30 hover:text-accent transition-all duration-300">
                                         <div className="w-10 h-10 rounded-full bg-accent/5 flex items-center justify-center">
                                             <User size={18} className="text-accent" />
                                         </div>
                                         Account
                                     </Link>
-                                    <Link onClick={() => setIsMenuOpen(false)} href="/wishlist" className="flex items-center justify-center px-2 bg-white border border-gray-100 rounded-lg text-[13px] font-bold text-gray-900 shadow-sm hover:border-accent/30 hover:text-accent transition-all duration-300">
+                                    <Link onClick={() => setIsMenuOpen(false)} href="/cart" className="flex items-center justify-center px-2 bg-white border border-gray-100 rounded-lg text-[13px] font-bold text-gray-900 shadow-sm hover:border-accent/30 hover:text-accent transition-all duration-300">
                                         <div className="w-10 h-10 rounded-full bg-accent/5 flex items-center justify-center">
-                                            <Heart size={18} className="text-accent" />
+                                            <ShoppingCart size={18} className="text-accent" />
                                         </div>
-                                        Wishlist
+                                        Cart
                                     </Link>
                                 </div>
                             </div>

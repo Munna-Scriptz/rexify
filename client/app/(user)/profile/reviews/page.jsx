@@ -28,7 +28,7 @@ const page = async () => {
         <div className="h-1 w-full bg-linear-to-r from-accent via-[#4d8bff] to-accent/30" />
         <div className="absolute top-0 right-0 w-64 h-64 bg-[#eff6ff] blur-3xl rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none" />
 
-        <div className="relative px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div className="relative px-5 md:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-5">
             <div className="w-16 h-16 rounded-2xl bg-[#eff6ff] border border-accent/15 flex items-center justify-center shadow-[0_4px_14px_#155dfc14]">
               <MessageSquare size={24} className="text-accent" />
@@ -79,7 +79,7 @@ const page = async () => {
             className="bg-white rounded-2xl border border-[#e8edf5] shadow-[0_2px_16px_#155dfc06] overflow-hidden hover:shadow-[0_4px_24px_#155dfc10] hover:border-accent/15 transition-all duration-300 group"
           >
             {/* ── Product Header ── */}
-            <div className="px-6 py-4 border-b border-[#f1f5f9] bg-[#f8faff] flex items-center justify-between gap-4">
+            <div className="px-4 md:px-6 py-4 border-b border-[#f1f5f9] bg-[#f8faff] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex items-center gap-4 min-w-0">
                 {/* Thumbnail */}
                 <div className="w-20 h-20 shrink-0 rounded-xl bg-white border border-[#e8edf5] overflow-hidden p-1.5 group-hover:border-accent/25 group-hover:shadow-[0_4px_12px_#155dfc14] transition-all duration-300">
@@ -104,7 +104,7 @@ const page = async () => {
             </div>
 
             {/* ── Review Body ── */}
-            <div className="px-6 py-5">
+            <div className="px-4 md:px-6 py-4 md:py-5">
               {/* Stars + meta row */}
               <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
                 <div className="flex items-center gap-3">

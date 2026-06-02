@@ -5,8 +5,8 @@ import React from 'react'
 
 const CategoryCard = ({ item, compact = false }) => {
     const containerClass = compact
-        ? 'group relative md:h-60 h-40 rounded-3xl overflow-hidden cursor-pointer block duration-500'
-        : 'group relative md:h-100 h-60 rounded-3xl overflow-hidden cursor-pointer block shadow-sm hover:shadow-2xl transition-all duration-500'
+        ? 'group relative md:h-60 h-60 rounded-3xl overflow-hidden cursor-pointer block duration-500'
+        : 'group relative md:h-100 h-100 rounded-3xl overflow-hidden cursor-pointer block shadow-sm hover:shadow-2xl transition-all duration-500'
 
     const contentClass = compact
         ? 'absolute inset-0 p-4 flex flex-col justify-end'

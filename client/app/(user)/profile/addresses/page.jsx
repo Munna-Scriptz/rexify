@@ -10,7 +10,7 @@ const page = () => {
 
   return (
     <div className="animate-slide-in-from-bottom-3 duration-500 space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <h2 className="text-xl font-bold font-space text-text-primary flex items-center gap-3">
           <MapPin size={22} className="text-accent" />
           Saved Addresses
@@ -22,7 +22,7 @@ const page = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {addresses.map((item) => (
-          <div key={item.id} className={`bg-white p-8 rounded-2xl border transition-all duration-300 relative group shadow-sm hover:shadow-md ${item.isDefault ? 'border-accent ring-1 ring-accent/20 shadow-lg shadow-accent/5' : 'border-border'}`}>
+          <div key={item.id} className={`bg-white p-5 md:p-8 rounded-2xl border transition-all duration-300 relative group shadow-sm hover:shadow-md ${item.isDefault ? 'border-accent ring-1 ring-accent/20 shadow-lg shadow-accent/5' : 'border-border'}`}>
             {item.isDefault && (
               <div className="absolute top-4 right-4 bg-accent text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-tighter shadow-sm">
                 Default

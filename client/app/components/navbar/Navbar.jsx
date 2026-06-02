@@ -184,7 +184,7 @@ const Navbar = ({ user, cart, categories }) => {
 
                             <div className="p-4 border-t border-accent-soft bg-gray-50/50 backdrop-blur-md">
                                 <div className="grid grid-cols-2 gap-3">
-                                    <Link onClick={() => setIsMenuOpen(false)} href="/profie" className="flex items-center justify-center px-2 bg-white border border-gray-100 rounded-lg text-[13px] font-bold text-gray-900 shadow-sm hover:border-accent/30 hover:text-accent transition-all duration-300">
+                                    <Link onClick={() => setIsMenuOpen(false)} href="/profile" className="flex items-center justify-center px-2 bg-white border border-gray-100 rounded-lg text-[13px] font-bold text-gray-900 shadow-sm hover:border-accent/30 hover:text-accent transition-all duration-300">
                                         <div className="w-10 h-10 rounded-full bg-accent/5 flex items-center justify-center">
                                             <User size={18} className="text-accent" />
                                         </div>

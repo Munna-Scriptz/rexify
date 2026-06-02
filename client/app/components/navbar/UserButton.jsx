@@ -5,7 +5,7 @@ const UserButton = ({ isNavbarWhite, user, loading }) => {
         <>
             <Link
                 href={!user ? "/auth/signin" : user.role === "admin" ? "/admin" : "/profile"}
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-accent hover:text-white transition-all duration-300 group-hover:text-text-primary ${!user && "border"} ${isNavbarWhite && 'text-text-primary'}`}
+                className={`hidden md:flex items-center gap-2 md:px-3 px-2 py-1.5 rounded-full hover:bg-accent hover:text-white transition-all duration-300 group-hover:text-text-primary ${!user && "border"} ${isNavbarWhite && 'text-text-primary'}`}
             >
                 {/* Avatar */}
                 {
@@ -20,7 +20,7 @@ const UserButton = ({ isNavbarWhite, user, loading }) => {
                 }
 
                 {/* Name */}
-                <span className={`text-sm font-medium`}>
+                <span className={`md:text-sm text-xs font-medium`}>
                     {!user ? "Sign In" : user.role === "admin" ? "Admin" : user.fullname}
                 </span>
 

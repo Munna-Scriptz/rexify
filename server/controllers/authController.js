@@ -155,7 +155,6 @@ const signIn = async (req, res) => {
             secure: true,
             sameSite: "none",
             maxAge: 120 * 24 * 60 * 60 * 1000,
-            partitioned: true
         })
 
         res.cookie("X-RF-TOKEN", refToken, {
@@ -163,7 +162,6 @@ const signIn = async (req, res) => {
             secure: true,
             sameSite: "none",
             maxAge: 120 * 24 * 60 * 60 * 1000,
-            partitioned: true
         })
 
         // ------------ Success 

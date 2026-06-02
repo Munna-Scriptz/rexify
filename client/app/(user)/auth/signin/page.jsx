@@ -10,7 +10,7 @@ import Link from 'next/link';
 import Header from '../../../components/ui/Header';
 import { Bounce, toast, ToastContainer } from 'react-toastify';
 import { useRouter } from 'next/navigation';
-import { apiClient } from '../../../lib/apiClient';
+import { apiClient } from '@/app/lib/apiClient';
 
 const page = () => {
   const router = useRouter();
@@ -35,18 +35,17 @@ const page = () => {
     setLoading(true)
     // ------------- Fetch ----------------
     try {
-      const data = await apiClient.post('/auth/signin', { 
-        email: formData.email, 
-        password: formData.password 
+      const data = await apiClient.post('/auth/signin', {
+        email: formData.email,
+        password: formData.password
       });
 
-      if (data.error) {
-        setLoading(false)
-        if (data.message === "Invalid or incorrect password!") return setFormData(prev => ({ ...prev, passwordError: data.message }))
-        toast.error(data.message || "Something went wrong", { transition: Bounce, });
-        return
-      }
-      
+      setLoading(false)
+      if (data.message == "Invalid or incorrect password!") return setFormData(prev => ({ ...prev, passwordError: data.message }))
+      if (data.message == "User with this email doesn't exists. Please signUp!") return setFormData(prev => ({ ...prev, emailError: "User with this email doesn't exists" }))
+      if (data.message == "You're not verified. Please verify your account first") return toast.error(data.message);
+      if (data.message == "Internal server error") return toast.error(data.message);
+
       setLoading(false)
       toast.success(data.message, {
         transition: Bounce,
@@ -59,7 +58,7 @@ const page = () => {
 
     } catch (error) {
       setLoading(false)
-      toast.error("Something went wrong!", { theme: "light", transition: Bounce, });
+      toast.error("Somethind went wrong!", { theme: "light", transition: Bounce, });
     }
   }
 

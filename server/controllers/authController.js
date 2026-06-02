@@ -154,9 +154,8 @@ const signIn = async (req, res) => {
             httpOnly: true,
             secure: true,
             sameSite: "none",
-            maxAge: 120 * 24 * 60 * 60 * 1000,
+            maxAge: 60 * 24 * 60 * 60 * 1000,
             partitioned: true,
-            domain: 'https://rexifyshop.vercel.app', 
         })
 
         res.cookie("X-RF-TOKEN", refToken, {
@@ -165,12 +164,12 @@ const signIn = async (req, res) => {
             sameSite: "none",
             maxAge: 120 * 24 * 60 * 60 * 1000,
             partitioned: true,
-            domain: 'https://rexifyshop.vercel.app', 
         })
 
         // ------------ Success 
         res.status(200).send({ message: "SignIn Successfully completed!" })
     } catch (error) {
+        console.log(error)
         res.status(500).send({ message: "Internal server error" })
     }
 }

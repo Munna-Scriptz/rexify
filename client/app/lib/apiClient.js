@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-const BASE_URL = process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:8000";
+const BASE_URL = process.env.NEXT_PUBLIC_SERVER_URL
 
 async function request(endpoint, options = {}) {
     const {

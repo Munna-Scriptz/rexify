@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from 'react';
-import { Plus, Package, Cpu, Battery, Monitor, Camera, Tag as TagIcon, Smartphone, ShieldCheck, Layers, Network, Weight } from 'lucide-react';
+import { Plus, Package, Cpu, Battery, Monitor, Camera, Tag as TagIcon, Smartphone, ShieldCheck, Layers, Network, Weight, ChartNoAxesGantt } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import { useGetSingleProductQuery, useGetCategoryQuery, useUpdateProductMutation } from '@/app/admin/services/api';
 import { toast } from 'react-toastify';
@@ -32,7 +32,8 @@ const Page = () => {
     const [formData, setFormData] = useState({
         title: '', slug: '', description: '', category: '',
         brand: '', badge: '', warranty: 'No warranty',
-        shipping: 'Ships in 3-5 business days', isActive: true
+        shipping: 'Ships in 3-5 business days', isActive: true,
+        isFeatured: false, isEveryday: false
     });
 
     const [specs, setSpecs] = useState({
@@ -63,6 +64,8 @@ const Page = () => {
             warranty: product.warranty || 'No warranty',
             shipping: product.shipping || 'Ships in 3-5 business days',
             isActive: product.isActive !== undefined ? product.isActive : true,
+            isFeatured: product.isFeatured !== undefined ? product.isFeatured : false,
+            isEveryday: product.isEveryday !== undefined ? product.isEveryday : false,
         });
 
         if (product.specifications) {
@@ -369,15 +372,8 @@ const Page = () => {
                         <section className="p-6 bg-white rounded-3xl border border-border shadow-sm flex flex-col gap-4">
                             <div className="flex items-center justify-between pb-1 border-b border-border/40">
                                 <h2 className="text-lg font-bold font-space text-brand flex items-center gap-2">
-                                    <TagIcon size={18} className="text-accent" /> Tags & Status
+                                    <TagIcon size={18} className="text-accent" /> Tags
                                 </h2>
-                                <div className="flex items-center gap-2">
-                                    <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider">Active Status</span>
-                                    <label className="relative inline-flex items-center cursor-pointer select-none">
-                                        <input type="checkbox" name="isActive" checked={formData.isActive} onChange={handleInputChange} className="sr-only peer" />
-                                        <div className="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-success" />
-                                    </label>
-                                </div>
                             </div>
 
                             <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto">
@@ -402,6 +398,40 @@ const Page = () => {
                             </div>
                         </section>
                     </section>
+
+                    {/* Product Show & Status */}
+                    <section className="p-6 bg-white rounded-3xl border border-border shadow-sm flex flex-col gap-4">
+                        <h2 className="text-lg font-bold font-space text-brand flex items-center gap-2">
+                            <ChartNoAxesGantt size={18} className="text-accent" /> Product Show & Status
+                        </h2>
+
+                        <section className="p-6 bg-white rounded-3xl border border-border shadow-sm flex flex-col gap-4">
+                            <div className="flex flex-wrap items-center gap-6">
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider">Active Status</span>
+                                    <label className="relative inline-flex items-center cursor-pointer select-none">
+                                        <input type="checkbox" name="isActive" checked={formData.isActive} onChange={handleInputChange} className="sr-only peer" />
+                                        <div className="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-success" />
+                                    </label>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider">Featured</span>
+                                    <label className="relative inline-flex items-center cursor-pointer select-none">
+                                        <input type="checkbox" name="isFeatured" checked={formData.isFeatured} onChange={handleInputChange} className="sr-only peer" />
+                                        <div className="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-success" />
+                                    </label>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                    <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider">Everyday</span>
+                                    <label className="relative inline-flex items-center cursor-pointer select-none">
+                                        <input type="checkbox" name="isEveryday" checked={formData.isEveryday} onChange={handleInputChange} className="sr-only peer" />
+                                        <div className="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-success" />
+                                    </label>
+                                </div>
+                            </div>
+                        </section>
+                    </section>
+
 
                     {/* Variants Section */}
                     <EditVariantManager

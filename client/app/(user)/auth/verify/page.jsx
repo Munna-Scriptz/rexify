@@ -6,6 +6,7 @@ import BreadCrumbs from '../../../components/utils/BreadCrumbs';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Bounce, toast, ToastContainer } from 'react-toastify';
+import { apiClient } from '../../../lib/apiClient';
 
 const page = () => {
     const router = useRouter();
@@ -14,14 +15,12 @@ const page = () => {
     const [email, setEmail] = useState("")
 
     useEffect(() => {
-        fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/profile`, {
-            method: "GET",
-            credentials: "include",
-        })
-            .then((res) => res.json())
+        apiClient.get('/auth/profile')
             .then((data) => {
-                setIsVerified(data.isVerified)
-                setEmail(data.email)
+                if (!data.error) {
+                    setIsVerified(data.isVerified)
+                    setEmail(data.email)
+                }
             })
             .catch((err) => console.error(err));
     }, []);
@@ -71,13 +70,9 @@ const page = () => {
         inputRefs[0].current?.focus();
 
         // ----------- Email validation ----------
-        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/resendOTP`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: email })
-        })
-        const data = await res.json();
-        if (!res.ok) {
+        const data = await apiClient.post('/auth/resendOTP', { email: email });
+        
+        if (data.error) {
             setLoading(false);
             setError(data.message)
             return
@@ -94,13 +89,9 @@ const page = () => {
         setLoading(true);
 
         // ----------- Email validation ----------
-        const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/verifyOTP`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, otp })
-        })
-        const data = await res.json();
-        if (!res.ok) {
+        const data = await apiClient.post('/auth/verifyOTP', { email, otp });
+        
+        if (data.error) {
             setLoading(false);
             setError(data.message)
             return

@@ -10,6 +10,7 @@ import Link from 'next/link';
 import Header from '../../../components/ui/Header';
 import { Bounce, toast, ToastContainer } from 'react-toastify';
 import { useRouter } from 'next/navigation';
+import { apiClient } from '../../../lib/apiClient';
 
 const page = () => {
   const router = useRouter();
@@ -34,20 +35,18 @@ const page = () => {
     setLoading(true)
     // ------------- Fetch ----------------
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/signin`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: formData.email, password: formData.password, })
-      })
+      const data = await apiClient.post('/auth/signin', { 
+        email: formData.email, 
+        password: formData.password 
+      });
 
-      const data = await res.json();
-      if (!res.ok) {
+      if (data.error) {
         setLoading(false)
         if (data.message === "Invalid or incorrect password!") return setFormData(prev => ({ ...prev, passwordError: data.message }))
-        toast.error(data.message, { transition: Bounce, });
+        toast.error(data.message || "Something went wrong", { transition: Bounce, });
         return
       }
+      
       setLoading(false)
       toast.success(data.message, {
         transition: Bounce,
@@ -60,7 +59,7 @@ const page = () => {
 
     } catch (error) {
       setLoading(false)
-      toast.error("Somethind went wrong!", { theme: "light", transition: Bounce, });
+      toast.error("Something went wrong!", { theme: "light", transition: Bounce, });
     }
   }
 
@@ -90,9 +89,9 @@ const page = () => {
               </span>
             </div>
 
-            <Link href="/auth/resetPassword" size="sm" className="text-[13px] text-coil font-medium underline underline-offset-4 hover:text-coil transition-colors whitespace-nowrap">
+            <button className="text-[13px] text-coil font-medium underline underline-offset-4 hover:text-coil whitespace-nowrap">
               Forget your password
-            </Link>
+            </button>
 
           </div>
           {/* -------- Next button */}

@@ -3,6 +3,7 @@ import { FiArrowUpCircle, FiBell, FiLogOut, FiChevronDown } from 'react-icons/fi
 import { HiOutlineSwitchHorizontal } from 'react-icons/hi';
 import { AiOutlineSwap } from 'react-icons/ai';
 import { Bounce, toast, ToastContainer } from 'react-toastify';
+import { apiClient } from '@/app/lib/apiClient';
 
 const Header = ({ pageName }) => {
   const [profileModalOpen, setProfileModalOpen] = useState(false);
@@ -19,13 +20,9 @@ const Header = ({ pageName }) => {
 
   const handleSignout = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/signout`, {
-        method: 'POST',
-        credentials: 'include'
-      })
+      const data = await apiClient.post('/auth/signout')
 
-      const data = await res.json();
-      if (!res.ok) {
+      if (data.error) {
         setLoading(false)
         toast.error(data.message, { transition: Bounce, });
         return

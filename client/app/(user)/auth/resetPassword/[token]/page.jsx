@@ -4,6 +4,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { Lock, CheckCircle2, AlertCircle } from 'lucide-react';
 import Input from '@/app/components/ui/Input';
 import Button from '@/app/components/ui/Buttons';
+import { apiClient } from '@/app/lib/apiClient';
 
 const ResetPasswordPage = () => {
   const getParams = useParams();
@@ -33,15 +34,11 @@ const ResetPasswordPage = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/resetPassword/${getParams.token}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ newPassword: password })
+      const data = await apiClient.post(`/auth/resetPassword/${getParams.token}`, { 
+          newPassword: password 
       });
 
-      const data = await response.json();
-
-      if (response.ok) {
+      if (!data.error) {
         setStatus('success');
         setMessage('Your password has been successfully reset. You can now log in with your new password.');
       } else {

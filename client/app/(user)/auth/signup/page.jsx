@@ -10,6 +10,7 @@ import Header from '../../../components/ui/Header';
 import BreadCrumbs from '../../../components/utils/BreadCrumbs';
 import { Bounce, toast, ToastContainer } from 'react-toastify';
 import { useRouter } from 'next/navigation';
+import { apiClient } from '../../../lib/apiClient';
 
 const page = () => {
     const [step, setStep] = useState(1)
@@ -40,14 +41,9 @@ const page = () => {
             setLoading(true)
 
             // ----------- Email validation ----------
-            const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/check-email`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email: formData.email })
-            })
-            const data = await res.json();
+            const data = await apiClient.post('/auth/check-email', { email: formData.email });
             setLoading(false)
-            if (!res.ok) return setFormData(prev => ({ ...prev, emailError: data.message }))
+            if (data.error) return setFormData(prev => ({ ...prev, emailError: data.message }))
 
             setTimeout(() => {
                 setStep(2)
@@ -67,14 +63,14 @@ const page = () => {
             if (formData.password != formData.confirmPass) return setFormData(prev => ({ ...prev, confirmPassError: "Password doesn't match" }))
             setLoading(true)
             // ------------- Fetch ----------------
-            const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/signup`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email: formData.email, fullname: formData.fullname, phone: formData.phone, password: formData.password, })
-            })
+            const data = await apiClient.post('/auth/signup', { 
+                email: formData.email, 
+                fullname: formData.fullname, 
+                phone: formData.phone, 
+                password: formData.password 
+            });
 
-            const data = await res.json();
-            if (!res.ok) return toast.error(data.message, { transition: Bounce, });
+            if (data.error) return toast.error(data.message, { transition: Bounce, });
 
             toast.success(data.message, {
                 transition: Bounce,

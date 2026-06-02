@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { Lock, ChevronRight, ShieldCheck, Mail, CheckCircle2, X } from 'lucide-react';
 import Input from '@/app/components/ui/Input';
 import Button from '@/app/components/ui/Buttons';
+import { apiClient } from '@/app/lib/apiClient';
 
 const page = () => {
   const [showEmailModal, setShowEmailModal] = useState(false);
@@ -13,11 +14,7 @@ const page = () => {
     e.preventDefault();
 
     // ----------- Send Resent link ----------
-    await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/auth/forgetPassword`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email })
-    })
+    await apiClient.post('/auth/forgetPassword', { email });
     setShowEmailModal(false)
     setShowSuccessModal(true)
   };

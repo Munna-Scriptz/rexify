@@ -3,7 +3,7 @@ import ProductSlider from '../sliders/ProductSlider';
 
 const Featured = async () => {
     // -------- From server ---------
-    const products = await apiClient.get("/product", {
+    const products = await apiClient.get("/product/home?isFeatured=true", {
         revalidate: 60 * 5,
     });
     
@@ -24,7 +24,7 @@ const Featured = async () => {
 
 
                     {/* ----------- Slider Content ----------- */}
-                    <ProductSlider products={products?.data?.products} />
+                    <ProductSlider products={products?.data} />
                 </div>
             </section>
         </>

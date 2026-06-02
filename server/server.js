@@ -12,7 +12,7 @@ const app = express()
 
 // ------------------- Middlewares 
 app.post('/webhook', express.raw({ type: 'application/json' }), webhook);
-
+app.set('trust proxy', 1)
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())

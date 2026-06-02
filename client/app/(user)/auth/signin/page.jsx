@@ -90,7 +90,7 @@ const page = () => {
               </span>
             </div>
 
-            <Link href="/forgot-password" size="sm" className="text-[13px] text-coil font-medium underline underline-offset-4 hover:text-coil transition-colors whitespace-nowrap">
+            <Link href="/auth/resetPassword" size="sm" className="text-[13px] text-coil font-medium underline underline-offset-4 hover:text-coil transition-colors whitespace-nowrap">
               Forget your password
             </Link>
 

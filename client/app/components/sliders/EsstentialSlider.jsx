@@ -14,16 +14,16 @@ const EssentialSlider = ({ products }) => {
         <div className="relative overflow-hidden">
             <div ref={emblaRef}>
                 <div className="flex gap-4">
-                    {products.map((item, i) => (
+                    {products?.map((item, i) => (
                         <div key={i} className="shrink-0 basis-22 md:basis-35.5">
                             <EssentialCard
-                                img={item.image}
+                                img={item.variants[0].thumbnail}
                                 badge={item.badge}
                                 name={item.title}
-                                variant={item.variant}
+                                variant={item.brand}
                                 price={item.price}
-                                rating={item.rating}
-                                reviews={item.reviews}
+                                rating={item.avgReview || 0}
+                                reviews={item.totalReview || 0}
                             />
                         </div>
                     ))}

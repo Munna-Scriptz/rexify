@@ -1,8 +1,9 @@
+import Link from 'next/link';
 import { FiHeart, FiShoppingBag } from 'react-icons/fi'
 
-const EssentialCard = ({ img, name, variant }) => {
+const EssentialCard = ({ img, name, variant, slug }) => {
     return (
-        <div className=" md:w-87 w-50 rounded-3xl border select-none border-neutral-200 cursor-pointer overflow-hidden group relative transition-all duration-500 ease-out hover:-translate-y-2 hover:shadow-[0_30px_70px_-15px_rgba(0,0,0,0.35)]">
+        <Link href={`/product/${slug}`} className=" md:w-87 w-50 rounded-3xl border inline-block select-none border-neutral-200 cursor-pointer overflow-hidden group relative transition-all duration-500 ease-out hover:-translate-y-2 hover:shadow-[0_30px_70px_-15px_rgba(0,0,0,0.35)]">
 
             {/* Image ------------ */}
             <div className="relative h-50 md:h-70 flex items-center justify-center">
@@ -42,7 +43,7 @@ const EssentialCard = ({ img, name, variant }) => {
                     <span className="h-2.5 w-2.5 md:h-3 md:w-3 rounded-full bg-sky-400" />
                 </div>
             </div>
-        </div>
+        </Link>
     );
 };
 

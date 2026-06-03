@@ -17,12 +17,9 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
 app.use(cors({
-    origin: [
-        'http://localhost:3000',
-        'https://rexifyshop.vercel.app'
-    ],
-    credentials: true,
-}))
+    origin: "https://rexifyshop.vercel.app",
+    credentials: true
+}));
 // ------------------- Route 
 app.use(router)
 // ------------------- Database 

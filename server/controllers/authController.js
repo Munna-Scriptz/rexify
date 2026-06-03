@@ -155,17 +155,19 @@ const signIn = async (req, res) => {
 
         res.cookie("X-AS-TOKEN", accToken, {
             httpOnly: true,
-            secure: isSecure,
-            sameSite: isSecure ? 'none' : 'lax',
-            maxAge: 7 * 24 * 60 * 60 * 1000,
-        })
+            secure: true,
+            sameSite: "none",
+            maxAge: 15 * 60 * 1000,
+            path: "/",
+        });
 
         res.cookie("X-RF-TOKEN", refToken, {
             httpOnly: true,
-            secure: isSecure,
-            sameSite: isSecure ? 'none' : 'lax',
-            maxAge: 120 * 24 * 60 * 60 * 1000,
-        })
+            secure: true,
+            sameSite: "none",
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+            path: "/",
+        });
 
         // ------------ Success 
         res.status(200).send({ message: "SignIn Successfully completed!" })

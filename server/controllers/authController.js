@@ -150,20 +150,21 @@ const signIn = async (req, res) => {
         // ------------- JWT token and cookie
         const accToken = generateAccToken(existingUser)
         const refToken = generateRefToken(existingUser)
+
+        const isSecure = req.secure || req.headers['x-forwarded-proto'] === 'https' || process.env.NODE_ENV === 'production';
+
         res.cookie("X-AS-TOKEN", accToken, {
             httpOnly: true,
-            secure: true,
-            sameSite: "none",
-            maxAge: 60 * 24 * 60 * 60 * 1000,
-            partitioned: true,
+            secure: isSecure,
+            sameSite: isSecure ? 'none' : 'lax',
+            maxAge: 7 * 24 * 60 * 60 * 1000,
         })
 
         res.cookie("X-RF-TOKEN", refToken, {
             httpOnly: true,
-            secure: true,
-            sameSite: "none",
+            secure: isSecure,
+            sameSite: isSecure ? 'none' : 'lax',
             maxAge: 120 * 24 * 60 * 60 * 1000,
-            partitioned: true,
         })
 
         // ------------ Success 
